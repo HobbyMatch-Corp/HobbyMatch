@@ -1,14 +1,19 @@
-## Sprint 1: Podstawowa infrastruktura i autoryzacja  
-### Cel: Stworzenie podstawowego szkieletu aplikacji, mechanizmu logowania oraz pierwszych interakcji użytkowników.  
+## Sprint 1: Podstawowa infrastruktura
+### Cel: Stworzenie podstawowego szkieletu aplikacji.  
 
 Zakres prac:  
 1. Konfiguracja repozytorium kodu i środowiska deweloperskiego  
-2. Implementacja systemu logowania i rejestracji użytkowników  
-3. Zarządzanie kontem użytkownika (edycja profilu, usuwanie konta)  
-4. Proof of Concept (POC) / MVP – podstawowy setup CI/CD  
-5. Wstępna baza danych i modelowanie użytkowników
+2. Proof of Concept (POC) / MVP – podstawowy setup CI/CD  
+3. Wstępna baza danych i modelowanie użytkowników
 
-## Sprint 2: Moduł użytkownika i wydarzenia  
+## Sprint 2: Autoryzacja  
+### Cel: Stworzenie podstawowego mechanizmu logowania oraz pierwszych interakcji użytkowników.  
+
+Zakres prac:  
+1. Implementacja systemu logowania i rejestracji użytkowników  
+2. Zarządzanie kontem użytkownika (edycja profilu, usuwanie konta)  
+
+## Sprint 3: Moduł użytkownika i wydarzenia  
 ### Cel: Wdrożenie podstawowych funkcji społecznościowych i zarządzania wydarzeniami.  
 
 Zakres prac:  
@@ -18,7 +23,7 @@ Zakres prac:
 4. Dodawanie i usuwanie znajomych  
 5. Testy jednostkowe dla kluczowych funkcji  
 
-## Sprint 3: Moduł klienta biznesowego  
+## Sprint 4: Moduł klienta biznesowego  
 ### Cel: Umożliwienie klientom biznesowym dodawania wydarzeń i interakcji z użytkownikami.  
 
 Zakres prac:  
@@ -27,7 +32,7 @@ Zakres prac:
 3. Zarządzanie wolnymi terminami  
 4. Wysyłanie powiadomień użytkownikom  
 
-## Sprint 4: Moderacja i zarządzanie systemem  
+## Sprint 5: Moderacja i zarządzanie systemem  
 ### Cel: Wprowadzenie mechanizmów moderacji i administracji systemu.  
 
 Zakres prac:  
@@ -36,7 +41,7 @@ Zakres prac:
 3. Nadzór nad aktywnością użytkowników  
 4. Moderacja obiektów i wydarzeń  
 
-## Sprint 5: Optymalizacja i dodatkowe funkcje  
+## Sprint 6: Optymalizacja i dodatkowe funkcje  
 ### Cel: Finalizacja, testy, optymalizacja wydajności i wprowadzenie kluczowych funkcji biznesowych.  
 
 Zakres prac:  
@@ -44,8 +49,6 @@ Zakres prac:
 2. Optymalizacja bazy danych i backendu  
 3. Wdrożenie modułu statystyk  
 4. Zapewnienie zgodności danych  
-5. Obsługa płatności  
-6. Promowanie wydarzeń  
-7. Ostateczne poprawki UI/UX
-8. Funkcja filtrowania użytkowników
-9. Funkcja czatu między użytkownikami  
+5. Ostateczne poprawki UI/UX
+6. Funkcja filtrowania użytkowników
+7. Funkcja czatu między użytkownikami  
