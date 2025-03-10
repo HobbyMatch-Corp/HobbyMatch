@@ -35,7 +35,7 @@ Zakres prac:
 2. Wysyłanie powiadomień użytkownikom
 3. Dodawanie i usuwanie znajomych  
 
-## Sprint 6: Optymalizacja i dodatkowe funkcje  (12.06.2025)
+## Sprint 6: Optymalizacja i dodatkowe funkcje  (02.06.2025)
 ### Cel: Finalizacja, testy, optymalizacja wydajności oraz implementacja dodatkowych funkcji.  
 
 Zakres prac:  
