@@ -11,7 +11,7 @@ Zakres prac:
 
 Zakres prac:  
 1. Implementacja systemu logowania i rejestracji użytkowników  
-2. Zarządzanie kontem użytkownika (edycja profilu, usuwanie konta)  
+2. Zarządzanie kontem użytkownika (edycja profilu)  
 
 ## Sprint 3: Moduł użytkownika i wydarzenia  
 ### Cel: Wdrożenie podstawowych funkcji społecznościowych i zarządzania wydarzeniami.  
@@ -19,26 +19,21 @@ Zakres prac:
 Zakres prac:  
 1. Tworzenie i wyszukiwanie wydarzeń  
 2. Zapisywanie i wypisywanie z wydarzeń  
-3. Publikowanie aktywności  
-4. Dodawanie i usuwanie znajomych  
-5. Testy jednostkowe dla kluczowych funkcji  
 
 ## Sprint 4: Moduł klienta biznesowego  
-### Cel: Umożliwienie klientom biznesowym dodawania wydarzeń i interakcji z użytkownikami.  
+### Cel: Umożliwienie klientom biznesowym dodawania obiektów i edycji.  
 
 Zakres prac:  
 1. Tworzenie i edycja obiektów (lokale, sale itp.)  
-2. Tworzenie i edycja wydarzeń   
-3. Wysyłanie powiadomień użytkownikom
+2. Edycja wydarzeń   
 
-## Sprint 5: Moderacja i zarządzanie systemem  
-### Cel: Wprowadzenie mechanizmów moderacji i administracji systemu.  
+## Sprint 5: 
+### Cel: Dodatkowe interakcje z użytkownikiem
 
 Zakres prac:  
-1. Zarządzanie zgłoszeniami użytkowników  
-2. Blokowanie użytkowników i klientów biznesowych  
-3. Nadzór nad aktywnością użytkowników  
-4. Moderacja obiektów i wydarzeń  
+1. Dodawanie komentarzy
+2. Wysyłanie powiadomień użytkownikom
+3. Dodawanie i usuwanie znajomych  
 
 ## Sprint 6: Optymalizacja i dodatkowe funkcje  
 ### Cel: Finalizacja, testy, optymalizacja wydajności oraz implementacja dodatkowych funkcji.  
@@ -46,8 +41,6 @@ Zakres prac:
 Zakres prac:  
 1. Testy systemowe i integracyjne  
 2. Optymalizacja bazy danych i backendu  
-3. Wdrożenie modułu statystyk  
-4. Zapewnienie zgodności danych  
-5. Ostateczne poprawki UI/UX
-6. Funkcja filtrowania użytkowników
-7. Funkcja czatu między użytkownikami  
+3. Ostateczne poprawki UI/UX
+4. Funkcja filtrowania użytkowników
+5. Usuwanie konta
