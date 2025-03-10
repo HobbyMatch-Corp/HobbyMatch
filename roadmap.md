@@ -28,9 +28,8 @@ Zakres prac:
 
 Zakres prac:  
 1. Tworzenie i edycja obiektów (lokale, sale itp.)  
-2. Tworzenie i edycja wydarzeń  
-3. Zarządzanie wolnymi terminami  
-4. Wysyłanie powiadomień użytkownikom  
+2. Tworzenie i edycja wydarzeń   
+3. Wysyłanie powiadomień użytkownikom
 
 ## Sprint 5: Moderacja i zarządzanie systemem  
 ### Cel: Wprowadzenie mechanizmów moderacji i administracji systemu.  
@@ -42,7 +41,7 @@ Zakres prac:
 4. Moderacja obiektów i wydarzeń  
 
 ## Sprint 6: Optymalizacja i dodatkowe funkcje  
-### Cel: Finalizacja, testy, optymalizacja wydajności i wprowadzenie kluczowych funkcji biznesowych.  
+### Cel: Finalizacja, testy, optymalizacja wydajności oraz implementacja dodatkowych funkcji.  
 
 Zakres prac:  
 1. Testy systemowe i integracyjne  
