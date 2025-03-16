@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatchApp", "HobbyMatchApp\HobbyMatchApp.csproj", "{599D196B-23AE-43A8-B568-2716A2B83B83}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.App", "HobbyMatchApp\HobbyMatch.App.csproj", "{599D196B-23AE-43A8-B568-2716A2B83B83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatchAPI", "HobbyMatchAPI\HobbyMatchAPI.csproj", "{4F74BFF8-C9A9-489E-AEF6-E02BA73F1D48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.API", "HobbyMatchAPI\HobbyMatch.API.csproj", "{4F74BFF8-C9A9-489E-AEF6-E02BA73F1D48}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.Model", "HobbyMatch.Model\HobbyMatch.Model.csproj", "{9C48D9B0-759E-4573-A48B-FF905A2C4424}"
 EndProject
