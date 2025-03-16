@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatchApp", "HobbyMatch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatchAPI", "HobbyMatchAPI\HobbyMatchAPI.csproj", "{4F74BFF8-C9A9-489E-AEF6-E02BA73F1D48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.Model", "HobbyMatch.Model\HobbyMatch.Model.csproj", "{9C48D9B0-759E-4573-A48B-FF905A2C4424}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4F74BFF8-C9A9-489E-AEF6-E02BA73F1D48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F74BFF8-C9A9-489E-AEF6-E02BA73F1D48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F74BFF8-C9A9-489E-AEF6-E02BA73F1D48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C48D9B0-759E-4573-A48B-FF905A2C4424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C48D9B0-759E-4573-A48B-FF905A2C4424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C48D9B0-759E-4573-A48B-FF905A2C4424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C48D9B0-759E-4573-A48B-FF905A2C4424}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
