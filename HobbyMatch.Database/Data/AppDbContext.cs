@@ -16,7 +16,7 @@ namespace HobbyMatch.Database.Data
             Database.EnsureCreated();
         }
 
-        public DbSet<User> Users;
-        public DbSet<BusinessClient> BusinessClients;
+        public DbSet<User> Users { get; set; }
+        public DbSet<BusinessClient> BusinessClients { get; set; }
     }
 }
