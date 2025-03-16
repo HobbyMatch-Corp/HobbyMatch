@@ -11,4 +11,9 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HobbyMatch.Database\HobbyMatch.Database.csproj" />
+    <ProjectReference Include="..\HobbyMatch.Model\HobbyMatch.Model.csproj" />
+  </ItemGroup>
+
 </Project>
