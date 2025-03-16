@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.API", "HobbyMatc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.Model", "HobbyMatch.Model\HobbyMatch.Model.csproj", "{9C48D9B0-759E-4573-A48B-FF905A2C4424}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.BL", "HobbyMatch.BL\HobbyMatch.BL.csproj", "{3C043A56-F825-43D0-AD81-F5FE3E5DE428}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.Database", "HobbyMatch.Database\HobbyMatch.Database.csproj", "{D6A6FE80-50B4-4C2F-85BB-1EA7E51A7438}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{9C48D9B0-759E-4573-A48B-FF905A2C4424}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C48D9B0-759E-4573-A48B-FF905A2C4424}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C48D9B0-759E-4573-A48B-FF905A2C4424}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C043A56-F825-43D0-AD81-F5FE3E5DE428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C043A56-F825-43D0-AD81-F5FE3E5DE428}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C043A56-F825-43D0-AD81-F5FE3E5DE428}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C043A56-F825-43D0-AD81-F5FE3E5DE428}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6A6FE80-50B4-4C2F-85BB-1EA7E51A7438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6A6FE80-50B4-4C2F-85BB-1EA7E51A7438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6A6FE80-50B4-4C2F-85BB-1EA7E51A7438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6A6FE80-50B4-4C2F-85BB-1EA7E51A7438}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
