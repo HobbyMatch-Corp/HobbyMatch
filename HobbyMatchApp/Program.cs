@@ -1,4 +1,4 @@
-using HobbyMatchApp.Components;
+using HobbyMatch.App.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
