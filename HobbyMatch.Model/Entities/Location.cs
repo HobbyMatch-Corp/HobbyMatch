@@ -11,7 +11,7 @@ namespace HobbyMatch.Model.Entities
     public class Location
     {
 
-        public int Longitude { get; set; }
-        public int Latitude { get; set; }
+        public float Longitude { get; set; }
+        public float Latitude { get; set; }
     }
 }
