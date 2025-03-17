@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.BL", "HobbyMatch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.Database", "HobbyMatch.Database\HobbyMatch.Database.csproj", "{D6A6FE80-50B4-4C2F-85BB-1EA7E51A7438}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.UnitTest", "HobbyMatch.UnitTest\HobbyMatch.UnitTest.csproj", "{3929F45B-E78B-46B3-A23B-ED039BD2CFA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D6A6FE80-50B4-4C2F-85BB-1EA7E51A7438}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6A6FE80-50B4-4C2F-85BB-1EA7E51A7438}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6A6FE80-50B4-4C2F-85BB-1EA7E51A7438}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3929F45B-E78B-46B3-A23B-ED039BD2CFA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3929F45B-E78B-46B3-A23B-ED039BD2CFA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3929F45B-E78B-46B3-A23B-ED039BD2CFA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3929F45B-E78B-46B3-A23B-ED039BD2CFA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
