@@ -8,6 +8,5 @@ namespace HobbyMatch.Model.Entities
 {
     public class User : Organizer
     {
-        public Location Location { get; set; }
     }
 }
