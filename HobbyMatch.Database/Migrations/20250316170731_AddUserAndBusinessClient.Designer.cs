@@ -25,7 +25,7 @@ namespace HobbyMatch.Database.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("HobbyMatch.Model.Entities.BusinessClient", b =>
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.BusinessClient", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -55,7 +55,7 @@ namespace HobbyMatch.Database.Migrations
                     b.ToTable("BusinessClients");
                 });
 
-            modelBuilder.Entity("HobbyMatch.Model.Entities.User", b =>
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.User", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -76,7 +76,7 @@ namespace HobbyMatch.Database.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Location", "HobbyMatch.Model.Entities.User.Location#Location", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Location", "HobbyMatch.Domain.Entities.User.Location#Location", b1 =>
                         {
                             b1.IsRequired();
 

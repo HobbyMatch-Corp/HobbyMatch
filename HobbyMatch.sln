@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.App", "HobbyMatc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.API", "HobbyMatchAPI\HobbyMatch.API.csproj", "{4F74BFF8-C9A9-489E-AEF6-E02BA73F1D48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.Model", "HobbyMatch.Model\HobbyMatch.Model.csproj", "{9C48D9B0-759E-4573-A48B-FF905A2C4424}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.Domain", "HobbyMatch.Domain\HobbyMatch.Domain.csproj", "{9C48D9B0-759E-4573-A48B-FF905A2C4424}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.BL", "HobbyMatch.BL\HobbyMatch.BL.csproj", "{3C043A56-F825-43D0-AD81-F5FE3E5DE428}"
 EndProject

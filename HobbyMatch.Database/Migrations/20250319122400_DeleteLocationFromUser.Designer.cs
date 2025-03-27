@@ -24,7 +24,7 @@ namespace HobbyMatch.Database.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("HobbyMatch.Model.Entities.BusinessClient", b =>
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.BusinessClient", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -54,7 +54,7 @@ namespace HobbyMatch.Database.Migrations
                     b.ToTable("BusinessClients");
                 });
 
-            modelBuilder.Entity("HobbyMatch.Model.Entities.User", b =>
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.User", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
