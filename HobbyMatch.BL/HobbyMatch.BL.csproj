@@ -7,13 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\HobbyMatch.Database\HobbyMatch.Database.csproj" />
+    <ProjectReference Include="..\HobbyMatch.Domain\HobbyMatch.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HobbyMatch.Database\HobbyMatch.Database.csproj" />
-    <ProjectReference Include="..\HobbyMatch.Model\HobbyMatch.Model.csproj" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.7.0" />
   </ItemGroup>
 
 </Project>

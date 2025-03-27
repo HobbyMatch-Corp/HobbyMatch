@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HobbyMatch.Model\HobbyMatch.Model.csproj" />
+    <ProjectReference Include="..\HobbyMatch.Domain\HobbyMatch.Domain.csproj" />
   </ItemGroup>
 
 </Project>

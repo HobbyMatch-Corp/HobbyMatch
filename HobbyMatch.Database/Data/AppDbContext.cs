@@ -1,18 +1,20 @@
 ﻿using HobbyMatch.Model.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HobbyMatch.Database.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<Organizer,IdentityRole<int>,int>
     {
         public AppDbContext() { }
 
         public AppDbContext(DbContextOptions<AppDbContext> options): base(options) 
         {
-            Database.EnsureCreated();
         }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> AppUsers { get; set; }
         public DbSet<BusinessClient> BusinessClients { get; set; }
+        
     }
 }
