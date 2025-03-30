@@ -2,10 +2,10 @@
 {
     public interface IBusinessClientService
     {
-        public Task<List<Model.Entities.BusinessClient>> GetBusinessClientsAsync();
+        public Task<List<Domain.Entities.BusinessClient>> GetBusinessClientsAsync();
 
-        public Task<Model.Entities.BusinessClient?> GetBusinessClientByIdAsync(int id);
+        public Task<Domain.Entities.BusinessClient?> GetBusinessClientByIdAsync(int id);
 
-        public Task UpdateBusinessClientAsync(int userId, Model.Entities.BusinessClient user);
+        public Task UpdateBusinessClientAsync(int userId, Domain.Entities.BusinessClient user);
     }
 }

@@ -1,4 +1,4 @@
-﻿using HobbyMatch.Model.Entities;
+﻿using HobbyMatch.Domain.Entities;
 using System.Diagnostics.Metrics;
 
 namespace HobbyMatch.App.Services

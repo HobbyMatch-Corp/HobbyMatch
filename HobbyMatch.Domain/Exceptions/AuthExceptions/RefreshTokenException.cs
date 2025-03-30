@@ -1,3 +1,3 @@
-namespace HobbyMatch.Model.Exceptions.AuthExceptions;
+namespace HobbyMatch.Domain.Exceptions.AuthExceptions;
 
 public class RefreshTokenException(string message) : Exception(message);

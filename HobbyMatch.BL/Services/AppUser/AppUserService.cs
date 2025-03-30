@@ -1,5 +1,5 @@
 ﻿using HobbyMatch.Database.Repositories.AppUser;
-using HobbyMatch.Model.Entities;
+using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.BL.Services.AppUser
 {

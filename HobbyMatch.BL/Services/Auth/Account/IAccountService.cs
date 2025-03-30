@@ -1,5 +1,5 @@
 using HobbyMatch.BL.Models.Auth;
-using HobbyMatch.Model.Requests;
+using HobbyMatch.Domain.Requests;
 
 namespace HobbyMatch.BL.Services.Auth.Account;
 

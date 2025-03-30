@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HobbyMatch.Model.Entities
+namespace HobbyMatch.Domain.Entities
 {
     [ComplexType]
     public class Location

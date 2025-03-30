@@ -1,4 +1,4 @@
-﻿namespace HobbyMatch.Model.Entities
+﻿namespace HobbyMatch.Domain.Entities
 {
     public class BusinessClient : Organizer
     {
