@@ -7,10 +7,10 @@
 <MudContainer Style="justify-content: center" MaxWidth="MaxWidth.Small">
 
     <MudPaper Class="pa-4">
-        <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:8px">Sign in to your account</MudText>
+        <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">Sign in to your account</MudText>
         <MudForm @bind-IsValid="@success" @bind-Errors="@errors">
             <MudTextField @ref="emailField" T="string" Label="Email" Required="true" RequiredError="Email is required!"
-                          Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
+                          Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" style="margin-bottom:8px"/>
             <MudTextField @ref="passwordField" T="string" Label="Password" InputType="InputType.Password"
                              Required="true" RequiredError="Password is required!" Style="margin-bottom:8px"/>
             <div class="d-flex">
