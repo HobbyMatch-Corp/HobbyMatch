@@ -10,13 +10,13 @@ namespace HobbyMatch.App.Services
 		private readonly Dictionary<Type, string> _endpointMap = new() // TODO: Create endpoint provider using strategy pattern
 		{
 			{ typeof(User), "users" },
-			{ typeof(Organizer), "organizers" },
+			{ typeof(BusinessClient), "businessclients" },
 		};
 		public OrganizerApiService(IHttpClientFactory httpClientFactory)
 		{
 			_httpClient = httpClientFactory.CreateClient("AuthenticatedClient");
 		}
-		private string GetEndpoint<T>() where T : BusinessClient
+		private string GetEndpoint<T>() where T : Organizer
 		{
 			if (_endpointMap.TryGetValue(typeof(T), out var endpoint))
 			{
@@ -25,7 +25,7 @@ namespace HobbyMatch.App.Services
 			throw new InvalidOperationException($"No endpoint declared for type: {typeof(T).Name}");
 		}
 
-		public async Task<T[]?> GetUsersAsync<T>() where T : BusinessClient
+		public async Task<T[]?> GetUsersAsync<T>() where T : Organizer
 		{
 			string endpoint = "";
 			try
@@ -48,7 +48,7 @@ namespace HobbyMatch.App.Services
 
 		}
 
-		public async Task<T?> GetUserAsync<T>(int id) where T : BusinessClient
+		public async Task<T?> GetUserAsync<T>(int id) where T : Organizer
 		{
 			string endpoint = "";
 			try
@@ -70,7 +70,7 @@ namespace HobbyMatch.App.Services
 			return user;
 		}
 
-		public async Task<T?> EditUserAsync<T>(int id, T editedUser) where T : BusinessClient
+		public async Task<T?> EditUserAsync<T>(int id, T editedUser) where T : Organizer
 		{
 			string endpoint = "";
 			try
