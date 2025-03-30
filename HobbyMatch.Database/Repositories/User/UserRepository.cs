@@ -1,5 +1,5 @@
 using HobbyMatch.Database.Data;
-using HobbyMatch.Model.Entities;
+using HobbyMatch.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace HobbyMatch.Database.Repositories.User;

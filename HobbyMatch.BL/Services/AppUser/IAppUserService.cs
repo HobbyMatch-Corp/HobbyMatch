@@ -1,4 +1,4 @@
-﻿using HobbyMatch.Model.Entities;
+﻿using HobbyMatch.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

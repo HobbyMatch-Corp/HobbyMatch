@@ -1,6 +1,6 @@
 ﻿using HobbyMatch.BL.Services.BusinessClient;
 using HobbyMatch.Database.Repositories.BusinessClient;
-using HobbyMatch.Model.Entities;
+using HobbyMatch.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

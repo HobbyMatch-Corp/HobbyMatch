@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HobbyMatch.Model.Entities
+namespace HobbyMatch.Domain.Entities
 {
     [ComplexType]
     public class Location

@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using HobbyMatch.BL.Configuration;
-using HobbyMatch.Model.Entities;
+using HobbyMatch.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 

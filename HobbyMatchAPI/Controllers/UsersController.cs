@@ -2,7 +2,7 @@
 using HobbyMatch.Database.Data;
 using HobbyMatch.Database.Repositories.AppUser;
 using HobbyMatch.Database.Repositories.User;
-using HobbyMatch.Model.Entities;
+using HobbyMatch.Domain.Entities;
 using HobbyMatchAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

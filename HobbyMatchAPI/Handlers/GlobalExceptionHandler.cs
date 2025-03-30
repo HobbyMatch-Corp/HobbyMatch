@@ -1,5 +1,5 @@
 using System.Net;
-using HobbyMatch.Model.Exceptions.AuthExceptions;
+using HobbyMatch.Domain.Exceptions.AuthExceptions;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace HobbyMatch.API.Handlers;

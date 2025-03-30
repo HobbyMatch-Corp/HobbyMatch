@@ -1,5 +1,5 @@
 ﻿using HobbyMatch.Database.Repositories.AppUser;
-using HobbyMatch.Model.Entities;
+using HobbyMatch.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
