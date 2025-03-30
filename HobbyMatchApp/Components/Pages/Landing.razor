@@ -20,8 +20,8 @@
                     Graj bez ograniczeń
                 </MudText>
 
-                <button style="position: fixed; bottom: 40px; left: 25%; transform: translateX(-50%);" 
-                class="btn btn-primary large-button mt-5" @onclick="LogInAction">
+                <button style="position: fixed; bottom: 40px; left: 25%; transform: translateX(-50%);"
+                        class="btn btn-primary large-button mt-5" @onclick="SignUpAction">
                     Zarejestruj się
                 </button>
             </div>
@@ -34,8 +34,9 @@
 </MudContainer>
 
 @code {
-    private void LogInAction()
+    private void SignUpAction()
     {
-        navigationManager.NavigateTo("/Error");
+        navigationManager.NavigateTo("/SignUp");
     }
+
 }
