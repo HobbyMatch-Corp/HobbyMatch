@@ -1,11 +1,24 @@
+using HobbyMatch.App.Auth;
+using HobbyMatch.App.Auth.TokenService;
 using HobbyMatch.App.Components;
 using MudBlazor.Services;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+.AddInteractiveServerComponents();
+builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
+
+builder.Services.AddTransient<AuthHttpClientHandler>();
+
+builder.Services.AddScoped<ProtectedLocalStorage>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+builder.Services.AddHttpClient("AuthenticatedClient")
+	.AddHttpMessageHandler<AuthHttpClientHandler>();
 
 builder.Services.AddMudServices();
 
