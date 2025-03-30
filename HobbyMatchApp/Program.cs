@@ -1,6 +1,8 @@
 using HobbyMatch.App.Auth;
+using HobbyMatch.App.Auth.CustomAuthStateProvider;
 using HobbyMatch.App.Auth.TokenService;
 using HobbyMatch.App.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
@@ -16,9 +18,8 @@ builder.Services.AddTransient<AuthHttpClientHandler>();
 builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-builder.Services.AddHttpClient("AuthenticatedClient")
-    .AddHttpMessageHandler<AuthHttpClientHandler>();
-
+builder.Services.AddHttpClient("AuthenticatedClient").AddHttpMessageHandler<AuthHttpClientHandler>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddMudServices();
 
 var app = builder.Build();
