@@ -16,6 +16,12 @@ a, .btn-link {
     border-bottom-right-radius: 28px;
     width: 150px;
 }
+
+    .btn-primary:disabled {
+        background-color: gray;
+        border-color: gray;
+    }
+
 .large-button {
     font-size: 2rem;
     width: 300px;

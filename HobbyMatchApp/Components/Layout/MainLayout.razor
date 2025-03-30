@@ -1,10 +1,13 @@
 ﻿@inherits LayoutComponentBase
+
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Windows;
 @inject NavigationManager navigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager navigationManager
 
 @* Required *@
-<MudThemeProvider />
+<MudThemeProvider Theme="MyCustomTheme" />
 <MudPopoverProvider />
 <div class="page">
     <CascadingAuthenticationState>
@@ -26,7 +29,7 @@
                         </button>
                     </Authorized>
                     <NotAuthorized>
-                        <button class="btn btn-primary">
+                        <button class="btn btn-primary" @onclick="SignInAction">
                             Zaloguj się
                         </button>
                     </NotAuthorized>
@@ -46,3 +49,30 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code
+{
+    MudTheme MyCustomTheme = new MudTheme()
+        {
+            PaletteLight = new PaletteLight()
+            {
+                Primary = new MudBlazor.Utilities.MudColor("#213d5d"),
+                Secondary = new MudBlazor.Utilities.MudColor("#1e3957"),
+            },
+            PaletteDark = new PaletteDark()
+            {
+                Primary = Colors.Blue.Lighten1
+            },
+
+            LayoutProperties = new LayoutProperties()
+            {
+                DrawerWidthLeft = "260px",
+                DrawerWidthRight = "300px"
+            }
+        };
+
+    private void SignInAction()
+    {
+        navigationManager.NavigateTo("/SignIn");
+    }
+}

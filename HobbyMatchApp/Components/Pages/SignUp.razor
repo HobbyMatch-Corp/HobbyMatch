@@ -1,0 +1,86 @@
+﻿@page "/SignUp"
+
+@rendermode InteractiveServer
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+
+
+<MudContainer Style="justify-content: center" MaxWidth="MaxWidth.Small">
+
+    <MudPaper Class="pa-4">
+        <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:8px">SignUp Form</MudText>
+        <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+            <MudTextField @ref="usernameField" T="string" Label="Username" Required="true" RequiredError="User name is required!" />
+            <MudTextField @ref="emailField" T="string" Label="Email" Required="true" RequiredError="Email is required!"
+            Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
+            <MudTextField @ref="pwField1"  T="string" Label="Password" HelperText="Choose a strong password"
+            InputType="InputType.Password"
+            Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
+            RequiredError="Password is required!" />
+            <MudTextField T="string"
+            Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
+            Validation="@(new Func<string, string>(PasswordMatch))" />
+            @if (accountType != null && accountType.Value == "BusinessClient")
+            {
+                <MudTextField @ref="taxIdField" T="string" Label="TaxId" Required="true" RequiredError="Tax ID is required!" style="margin-bottom:8px" />
+            }
+            <div class="d-flex">
+                <MudRadioGroup @ref="accountType" T="string" Required="true" RequiredError="Account type is required!">
+                    <MudRadio Color="Color.Primary" Value="@("User")">User</MudRadio>
+                    <MudRadio Color="Color.Primary" Value="@("BusinessClient")">Business Client</MudRadio>
+                </MudRadioGroup>
+            </div>
+            <div class="d-flex align-center justify-space-between">
+                <MudCheckBox Color="Color.Primary" T="bool" Required="true" RequiredError="You must agree" Label="I agree!" />
+                <button disabled="@(!success)" Class="btn btn-primary" @onclick="SignUpAction">Register</button>
+            </div>
+        </MudForm>
+    </MudPaper>
+</MudContainer>
+
+
+@code {
+    bool success;
+    string[] errors = { };
+    MudTextField<string> usernameField;
+    MudTextField<string> emailField;
+    MudTextField<string> pwField1;
+    MudTextField<string> taxIdField;
+    MudRadioGroup<string> accountType;
+    MudForm form;
+
+    private IEnumerable<string> PasswordStrength(string pw)
+    {
+        if (string.IsNullOrWhiteSpace(pw))
+        {
+            yield return "Password is required!";
+            yield break;
+        }
+        if (pw.Length < 8)
+            yield return "Password must be at least of length 8";
+        if (!Regex.IsMatch(pw, @"[A-Z]"))
+            yield return "Password must contain at least one capital letter";
+        if (!Regex.IsMatch(pw, @"[a-z]"))
+            yield return "Password must contain at least one lowercase letter";
+        if (!Regex.IsMatch(pw, @"[0-9]"))
+            yield return "Password must contain at least one digit";
+    }
+
+    private string PasswordMatch(string arg)
+    {
+        if (pwField1.Value != arg)
+            return "Passwords don't match";
+        return null;
+    }
+
+    private void SignUpAction()
+    {
+        var username = usernameField.Value;
+        var email = emailField.Value;
+        var password = pwField1.Value;
+        if (accountType.Value == "BusinessClient")
+        {
+            var taxid = taxIdField.Value;
+        }
+    }
+}
