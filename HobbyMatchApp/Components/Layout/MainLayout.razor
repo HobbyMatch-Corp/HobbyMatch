@@ -1,14 +1,13 @@
 ﻿@inherits LayoutComponentBase
 
 @using Microsoft.AspNetCore.Components.Authorization
-@using System.Windows;
 @inject NavigationManager navigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject NavigationManager navigationManager
 
 @* Required *@
 <MudThemeProvider Theme="MyCustomTheme" />
-<MudPopoverProvider />
+<MudPopoverProvider @rendermode="InteractiveServer"/>
+
 <div class="page">
     <CascadingAuthenticationState>
         <AuthorizeView>
@@ -28,7 +27,7 @@
                             Wyloguj się
                         </button>
                     </Authorized>
-                    <NotAuthorized>
+                    <NotAuthorized >
                         <button class="btn btn-primary" @onclick="SignInAction">
                             Zaloguj się
                         </button>
