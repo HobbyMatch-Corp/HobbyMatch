@@ -1,19 +1,44 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager navigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using Microsoft.AspNetCore.Components.Authorization
 
+@* Required *@
+<MudThemeProvider />
+<MudPopoverProvider />
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    <CascadingAuthenticationState>
+        <AuthorizeView>
+            <Authorized>
+                <div class="sidebar">
+                    <NavMenu />
+                </div>
+            </Authorized>
+        </AuthorizeView>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+        <main>
+            <div class="top-row px-4">
+                <AuthorizeView>
+                    <Authorized>
+                        <button class="btn btn-primary">
+                            Wyloguj się
+                        </button>
+                    </Authorized>
+                    <NotAuthorized>
+                        <button class="btn btn-primary">
+                            Zaloguj się
+                        </button>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+
+    </CascadingAuthenticationState>
 </div>
 
 <div id="blazor-error-ui" data-nosnippet>

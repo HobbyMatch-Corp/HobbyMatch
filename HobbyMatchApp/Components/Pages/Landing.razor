@@ -1,0 +1,41 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject NavigationManager navigationManager
+
+<MudContainer>
+    <div class="full-background" />
+
+    <MudGrid Justify="Justify.Center" AlignItems="Center" Style="height: 100vh;">
+        <MudItem xs="12" md="6" Class="text-center text-container">
+
+            <div class="overlay">
+
+                <MudText Variant="h2" Class="slogan-text mt-5">
+                    Znajdź ekipę
+                </MudText>
+                <MudText Variant="h2" Class="slogan-text">
+                    Znajdź miejsce
+                </MudText>
+                <MudText Variant="h2" Class="slogan-text">
+                    Graj bez ograniczeń
+                </MudText>
+
+                <button style="position: fixed; bottom: 40px; left: 25%; transform: translateX(-50%);" 
+                class="btn btn-primary large-button mt-5" @onclick="LogInAction">
+                    Zarejestruj się
+                </button>
+            </div>
+        </MudItem>
+
+        <MudItem xs="12" md="6" Class="d-flex justify-center">
+            
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private void LogInAction()
+    {
+        navigationManager.NavigateTo("/Error");
+    }
+}
