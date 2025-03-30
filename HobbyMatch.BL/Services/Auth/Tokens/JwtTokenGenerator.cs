@@ -1,5 +1,5 @@
 using HobbyMatch.BL.Configuration;
-using HobbyMatch.Domain.Entities;
+using HobbyMatch.Model.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

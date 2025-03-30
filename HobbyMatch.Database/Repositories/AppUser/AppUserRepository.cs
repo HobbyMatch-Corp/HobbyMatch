@@ -12,22 +12,22 @@ namespace HobbyMatch.Database.Repositories.AppUser
             _dbContext = dbContext;
         }
 
-        public async Task<Domain.Entities.User?> GetUserByEmailAsync(string email)
+        public async Task<Model.Entities.User?> GetUserByEmailAsync(string email)
         {
             return await _dbContext.AppUsers.FirstOrDefaultAsync(x => x.Email == email);
         }
 
-        public async Task<Domain.Entities.User?> GetUserByIdAsync(int id)
+        public async Task<Model.Entities.User?> GetUserByIdAsync(int id)
         {
             return await _dbContext.AppUsers.FindAsync(id);
         }
 
-        public Task<List<Domain.Entities.User>> GetUsersAsync()
+        public Task<List<Model.Entities.User>> GetUsersAsync()
         {
             return _dbContext.AppUsers.ToListAsync();
         }
 
-        public async Task UpdateUserAsync(int userId, Domain.Entities.User user)
+        public async Task UpdateUserAsync(int userId, Model.Entities.User user)
         {
             var dbUser = await GetUserByIdAsync(userId);
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace HobbyMatch.Domain.Entities
+namespace HobbyMatch.Model.Entities
 {
     public abstract class Organizer : IdentityUser<int>
     {

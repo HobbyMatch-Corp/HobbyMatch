@@ -11,17 +11,17 @@ namespace HobbyMatch.BL.Services.BusinessClient
             _businessClientRepository = businessClientRepository;
         }
 
-        public async Task<Domain.Entities.BusinessClient?> GetBusinessClientByIdAsync(int id)
+        public async Task<Model.Entities.BusinessClient?> GetBusinessClientByIdAsync(int id)
         {
             return await _businessClientRepository.GetBusinessClientByIdAsync(id);
         }
 
-        public async Task<List<Domain.Entities.BusinessClient>> GetBusinessClientsAsync()
+        public async Task<List<Model.Entities.BusinessClient>> GetBusinessClientsAsync()
         {
             return await _businessClientRepository.GetBusinessClientsAsync();
         }
 
-        public async Task UpdateBusinessClientAsync(int userId, Domain.Entities.BusinessClient businessClient)
+        public async Task UpdateBusinessClientAsync(int userId, Model.Entities.BusinessClient businessClient)
         {
             await _businessClientRepository.UpdateUserAsync(userId, businessClient);
         }

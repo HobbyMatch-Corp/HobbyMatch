@@ -1,4 +1,4 @@
-using HobbyMatch.Domain.Entities;
+using HobbyMatch.Model.Entities;
 
 namespace HobbyMatch.BL.Services.Auth;
 

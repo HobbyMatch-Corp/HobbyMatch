@@ -4,7 +4,7 @@ using HobbyMatch.BL.Services.Auth;
 using HobbyMatch.BL.Services.Auth.Account;
 using HobbyMatch.Database.Data;
 using HobbyMatch.Database.Repositories.User;
-using HobbyMatch.Domain.Entities;
+using HobbyMatch.Model.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

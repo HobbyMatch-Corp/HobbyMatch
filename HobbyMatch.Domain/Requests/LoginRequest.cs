@@ -1,3 +1,3 @@
-namespace HobbyMatch.Domain.Requests;
+namespace HobbyMatch.Model.Requests;
 
 public record LoginRequest(string Email, string Password);

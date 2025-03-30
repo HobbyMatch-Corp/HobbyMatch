@@ -1,8 +1,8 @@
 using HobbyMatch.BL.Models.Auth;
 using HobbyMatch.Database.Repositories.User;
-using HobbyMatch.Domain.Entities;
-using HobbyMatch.Domain.Exceptions.AuthExceptions;
-using HobbyMatch.Domain.Requests;
+using HobbyMatch.Model.Entities;
+using HobbyMatch.Model.Exceptions.AuthExceptions;
+using HobbyMatch.Model.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +29,7 @@ public class AccountService : IAccountService
             throw new UserAlreadyExistsException(registerRequest.Email);
         }
 
-        var newBusinessClient = new Domain.Entities.BusinessClient
+        var newBusinessClient = new Model.Entities.BusinessClient
         {
             Email = registerRequest.Email,
             TaxID = registerRequest.TaxId,
