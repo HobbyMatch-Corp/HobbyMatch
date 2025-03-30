@@ -33,6 +33,7 @@ public class AccountService : IAccountService
         {
             Email = registerRequest.Email,
             TaxID = registerRequest.TaxId,
+            UserName = registerRequest.UserName,
         };
         var result = await _userManager.CreateAsync(newBusinessClient, registerRequest.Password);
 
@@ -53,6 +54,7 @@ public class AccountService : IAccountService
         var newUser = new User
         {
             Email = registerRequest.Email,
+            UserName = registerRequest.UserName
         };
         var result = await _userManager.CreateAsync(newUser, registerRequest.Password);
 
