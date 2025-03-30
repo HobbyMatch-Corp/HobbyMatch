@@ -36,7 +36,7 @@ namespace HobbyMatch.App.Auth.TokenService
 			if (!string.IsNullOrEmpty(_accessToken))
 				return _accessToken;
 
-			try // TODO: Fix this ASAP
+			try 
 			{
 				var result = await _localStorage.GetAsync<string>("accessToken");
 				if (result.Success)
@@ -45,7 +45,7 @@ namespace HobbyMatch.App.Auth.TokenService
 					return _accessToken;
 				}
 			}
-			catch (Exception)
+			catch (Exception) // Apparently protected local storage throws an exception, bcs of double render (once on server side), but should work anyways on client
 			{
 				return null;
 			}
