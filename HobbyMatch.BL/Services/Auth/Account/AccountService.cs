@@ -1,8 +1,6 @@
-using System.Net;
 using HobbyMatch.BL.Models.Auth;
 using HobbyMatch.Database.Repositories.User;
 using HobbyMatch.Model.Entities;
-using HobbyMatch.Model.Exceptions;
 using HobbyMatch.Model.Exceptions.AuthExceptions;
 using HobbyMatch.Model.Requests;
 using Microsoft.AspNetCore.Identity;
@@ -10,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HobbyMatch.BL.Services.Auth.Account;
 
-public class AccountService: IAccountService
+public class AccountService : IAccountService
 {
     private readonly ITokenGenerator _tokenGenerator;
     private readonly UserManager<Organizer> _userManager;
     private readonly IUserRepository _userRepository;
 
-    public AccountService(ITokenGenerator tokenGenerator, UserManager<Organizer> userManager,IUserRepository userRepository)
+    public AccountService(ITokenGenerator tokenGenerator, UserManager<Organizer> userManager, IUserRepository userRepository)
     {
         _tokenGenerator = tokenGenerator;
         _userManager = userManager;
@@ -31,19 +29,19 @@ public class AccountService: IAccountService
             throw new UserAlreadyExistsException(registerRequest.Email);
         }
 
-        var newBusinessClient = new BusinessClient
+        var newBusinessClient = new Model.Entities.BusinessClient
         {
             Email = registerRequest.Email,
             TaxID = registerRequest.TaxId,
         };
-        var result = await _userManager.CreateAsync(newBusinessClient,registerRequest.Password);
+        var result = await _userManager.CreateAsync(newBusinessClient, registerRequest.Password);
 
         if (!result.Succeeded)
         {
             throw new RegistrationFailedException(result.Errors.Select(err => err.Description));
         }
     }
-    
+
     public async Task RegisterUserAsync(UserRegisterRequest registerRequest)
     {
         var userExists = await _userManager.FindByEmailAsync(registerRequest.Email) != null;
@@ -56,7 +54,7 @@ public class AccountService: IAccountService
         {
             Email = registerRequest.Email,
         };
-        var result = await _userManager.CreateAsync(newUser,registerRequest.Password);
+        var result = await _userManager.CreateAsync(newUser, registerRequest.Password);
 
         if (!result.Succeeded)
         {
@@ -82,10 +80,10 @@ public class AccountService: IAccountService
         user.RefreshTokenExpiresAt = refreshTokenExpiration;
 
         await _userManager.UpdateAsync(user);
-        
+
         return new AuthResult
         {
-            JwtToken =  jwtToken,
+            JwtToken = jwtToken,
             JwtTokenExpirationDate = expiresAt,
             RefreshToken = refreshToken,
             RefreshTokenExpirationDate = refreshTokenExpiration
@@ -110,7 +108,7 @@ public class AccountService: IAccountService
         {
             throw new RefreshTokenException("Refresh token is expired.");
         }
-        
+
         var (jwtToken, expiresAt) = _tokenGenerator.GenerateToken(user);
         var newRefreshToken = _tokenGenerator.GenerateRefreshToken();
 
@@ -120,10 +118,10 @@ public class AccountService: IAccountService
         user.RefreshTokenExpiresAt = refreshTokenExpiration;
 
         await _userManager.UpdateAsync(user);
-        
+
         return new AuthResult
         {
-            JwtToken =  jwtToken,
+            JwtToken = jwtToken,
             JwtTokenExpirationDate = expiresAt,
             RefreshToken = refreshToken,
             RefreshTokenExpirationDate = refreshTokenExpiration
