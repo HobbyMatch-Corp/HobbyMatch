@@ -37,14 +37,14 @@ namespace HobbyMatch.App.Services
 				Console.WriteLine(e);
 				return null;
 			}
-			T[]? user = null;
+			T[]? users = null;
 			var response = await _httpClient.GetAsync(endpoint);
 			if (response.IsSuccessStatusCode)
 			{
-				user = await response.Content.ReadFromJsonAsync<T[]>();
+				users = await response.Content.ReadFromJsonAsync<T[]>();
 			}
 
-			return user;
+			return users;
 
 		}
 
