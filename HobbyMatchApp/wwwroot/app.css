@@ -8,8 +8,17 @@ a, .btn-link {
 
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: #213d5d /*#1b6ec2*/;
+    border-color: #1e3957 /*#1861ac*/;
+    border-top-left-radius: 28px;
+    border-top-right-radius: 28px;
+    border-bottom-left-radius: 28px;
+    border-bottom-right-radius: 28px;
+    width: 150px;
+}
+.large-button {
+    font-size: 2rem;
+    width: 300px;
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -57,4 +66,39 @@ h1:focus {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
+}
+
+.centered-text {
+    text-align: center;
+    width: 100px
+}
+.full-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/sport.jpg'); /* Œcie¿ka do obrazu */
+    background-size: cover;
+    background-position: center;
+    z-index: -1; /* T³o bêdzie za treœci¹ */
+}
+
+.overlay {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 80%;
+    height: 100%;
+    clip-path: polygon(0 0, 35% 0, 75% 100%, 0% 100%);
+    background-color: rgba(255, 255, 255, 0.8); /* Bia³e t³o z przezroczystoœci¹ */
+    text-align: left; /* Wyrównanie tekstu do œrodka */
+    padding: 40px;
+}
+.slogan-text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    font-weight: bold !important;
+    font-size: 48px !important;
+    color: #00171F !important;
+    padding: 20px;
 }
