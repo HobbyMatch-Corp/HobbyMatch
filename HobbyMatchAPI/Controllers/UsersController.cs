@@ -1,15 +1,7 @@
 ﻿using HobbyMatch.BL.Services.AppUser;
-using HobbyMatch.Database.Data;
-using HobbyMatch.Database.Repositories.AppUser;
-using HobbyMatch.Database.Repositories.User;
 using HobbyMatch.Domain.Entities;
-using HobbyMatchAPI.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace HobbyMatch.API.Controllers
 {

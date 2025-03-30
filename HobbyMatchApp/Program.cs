@@ -2,7 +2,6 @@ using HobbyMatch.App.Auth;
 using HobbyMatch.App.Auth.TokenService;
 using HobbyMatch.App.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +16,7 @@ builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddHttpClient("AuthenticatedClient")
-	.AddHttpMessageHandler<AuthHttpClientHandler>();
+    .AddHttpMessageHandler<AuthHttpClientHandler>();
 
 var app = builder.Build();
 

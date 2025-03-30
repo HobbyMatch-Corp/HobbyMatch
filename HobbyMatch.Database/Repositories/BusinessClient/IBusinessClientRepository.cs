@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HobbyMatch.Domain.Entities;
-
-namespace HobbyMatch.Database.Repositories.BusinessClient
+﻿namespace HobbyMatch.Database.Repositories.BusinessClient
 {
     public interface IBusinessClientRepository
     {

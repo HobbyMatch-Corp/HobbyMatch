@@ -15,7 +15,7 @@ public class AuthController : ControllerBase
     {
         _accountService = accountService;
     }
-    
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
         await _accountService.RegisterBusinessClientAsync(request);
         return Ok();
     }
-    
+
     [HttpPost("register/user")]
     public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
     {

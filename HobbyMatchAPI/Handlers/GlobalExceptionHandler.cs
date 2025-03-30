@@ -1,15 +1,15 @@
-using System.Net;
 using HobbyMatch.Domain.Exceptions.AuthExceptions;
 using Microsoft.AspNetCore.Diagnostics;
+using System.Net;
 
 namespace HobbyMatch.API.Handlers;
 
-public class GlobalExceptionHandler: IExceptionHandler
+public class GlobalExceptionHandler : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
         var (statusCode, message) = GetExceptionDetails(exception);
-        
+
         httpContext.Response.StatusCode = (int)statusCode;
         await httpContext.Response.WriteAsJsonAsync(message, cancellationToken);
 
