@@ -1,8 +1,12 @@
 using HobbyMatch.API.Handlers;
 using HobbyMatch.BL.Configuration;
+using HobbyMatch.BL.Services.AppUser;
 using HobbyMatch.BL.Services.Auth;
 using HobbyMatch.BL.Services.Auth.Account;
+using HobbyMatch.BL.Services.BusinessClient;
 using HobbyMatch.Database.Data;
+using HobbyMatch.Database.Repositories.AppUser;
+using HobbyMatch.Database.Repositories.BusinessClient;
 using HobbyMatch.Database.Repositories.User;
 using HobbyMatch.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -36,7 +40,11 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 builder.Services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
+builder.Services.AddScoped<IBusinessClientRepository, BusinessClientRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAppUserService, AppUserService>();
+builder.Services.AddScoped<IBusinessClientService, BusinessClientService>();
 
 builder.Services.AddAuthentication(opt =>
 {
