@@ -1,19 +1,46 @@
 ﻿@inherits LayoutComponentBase
 
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager navigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@* Required *@
+<MudThemeProvider Theme="MyCustomTheme" />
+<MudPopoverProvider @rendermode="InteractiveServer"/>
+
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    <CascadingAuthenticationState>
+        <AuthorizeView>
+            <Authorized>
+                <div class="sidebar">
+                    <NavMenu />
+                </div>
+            </Authorized>
+        </AuthorizeView>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+        <main>
+            <div class="top-row px-4">
+                <AuthorizeView>
+                    <Authorized>
+                        <button class="btn btn-primary">
+                            Wyloguj się
+                        </button>
+                    </Authorized>
+                    <NotAuthorized >
+                        <button class="btn btn-primary" @onclick="SignInAction">
+                            Zaloguj się
+                        </button>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+
+    </CascadingAuthenticationState>
 </div>
 
 <div id="blazor-error-ui" data-nosnippet>
@@ -21,3 +48,30 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code
+{
+    MudTheme MyCustomTheme = new MudTheme()
+        {
+            PaletteLight = new PaletteLight()
+            {
+                Primary = new MudBlazor.Utilities.MudColor("#213d5d"),
+                Secondary = new MudBlazor.Utilities.MudColor("#1e3957"),
+            },
+            PaletteDark = new PaletteDark()
+            {
+                Primary = Colors.Blue.Lighten1
+            },
+
+            LayoutProperties = new LayoutProperties()
+            {
+                DrawerWidthLeft = "260px",
+                DrawerWidthRight = "300px"
+            }
+        };
+
+    private void SignInAction()
+    {
+        navigationManager.NavigateTo("/SignIn");
+    }
+}

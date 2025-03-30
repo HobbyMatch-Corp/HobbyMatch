@@ -1,6 +1,6 @@
 using HobbyMatch.BL.DTOs.Auth;
 using HobbyMatch.BL.Services.Auth.Account;
-using HobbyMatch.Model.Requests;
+using HobbyMatch.Domain.Requests;
 using HobbyMatchAPI.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +15,7 @@ public class AuthController : ControllerBase
     {
         _accountService = accountService;
     }
-    
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
         await _accountService.RegisterBusinessClientAsync(request);
         return Ok();
     }
-    
+
     [HttpPost("register/user")]
     public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
     {

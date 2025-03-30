@@ -1,17 +1,17 @@
+using HobbyMatch.BL.Configuration;
+using HobbyMatch.Domain.Entities;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using HobbyMatch.BL.Configuration;
-using HobbyMatch.Model.Entities;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 namespace HobbyMatch.BL.Services.Auth;
 
-public class JwtTokenGenerator: ITokenGenerator
+public class JwtTokenGenerator : ITokenGenerator
 {
-    private readonly JwtOptions _options; 
+    private readonly JwtOptions _options;
     public JwtTokenGenerator(IOptions<JwtOptions> options)
     {
         _options = options.Value;
@@ -46,5 +46,5 @@ public class JwtTokenGenerator: ITokenGenerator
         rng.GetBytes(randomNumber);
         return Convert.ToBase64String(randomNumber);
     }
-        
+
 }
