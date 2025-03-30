@@ -10,10 +10,10 @@ namespace HobbyMatch.Database.Repositories.AppUser
     {
         public Task<List<Model.Entities.User>> GetUsersAsync();
 
-        public Task<Model.Entities.User?> GetUserBeEmailAsync(string email);
+        public Task<Model.Entities.User?> GetUserByEmailAsync(string email);
 
-        public Task<Model.Entities.User?> GetUserBeIdAsync(int id);
+        public Task<Model.Entities.User?> GetUserByIdAsync(int id);
 
-        public Task UpdateUserAsync(string email, Model.Entities.User user);
+        public Task UpdateUserAsync(int id, Model.Entities.User user);
     }
 }

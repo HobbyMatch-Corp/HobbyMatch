@@ -15,6 +15,6 @@ namespace HobbyMatch.BL.Services.AppUser
 
         public Task<User?> GetUserByIdAsync(int id);
 
-        public Task UpdateUserAsync(string email, User user);
+        public Task UpdateUserAsync(int userId, User user);
     }
 }

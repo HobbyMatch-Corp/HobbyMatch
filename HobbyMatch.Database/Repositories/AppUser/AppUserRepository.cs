@@ -17,12 +17,12 @@ namespace HobbyMatch.Database.Repositories.AppUser
             _dbContext = dbContext;
         }
 
-        public async Task<Model.Entities.User?> GetUserBeEmailAsync(string email)
+        public async Task<Model.Entities.User?> GetUserByEmailAsync(string email)
         {
             return await _dbContext.AppUsers.FirstOrDefaultAsync(x => x.Email == email);
         }
 
-        public async Task<Model.Entities.User?> GetUserBeIdAsync(int id)
+        public async Task<Model.Entities.User?> GetUserByIdAsync(int id)
         {
             return await _dbContext.AppUsers.FindAsync(id);
         }
@@ -32,9 +32,9 @@ namespace HobbyMatch.Database.Repositories.AppUser
             return _dbContext.AppUsers.ToListAsync();
         }
 
-        public async Task UpdateUserAsync(string email, Model.Entities.User user)
+        public async Task UpdateUserAsync(int userId, Model.Entities.User user)
         {
-            var dbUser = await _dbContext.AppUsers.FirstOrDefaultAsync(u => u.Email == email);
+            var dbUser = await GetUserByIdAsync(userId);
 
             if (dbUser != null)
             {

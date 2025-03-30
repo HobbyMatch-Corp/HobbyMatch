@@ -21,8 +21,4 @@
     <ProjectReference Include="..\HobbyMatch.Domain\HobbyMatch.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\BusinessClient\" />
-  </ItemGroup>
-
 </Project>

@@ -29,7 +29,7 @@ namespace HobbyMatch.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            return Ok(_appUserService.GetUsersAsync());
+            return Ok(await _appUserService.GetUsersAsync());
         }
 
         [Authorize]
@@ -53,7 +53,7 @@ namespace HobbyMatch.API.Controllers
             var userDb = await _appUserService.GetUserByIdAsync(userId);
             if (userDb == null || string.IsNullOrEmpty(emailJWT) || userDb.Email != emailJWT) return BadRequest();
 
-            await _appUserService.UpdateUserAsync(emailJWT, user);
+            await _appUserService.UpdateUserAsync(userId, user);
 
             return Ok();
         }

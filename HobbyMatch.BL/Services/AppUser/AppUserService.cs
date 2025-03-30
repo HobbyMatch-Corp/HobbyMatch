@@ -21,12 +21,12 @@ namespace HobbyMatch.BL.Services.AppUser
 
         public async Task<User?> GetUserByEmailAsync(string email)
         {
-            return await _appUserRepository.GetUserBeEmailAsync(email);
+            return await _appUserRepository.GetUserByEmailAsync(email);
         }
 
         public async Task<User?> GetUserByIdAsync(int id)
         {
-            return await _appUserRepository.GetUserBeIdAsync(id);
+            return await _appUserRepository.GetUserByIdAsync(id);
         }
 
         public async Task<List<User>> GetUsersAsync()
@@ -34,9 +34,9 @@ namespace HobbyMatch.BL.Services.AppUser
             return await _appUserRepository.GetUsersAsync();
         }
 
-        public async Task UpdateUserAsync(string email, User user)
+        public async Task UpdateUserAsync(int userId, User user)
         {
-            await _appUserRepository.UpdateUserAsync(email, user);
+            await _appUserRepository.UpdateUserAsync(userId, user);
         }
     }
 }
