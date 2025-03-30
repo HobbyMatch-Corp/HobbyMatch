@@ -31,7 +31,7 @@ public class AccountService: IAccountService
             throw new UserAlreadyExistsException(registerRequest.Email);
         }
 
-        var newBusinessClient = new BusinessClient
+        var newBusinessClient = new Model.Entities.BusinessClient
         {
             Email = registerRequest.Email,
             TaxID = registerRequest.TaxId,

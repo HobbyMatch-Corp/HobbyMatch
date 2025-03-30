@@ -30,7 +30,7 @@ namespace HobbyMatch.BL.Services.BusinessClient
 
         public async Task UpdateBusinessClientAsync(int userId, Model.Entities.BusinessClient businessClient)
         {
-            return await _businessClientRepository.UpdateUserAsync(userId, businessClient);
+            await _businessClientRepository.UpdateUserAsync(userId, businessClient);
         }
     }
 }
