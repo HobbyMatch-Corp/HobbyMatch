@@ -1,4 +1,4 @@
-using HobbyMatch.Model.Exceptions.AuthExceptions;
+using HobbyMatch.Domain.Exceptions.AuthExceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 

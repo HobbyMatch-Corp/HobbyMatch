@@ -1,5 +1,5 @@
 ﻿using HobbyMatch.BL.Services.AppUser;
-using HobbyMatch.Model.Entities;
+using HobbyMatch.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

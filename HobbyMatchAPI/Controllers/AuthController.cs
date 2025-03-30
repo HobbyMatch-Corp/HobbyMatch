@@ -1,6 +1,6 @@
 using HobbyMatch.BL.DTOs.Auth;
 using HobbyMatch.BL.Services.Auth.Account;
-using HobbyMatch.Model.Requests;
+using HobbyMatch.Domain.Requests;
 using HobbyMatchAPI.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
