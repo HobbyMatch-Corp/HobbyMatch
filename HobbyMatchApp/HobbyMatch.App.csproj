@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HobbyMatch.BL\HobbyMatch.BL.csproj" />
     <ProjectReference Include="..\HobbyMatch.Domain\HobbyMatch.Domain.csproj" />
   </ItemGroup>
 
