@@ -22,7 +22,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddHttpClient("AuthenticatedClient").AddHttpMessageHandler<AuthHttpClientHandler>();
 builder.Services.AddHttpClient("AuthClient", client =>
 {
-	client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("BaseUrl")?? "");
+	client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("BaseUrl")?? "https://localhost:7298/api");
 });
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddScoped<IAuthApiService, AuthApiService>();
