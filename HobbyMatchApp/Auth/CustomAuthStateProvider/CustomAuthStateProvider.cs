@@ -16,7 +16,7 @@ namespace HobbyMatch.App.Auth.CustomAuthStateProvider
 		public override async Task<AuthenticationState> GetAuthenticationStateAsync()
 		{
 			var claims = await _tokenService.GetClaimsFromTokenAsync();
-			var identity = new ClaimsIdentity(claims, "Bearer");
+			var identity = claims.Any() ? new ClaimsIdentity(claims, "Bearer") : new ClaimsIdentity();
 
 			var user = new ClaimsPrincipal(identity);
 
