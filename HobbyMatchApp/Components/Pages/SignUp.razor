@@ -91,8 +91,8 @@
         var username = usernameField.Value;
         var email = emailField.Value;
         var password = passwordField.Value;
-        var isBuisnessClient = accountType.Value == "BusinessClient";
-        var taxid = taxIdField is not null ? taxIdField.Value : "";
+        var isBusinessClient = accountType.Value == "BusinessClient";
+        var taxId = taxIdField is not null ? taxIdField.Value : "";
 
         var result = await AuthApiService.RegisterAsync(email, password);
         if (result is null)
