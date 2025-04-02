@@ -1,9 +1,10 @@
 ﻿@page "/SignIn"
 
+@using System.Threading 
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
 @using HobbyMatch.App.Services
-@inject IAuthApiService AuthApiService
+@inject Services.IAuthApiService AuthApiService
 @inject NavigationManager navigationManager
 
 
@@ -22,13 +23,22 @@
                     <MudRadio Color="Color.Primary" Value="@("BusinessClient")">Business Client</MudRadio>
                 </MudRadioGroup>
             </div> *@
-            <div class="d-flex align-center justify-space-between">
-                <MudText>Don’t have an account yet?  <MudLink Href="/SignUp">Sign up here</MudLink></MudText>
-                <button disabled="@(!success)" Class="btn btn-primary" @onclick="SignInAction">Sign in</button>
-            </div>
         </MudForm>
+
+        <div class="d-flex align-center justify-space-between">
+            <MudText>Don’t have an account yet?  <MudLink Href="/SignUp">Sign up here</MudLink></MudText>
+            <button disabled="@(!success)" Class="btn btn-primary" @onclick="SignInAction">Sign in</button>
+        </div>
     </MudPaper>
 </MudContainer>
+
+@if (_showAlert)
+{
+    <MudCard Class="centered-top rounded-xl">
+        <MudAlert Class="rounded-xl" Severity="Severity.Error" ShowCloseIcon="true"
+        CloseIconClicked="(() => CloseAlert(true))">@_alertText</MudAlert>
+    </MudCard>
+}
 
 
 @code {
@@ -38,7 +48,10 @@
     MudTextField<string>? passwordField;
     MudRadioGroup<string>? accountType;
 
-    private async void SignInAction()
+    private bool _showAlert = false;
+    private string _alertText = "";
+
+    private async Task SignInAction()
     {
         if (emailField is null || passwordField is null) return;
 
@@ -47,10 +60,27 @@
         var result = await AuthApiService.LoginAsync(email, password);
         if (result is null)
         {
-
+            await ShowAlert("Login failed!", 5000);
             return;
         }
 
         navigationManager.NavigateTo("/");
+        StateHasChanged();
+
+    }
+
+    public async Task ShowAlert(string text, int delay)
+    {
+        _alertText = text;
+        _showAlert = true;
+        StateHasChanged();
+        await Task.Delay(delay);
+        CloseAlert(true);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void CloseAlert(bool value)
+    {
+        _showAlert = !value;
     }
 }
