@@ -4,7 +4,7 @@ namespace HobbyMatch.App.Services
 {
     public interface IEventApiService
     {
-        Task<string?> EventSigninAsync(string EventId);
-        Task<string?> EventSignoutAsync(string EventId);
+        Task<bool?> EventSigninAsync(string EventId);
+        Task<bool?> EventSignoutAsync(string EventId);
     }
 }
