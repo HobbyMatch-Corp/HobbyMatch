@@ -1,11 +1,13 @@
 ﻿@inherits LayoutComponentBase
+
+@using Microsoft.AspNetCore.Components.Authorization
 @inject NavigationManager navigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@using Microsoft.AspNetCore.Components.Authorization
 
 @* Required *@
-<MudThemeProvider />
-<MudPopoverProvider />
+<MudThemeProvider Theme="MyCustomTheme" />
+<MudPopoverProvider @rendermode="InteractiveServer"/>
+
 <div class="page">
     <CascadingAuthenticationState>
         <AuthorizeView>
@@ -25,8 +27,8 @@
                             Log out
                         </button>
                     </Authorized>
-                    <NotAuthorized>
-                        <button class="btn btn-primary">
+                    <NotAuthorized >
+                        <button class="btn btn-primary" @onclick="SignInAction">
                             Log in
                         </button>
                     </NotAuthorized>
@@ -46,3 +48,32 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code
+{
+    MudTheme MyCustomTheme = new MudTheme()
+        {
+            PaletteLight = new PaletteLight()
+            {
+                Primary = new MudBlazor.Utilities.MudColor("#213d5d"),
+                Secondary = new MudBlazor.Utilities.MudColor("#1e3957"),
+                Tertiary = new MudBlazor.Utilities.MudColor("#007EA7"),
+                Info = new MudBlazor.Utilities.MudColor("#00A8E8")
+            },
+            PaletteDark = new PaletteDark()
+            {
+                Primary = Colors.Blue.Lighten1
+            },
+
+            LayoutProperties = new LayoutProperties()
+            {
+                DrawerWidthLeft = "260px",
+                DrawerWidthRight = "300px"
+            }
+        };
+
+    private void SignInAction()
+    {
+        navigationManager.NavigateTo("/SignIn");
+    }
+}
