@@ -1,6 +1,4 @@
-﻿using HobbyMatch.BL.Models.Auth;
-
-namespace HobbyMatch.App.Services
+﻿namespace HobbyMatch.App.Services
 {
     public class EventApiService : IEventApiService
     {
@@ -22,7 +20,13 @@ namespace HobbyMatch.App.Services
 
         public async Task<bool?> EventSignoutAsync(string EventId)
         {
-            throw new NotImplementedException();
+            bool success = false;
+            var response = await _httpClient.PostAsJsonAsync("api/eventsignout", new { EventId });
+            if (response.IsSuccessStatusCode)
+            {
+                success = await response.Content.ReadFromJsonAsync<bool>();
+            }
+            return success;
         }
     }
 }

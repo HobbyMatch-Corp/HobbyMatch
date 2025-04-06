@@ -1,6 +1,4 @@
-﻿using HobbyMatch.BL.Models.Auth;
-
-namespace HobbyMatch.App.Services
+﻿namespace HobbyMatch.App.Services
 {
     public interface IEventApiService
     {
