@@ -108,3 +108,10 @@ h1:focus {
     color: #00171F !important;
     padding: 20px;
 }
+
+
+.centered-top {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+}

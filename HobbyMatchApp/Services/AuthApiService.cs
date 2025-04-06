@@ -15,7 +15,7 @@ namespace HobbyMatch.App.Services
 		public async Task<AuthResult?> LoginAsync(string email, string password)
 		{
 			AuthResult? authResult = null;
-			var response = await _httpClient.PostAsJsonAsync("api/login", new { email, password });
+			var response = await _httpClient.PostAsJsonAsync("api/auth/login", new { email, password });
 			if (response.IsSuccessStatusCode)
 			{
 				authResult = await response.Content.ReadFromJsonAsync<AuthResult>();
