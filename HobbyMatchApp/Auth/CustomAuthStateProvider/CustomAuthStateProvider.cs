@@ -27,7 +27,7 @@ namespace HobbyMatch.App.Auth.CustomAuthStateProvider
 			return new AuthenticationState(user);
 		}
 
-		public async void Login(string email, string password)
+		public async Task<bool> LoginAsync(string email, string password)
 		{
 			var authResult = await _authApiService.LoginAsync(email, password);
 			if (authResult != null)
@@ -35,6 +35,7 @@ namespace HobbyMatch.App.Auth.CustomAuthStateProvider
 				await _tokenService.SetAccessTokenAsync(authResult.JwtToken);
 			}
 			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+			return authResult != null;
 		}
 		public void Logout()
 		{

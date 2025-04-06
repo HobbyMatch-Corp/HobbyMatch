@@ -24,7 +24,7 @@ builder.Services.AddHttpClient("AuthClient", client =>
 {
 	client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("BaseUrl")?? "https://localhost:7298/api");
 });
-builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddScoped<CustomAuthStateProvider>();
 builder.Services.AddScoped<IAuthApiService, AuthApiService>();
 builder.Services.AddMudServices();
 
