@@ -9,8 +9,8 @@ namespace HobbyMatch.App.Services
 
 		private readonly Dictionary<Type, string> _endpointMap = new() // TODO: Create endpoint provider using strategy pattern
 		{
-			{ typeof(User), "users" },
-			{ typeof(Organizer), "organizers" },
+			{ typeof(User), "/users" },
+			{ typeof(Organizer), "/organizers" },
 		};
 		public OrganizerApiService(IHttpClientFactory httpClientFactory)
 		{

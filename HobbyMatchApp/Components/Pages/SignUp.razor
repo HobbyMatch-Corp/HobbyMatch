@@ -58,6 +58,7 @@
     private bool _showAlert = false;
     private string _alertText = "";
 
+    // TODO: Proposition, to use a validation Service. This will be most likely needed in the future in "reset password" component
     private IEnumerable<string> PasswordStrength(string pw)
     {  
         if (string.IsNullOrWhiteSpace(pw))
@@ -94,7 +95,16 @@
         var isBusinessClient = accountType.Value == "BusinessClient";
         var taxId = taxIdField is not null ? taxIdField.Value : "";
 
-        var result = await AuthApiService.RegisterAsync(email, password);
+        HttpResponseMessage result;
+        if (isBusinessClient)
+        {
+            result = await AuthApiService.RegisterBusinessClientAsync(username, email, password, taxId);
+        }
+
+        else{
+            result = await AuthApiService.RegisterUserAsync(username, email, password);
+
+        }
         if (result is null)
         {
             await ShowAlert("Registration failed!", 5000);

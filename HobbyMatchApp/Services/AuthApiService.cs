@@ -1,12 +1,13 @@
 ﻿
 using HobbyMatch.BL.Models.Auth;
+using HobbyMatch.Domain.Requests;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HobbyMatch.App.Services
 {
 	public class AuthApiService : IAuthApiService
 	{
 		private readonly HttpClient _httpClient;
-
 		public AuthApiService(IHttpClientFactory httpClientFactory)
 		{
 			_httpClient = httpClientFactory.CreateClient("AuthClient");
@@ -15,7 +16,8 @@ namespace HobbyMatch.App.Services
 		public async Task<AuthResult?> LoginAsync(string email, string password)
 		{
 			AuthResult? authResult = null;
-			var response = await _httpClient.PostAsJsonAsync("api/auth/login", new { email, password });
+			var request = new LoginRequest(email, password);
+			var response = await _httpClient.PostAsJsonAsync("/api/auth/login", request);
 			if (response.IsSuccessStatusCode)
 			{
 				authResult = await response.Content.ReadFromJsonAsync<AuthResult>();
@@ -23,9 +25,17 @@ namespace HobbyMatch.App.Services
 			return authResult;
 		}
 
-		public Task<string?> RegisterAsync(string email, string password)
+		public async Task<HttpResponseMessage> RegisterUserAsync(string username, string email, string password)
 		{
-			throw new NotImplementedException();
+			var request = new UserRegisterRequest(email, password, username);
+			var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request);
+			return response;
+		}
+		public async Task<HttpResponseMessage> RegisterBusinessClientAsync(string username, string email, string password, string taxId)
+		{
+			var request = new BusinessRegisterRequest(email, password, taxId, username);
+			var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request);
+			return response;
 		}
 	}
 }
