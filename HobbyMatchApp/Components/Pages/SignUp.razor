@@ -98,11 +98,12 @@
         HttpResponseMessage result;
         if (isBusinessClient)
         {
-            result = await AuthApiService.RegisterUserAsync(username, email, password);
+            result = await AuthApiService.RegisterBusinessClientAsync(username, email, password, taxId);
         }
 
         else{
-            result = await AuthApiService.RegisterBusinessClientAsync(username, email, password, taxId);
+            result = await AuthApiService.RegisterUserAsync(username, email, password);
+
         }
         if (result is null)
         {
