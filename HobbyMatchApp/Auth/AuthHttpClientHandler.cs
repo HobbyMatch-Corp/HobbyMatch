@@ -42,5 +42,5 @@ namespace HobbyMatch.App.Auth
 
 public class ApiSettings
 {
-    public string BaseUrl { get; set; } = String.Empty;
+    public string BaseUrl { get; set; } = null!;
 }
