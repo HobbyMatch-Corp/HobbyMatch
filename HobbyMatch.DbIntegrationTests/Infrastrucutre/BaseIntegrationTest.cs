@@ -1,5 +1,8 @@
-﻿using HobbyMatch.Database.Data;
+﻿using HobbyMatch.BL.Services.Auth.Account;
+using HobbyMatch.Database.Data;
+using HobbyMatch.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -11,31 +14,18 @@ using Testcontainers.MsSql;
 
 namespace HobbyMatch.DbIntegrationTests.Infrastrucutre
 {
-    public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>, IAsyncLifetime
+    public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
     {
         private readonly IServiceScope _scope;
         protected readonly AppDbContext DbContext;
+        protected readonly UserManager<Organizer> UserManager;
 
         protected BaseIntegrationTest(IntegrationTestWebAppFactory factory)
         {
             _scope = factory.Services.CreateScope();
 
             DbContext = _scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-            //if (DbContext.Database.GetPendingMigrations().Any())
-            //{
-            //    DbContext.Database.Migrate();
-            //}
-        }
-
-        public Task InitializeAsync()
-        {
-            return DbContext.Database.EnsureCreatedAsync();
-        }
-
-        public Task DisposeAsync()
-        {
-            return Task.CompletedTask;
+            UserManager = _scope.ServiceProvider.GetRequiredService<UserManager<Organizer>>();
         }
     }
 }

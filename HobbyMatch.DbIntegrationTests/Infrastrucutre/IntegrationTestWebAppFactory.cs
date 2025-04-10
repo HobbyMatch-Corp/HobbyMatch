@@ -12,7 +12,7 @@ namespace HobbyMatch.DbIntegrationTests.Infrastrucutre
     {
         public MsSqlContainer DbContainer = new MsSqlBuilder()
             .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
-            .WithPortBinding(1433, true)
+            .WithPortBinding(1435, true)
             .Build();
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)

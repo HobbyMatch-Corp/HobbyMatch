@@ -1,4 +1,5 @@
-﻿using HobbyMatch.BL.Services.Auth;
+﻿using HobbyMatch.BL.Configuration;
+using HobbyMatch.BL.Services.Auth;
 using HobbyMatch.BL.Services.Auth.Account;
 using HobbyMatch.Database.Repositories.User;
 using HobbyMatch.DbIntegrationTests.Infrastrucutre;
@@ -6,6 +7,7 @@ using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace HobbyMatch.DbIntegrationTests
@@ -23,15 +25,12 @@ namespace HobbyMatch.DbIntegrationTests
         {
             // Arrange
             var email = "integrationtest1@test.com";
-            var pass = "IntegTest1";
-            var username = "username";
+            var pass = "IntegTest1!";
+            var username = "IntegTestUser";
             var userRegisterRequest = new UserRegisterRequest(email, pass, username);
 
-            // Arrange.Mock
-            var userManager = new Mock<UserManager<Organizer>>();
             var userRepo = new UserRepository(DbContext);
-            var tokenGen = new Mock<JwtTokenGenerator>();
-            var accountService = new AccountService(tokenGen.Object, userManager.Object, userRepo);
+            var accountService = new AccountService(null, UserManager, userRepo);
 
             // Act
             await accountService.RegisterUserAsync(userRegisterRequest);
