@@ -1,8 +1,10 @@
 ﻿using HobbyMatch.Domain.Entities;
+using HobbyMatch.Model.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Reflection.Emit;
 using System.Security.Claims;
 
 namespace HobbyMatch.Database.Data
@@ -17,6 +19,7 @@ namespace HobbyMatch.Database.Data
 
         public DbSet<User> AppUsers { get; set; }
         public DbSet<BusinessClient> BusinessClients { get; set; }
+        public DbSet<Event> Events { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -101,6 +104,41 @@ namespace HobbyMatch.Database.Data
                         new Claim(ClaimTypes.Name, "Business Client")
                     });
                 }
+            });
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity("BusinessClientEvent", b =>
+            {
+                b.HasOne("HobbyMatch.Model.Entities.Event", null)
+                    .WithMany()
+                    .HasForeignKey("SponsoredEventsId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+
+                b.HasOne("HobbyMatch.Domain.Entities.BusinessClient", null)
+                    .WithMany()
+                    .HasForeignKey("SponsorsPartnersId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity("EventUser", b =>
+            {
+                b.HasOne("HobbyMatch.Domain.Entities.User", null)
+                    .WithMany()
+                    .HasForeignKey("SignUpListId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+
+                b.HasOne("HobbyMatch.Model.Entities.Event", null)
+                    .WithMany()
+                    .HasForeignKey("SignedUpEventsId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
             });
         }
     }

@@ -72,8 +72,8 @@ builder.Services.AddAuthentication();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 var app = builder.Build();
 
-await using(var serviceScope = app.Services.CreateAsyncScope())
-    await using(var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>())
+await using (var serviceScope = app.Services.CreateAsyncScope())
+await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>())
 {
     await dbContext.Database.EnsureCreatedAsync();
 }
