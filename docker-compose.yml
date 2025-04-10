@@ -7,6 +7,11 @@ services:
       - SA_PASSWORD=Password123!
     ports:
       - "1433:1433"
+    healthcheck:
+      test: [ "CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "Password123!", "-Q", "SELECT 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - sqlserver_data:/var/opt/mssql
     networks: 
@@ -19,6 +24,7 @@ services:
       - "5000:8080"
     depends_on:
       - sqlserver
+    restart: on-failure
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=HobbyDB;User=sa;Password=Password123!;TrustServerCertificate=True;
@@ -38,7 +44,7 @@ services:
       - backend
     environment: 
       - ASPNETCORE_ENVIRONMENT=Development
-      - BackendUrl=http://backend
+      - ApiSettings__BaseUrl=http://backend:8080
     networks:
       - app-network
 networks:
