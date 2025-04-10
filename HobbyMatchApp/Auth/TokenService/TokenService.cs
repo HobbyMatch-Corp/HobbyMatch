@@ -16,13 +16,10 @@ namespace HobbyMatch.App.Auth.TokenService
         private readonly ProtectedLocalStorage _localStorage;
         private string? _accessToken;
         private string _accessTokenName = "accessToken";
-        private readonly IJSRuntime _jsRuntime;
 
-
-        public TokenService(ProtectedLocalStorage localStorage, IJSRuntime jsRuntime)
+        public TokenService(ProtectedLocalStorage localStorage)
         {
             _localStorage = localStorage;
-            _jsRuntime = jsRuntime;
         }
 
         public async Task SetAccessTokenAsync(string token)

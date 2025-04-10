@@ -5,7 +5,8 @@ namespace HobbyMatch.App.Services
     public interface IAuthApiService
     {
         Task<AuthResult?> LoginAsync(string email, string password);
-        Task<string?> RegisterAsync(string email, string password);
+        Task<HttpResponseMessage> RegisterUserAsync(string username, string email, string password);
+        Task<HttpResponseMessage> RegisterBusinessClientAsync(string username, string email, string password, string taxId);
 
     }
 }
