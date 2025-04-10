@@ -1,13 +1,13 @@
-using HobbyMatch.BL.Configuration;
-using HobbyMatch.Domain.Entities;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using HobbyMatch.BL.Configuration;
+using HobbyMatch.Domain.Entities;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
-namespace HobbyMatch.BL.Services.Auth;
+namespace HobbyMatch.BL.Services.Auth.Tokens;
 
 public class JwtTokenGenerator : ITokenGenerator
 {

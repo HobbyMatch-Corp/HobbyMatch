@@ -28,10 +28,10 @@ namespace HobbyMatch.API.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserAsync(int businessClientId)
         {
-            var emailJWT = User.FindFirst("email")?.Value;
+            var emailJwt = User.FindFirst("email")?.Value;
 
             var businessClient = await _businessClientService.GetBusinessClientByIdAsync(businessClientId);
-            if (businessClient == null || string.IsNullOrEmpty(emailJWT) || businessClient.Email != emailJWT) return BadRequest();
+            if (businessClient == null || string.IsNullOrEmpty(emailJwt) || businessClient.Email != emailJwt) return BadRequest();
 
             return Ok(businessClient);
         }
@@ -40,10 +40,10 @@ namespace HobbyMatch.API.Controllers
         [HttpPost("{businessClientId}")]
         public async Task<IActionResult> UpdateUserAsync(int businessClientId, [FromBody] BusinessClient businessClient)
         {
-            var emailJWT = User.FindFirst("email")?.Value;
+            var emailJwt = User.FindFirst("email")?.Value;
 
             var businessClientDb = await _businessClientService.GetBusinessClientByIdAsync(businessClientId);
-            if (businessClientDb == null || string.IsNullOrEmpty(emailJWT) || businessClientDb.Email != emailJWT) return BadRequest();
+            if (businessClientDb == null || string.IsNullOrEmpty(emailJwt) || businessClientDb.Email != emailJwt) return BadRequest();
 
             await _businessClientService.UpdateBusinessClientAsync(businessClientId, businessClientDb);
 
