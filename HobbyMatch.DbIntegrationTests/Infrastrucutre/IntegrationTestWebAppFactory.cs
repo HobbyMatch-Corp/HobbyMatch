@@ -10,7 +10,10 @@ namespace HobbyMatch.DbIntegrationTests.Infrastrucutre
 {
     public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
-        protected MsSqlContainer _dbContainer = new MsSqlBuilder().Build();
+        public MsSqlContainer DbContainer = new MsSqlBuilder()
+            .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+            .WithPortBinding(1433, true)
+            .Build();
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
@@ -25,21 +28,18 @@ namespace HobbyMatch.DbIntegrationTests.Infrastrucutre
 
                 services.AddDbContext<AppDbContext>(options =>
                 {
-                    options.UseSqlServer(_dbContainer.GetConnectionString());
+                    options.UseSqlServer(DbContainer.GetConnectionString());
                 });
             });
         }
-        public async Task InitializeAsync()
+        public Task InitializeAsync()
         {
-            await _dbContainer.StartAsync();
-
-            var context = Services.GetRequiredService<AppDbContext>();
-            await context.Database.EnsureCreatedAsync();
+            return DbContainer.StartAsync();
         }
 
         public new Task DisposeAsync()
         {
-            return _dbContainer.DisposeAsync().AsTask();
+            return DbContainer.DisposeAsync().AsTask();
         }
     }
 }

@@ -13,15 +13,18 @@ namespace HobbyMatch.DbIntegrationTests
 {
     public class DatabaseTests : BaseIntegrationTest
     {
+        private readonly MsSqlContainer _dbContainer;
+
         public DatabaseTests(IntegrationTestWebAppFactory factory) : base(factory)
         {
+            _dbContainer = factory.DbContainer;
         }
 
         [Fact]
         public void ConnectionStateReturnsOpen()
         {
             // Given
-            using DbConnection connection = new SqlConnection(DbContainer.GetConnectionString());
+            using DbConnection connection = new SqlConnection(_dbContainer.GetConnectionString());
 
             // When
             connection.Open();
@@ -37,7 +40,7 @@ namespace HobbyMatch.DbIntegrationTests
             const string scriptContent = "SELECT 1;";
 
             // When
-            var execResult = await DbContainer.ExecScriptAsync(scriptContent)
+            var execResult = await _dbContainer.ExecScriptAsync(scriptContent)
                 .ConfigureAwait(true);
 
             // Then
