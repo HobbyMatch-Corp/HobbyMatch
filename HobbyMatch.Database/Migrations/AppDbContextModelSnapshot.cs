@@ -336,13 +336,13 @@ namespace HobbyMatch.Database.Migrations
                     b.HasOne("HobbyMatch.Model.Entities.Event", null)
                         .WithMany()
                         .HasForeignKey("SponsoredEventsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("HobbyMatch.Domain.Entities.BusinessClient", null)
                         .WithMany()
                         .HasForeignKey("SponsorsPartnersId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -351,13 +351,13 @@ namespace HobbyMatch.Database.Migrations
                     b.HasOne("HobbyMatch.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("SignUpListId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("HobbyMatch.Model.Entities.Event", null)
                         .WithMany()
                         .HasForeignKey("SignedUpEventsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -366,7 +366,7 @@ namespace HobbyMatch.Database.Migrations
                     b.HasOne("HobbyMatch.Domain.Entities.Organizer", "Organizer")
                         .WithMany()
                         .HasForeignKey("OrganizerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Organizer");
