@@ -1,4 +1,5 @@
 ﻿using HobbyMatch.Domain.Entities;
+using HobbyMatch.Model.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace HobbyMatch.Database.Data
 
         public DbSet<User> AppUsers { get; set; }
         public DbSet<BusinessClient> BusinessClients { get; set; }
+        public DbSet<Event> Events { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
