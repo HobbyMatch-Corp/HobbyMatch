@@ -7,6 +7,6 @@ namespace HobbyMatch.Domain.Entities
     {
 
         [JsonIgnore]
-        public ICollection<Event> SignedUpEvents { get; set; }
+        public ICollection<Event>? SignedUpEvents { get; set; }
     }
 }
