@@ -29,6 +29,6 @@ namespace HobbyMatch.Model.Entities
         public ICollection<User>? SignUpList { get; set; }
 
         [JsonIgnore]
-        public ICollection<BusinessClient>? SponsorsPartners { get; set; }
+        public ICollection<BusinessClient> SponsorsPartners { get; set; }
     }
 }

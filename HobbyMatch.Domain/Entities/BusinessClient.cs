@@ -8,6 +8,6 @@ namespace HobbyMatch.Domain.Entities
         public string TaxID { get; set; }
 
         [JsonIgnore]
-        public ICollection<Event>? SponsoredEvents { get; set; }
+        public ICollection<Event> SponsoredEvents { get; set; }
     }
 }

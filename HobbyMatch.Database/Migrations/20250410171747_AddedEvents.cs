@@ -33,7 +33,7 @@ namespace HobbyMatch.Database.Migrations
                         column: x => x.OrganizerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,13 +51,13 @@ namespace HobbyMatch.Database.Migrations
                         column: x => x.SponsorsPartnersId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_BusinessClientEvent_Events_SponsoredEventsId",
                         column: x => x.SponsoredEventsId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,13 +75,13 @@ namespace HobbyMatch.Database.Migrations
                         column: x => x.SignUpListId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_EventUser_Events_SignedUpEventsId",
                         column: x => x.SignedUpEventsId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
