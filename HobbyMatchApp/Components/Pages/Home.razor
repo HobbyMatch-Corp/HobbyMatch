@@ -1,7 +1,50 @@
 ﻿@page "/home"
 
+@using HobbyMatch.App.Components.Components
+@using HobbyMatch.Domain.Entities
+
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, user!</h1>
+<MudText Typo="Typo.h1" Color="Color.Primary">Welcome, @(UserName)!</MudText>
 
-Welcome to your new app.
+<MudGrid>
+    <MudItem xs="12" md="8"> 
+        <UpcomingEventsCard UpcomingEventsList="@UpcomingEventsList"/> 
+    </MudItem>
+
+    <MudItem xs="12" md="4"> 
+        <MudGrid>
+            <MudItem xs="12">
+                <UserCard Username="@UserName" Email="@Email" TaxId="@TaxId"
+                    SignedUpEventCount="@EventsSignedUp" OrganizedEventCount="@EventsOrganized"/>
+            </MudItem>
+            <MudItem xs="12">
+                <CreateEventShortcutCard />
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+
+@code {
+    public string UserName { get; set; } = "UserTest";
+    public string Email { get; set; } = "user@test.com";
+    public string? TaxId { get; set; }
+    public int EventsSignedUp { get; set; } = 12;
+    public int EventsOrganized { get; set; } = 22;
+    public List<Event> UpcomingEventsList { get; set; } = new List<Event>()
+     {
+         new Event {Id = 1, Name = "Event Football", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow, EndTime = DateTime.UtcNow.AddDays(1), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 15.50f, Organizer = new User { UserName = "SportsClub123" }},
+         new Event {Id = 2, Name = "Event Basketball", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(1), EndTime = DateTime.UtcNow.AddDays(6), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 0, Organizer = new User { UserName = "LocalTeam" }},
+         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
+         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
+         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
+         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
+         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
+         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
+         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
+         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
+         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
+         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }}
+     };
+}

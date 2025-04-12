@@ -8,25 +8,26 @@
          Elevation="3">
     <MudCardContent>
         <MudText Typo="Typo.h6" Class="mb-3" Align="Align.Center"
-                 Style="cursor: pointer;"
+                 Style="cursor: pointer;" Color="Color.Primary"
                  @onclick="NavigateToUserPage">Upcoming Events</MudText>
         <div style="overflow-y: auto;">
             @if (UpcomingEventsList != null && UpcomingEventsList.Any())
             {
-                <MudList T="Event" Clickable="false">
+                <MudList T="Event" Clickable="false" Style="max-height: 600px; overflow-y: scroll;">
                     @foreach (var evt in UpcomingEventsList.OrderBy(e => e.StartTime))
                     {
                         <MudListItem Expanded="false">
                             <ChildContent>
                                 <div class="d-flex">
                                     <!-- Start Time Only -->
-                                    <div class="mr-3 text-center">
-                                        <MudText Typo="Typo.body1" Class="mb-0 font-weight-bold">
-                                            @evt.StartTime.ToString("HH:mm")
-                                        </MudText>
-                                        <MudText Typo="Typo.body2" Class="mt-0">
-                                            @evt.StartTime.ToString("dd.MM.yyyy")
-                                        </MudText>
+                                    <div class="mr-3 text-center align-content-center">
+                                            <MudText Typo="Typo.body1" Class="mb-0 font-weight-bold" Color="Color.Secondary">
+                                                @evt.StartTime.ToString("HH:mm")
+                                            </MudText>
+                                            <MudText Typo="Typo.body2" Class="mt-0" Color="Color.Secondary">
+                                                @evt.StartTime.ToString("dd.MM.yyyy")
+                                            </MudText>
+                                        
                                     </div>
 
                                     <div style="flex: 1">
