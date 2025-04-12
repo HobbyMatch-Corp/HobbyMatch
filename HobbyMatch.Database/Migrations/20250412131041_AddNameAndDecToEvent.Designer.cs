@@ -5,6 +5,7 @@ using HobbyMatch.Database.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,9 +13,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HobbyMatch.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250412131041_AddNameAndDecToEvent")]
+    partial class AddNameAndDecToEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -374,7 +377,7 @@ namespace HobbyMatch.Database.Migrations
             modelBuilder.Entity("HobbyMatch.Model.Entities.Event", b =>
                 {
                     b.HasOne("HobbyMatch.Domain.Entities.Organizer", "Organizer")
-                        .WithMany("OrganizedEvents")
+                        .WithMany()
                         .HasForeignKey("OrganizerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -431,11 +434,6 @@ namespace HobbyMatch.Database.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("HobbyMatch.Domain.Entities.Organizer", b =>
-                {
-                    b.Navigation("OrganizedEvents");
                 });
 #pragma warning restore 612, 618
         }
