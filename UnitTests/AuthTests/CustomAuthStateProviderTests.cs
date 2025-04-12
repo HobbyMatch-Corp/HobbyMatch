@@ -1,6 +1,6 @@
 ﻿using HobbyMatch.App.Auth.CustomAuthStateProvider;
 using HobbyMatch.App.Auth.TokenService;
-using HobbyMatch.App.Services;
+using HobbyMatch.App.Services.Api;
 using Microsoft.AspNetCore.Components.Authorization;
 using Moq;
 using System.Security.Claims;
