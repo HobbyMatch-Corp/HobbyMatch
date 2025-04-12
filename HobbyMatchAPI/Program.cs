@@ -3,6 +3,7 @@ using HobbyMatch.BL.Configuration;
 using HobbyMatch.BL.Services.AppUser;
 using HobbyMatch.BL.Services.Auth;
 using HobbyMatch.BL.Services.Auth.Account;
+using HobbyMatch.BL.Services.Auth.Tokens;
 using HobbyMatch.BL.Services.BusinessClient;
 using HobbyMatch.Database.Data;
 using HobbyMatch.Database.Repositories.AppUser;
