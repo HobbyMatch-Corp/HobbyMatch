@@ -1,12 +1,12 @@
 ﻿using HobbyMatch.App.Auth.TokenService;
-using HobbyMatch.App.Services;
+using HobbyMatch.App.Services.Api;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 
 
 namespace HobbyMatch.App.Auth.CustomAuthStateProvider
 {
-    public class CustomAuthStateProvider : AuthenticationStateProvider
+	public class CustomAuthStateProvider : AuthenticationStateProvider
     {
         private readonly ITokenService _tokenService;
         private readonly IAuthApiService _authApiService;
@@ -23,7 +23,6 @@ namespace HobbyMatch.App.Auth.CustomAuthStateProvider
             var identity = claims.Any() ? new ClaimsIdentity(claims, "Bearer") : new ClaimsIdentity();
 
             var user = new ClaimsPrincipal(identity);
-
             return new AuthenticationState(user);
         }
 

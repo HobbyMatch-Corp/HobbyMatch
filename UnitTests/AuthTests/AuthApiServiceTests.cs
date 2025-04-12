@@ -3,7 +3,7 @@ using System.Net;
 using System.Text.Json;
 using Moq.Protected;
 using HobbyMatch.BL.Models.Auth;
-using HobbyMatch.App.Services;
+using HobbyMatch.App.Services.Api;
 namespace UnitTests.AuthTests
 {
 	public class AuthApiServiceTests
