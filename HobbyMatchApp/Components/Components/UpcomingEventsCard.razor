@@ -1,0 +1,62 @@
+﻿@page "/eventList"
+
+@using System.Linq
+@using HobbyMatch.Model.Entities
+
+@inject NavigationManager NavigationManager
+
+<MudCard Class="ma-2 d-inline-flex flex-column justify-center rounded-lg"
+         Style="width: 350px; border: 2px solid var(--mud-palette-secondary); border-radius: 16px;"
+         Elevation="3">
+    <MudCardContent>
+        <MudText Typo="Typo.h6" Class="mb-3" Align="Align.Center">Upcoming Events</MudText>
+
+        <div style="max-height: 300px; overflow-y: auto;">
+            @if (UpcomingEventsList != null && UpcomingEventsList.Any())
+            {
+                <MudList T="Event" Clickable="true">
+                    @foreach (var evt in UpcomingEventsList.OrderBy(e => e.StartTime))
+                    {
+                        <MudListItem @onclick="() => NavigateToEventDetails(evt.Id)">
+                            <div class="d-flex align-center">
+                                <div class="mr-3">
+                                    <MudText Typo="Typo.body1" Class="mb-0 font-weight-bold">
+                                        @evt.StartTime.ToString("dd.MM")
+                                    </MudText>
+                                    <MudText Typo="Typo.body2" Class="mt-0">
+                                        @evt.StartTime.ToString("HH:mm")
+                                    </MudText>
+                                </div>
+                                <MudText Typo="Typo.body1" Class="font-weight-bold text-uppercase">
+                                    @(evt.Location.Latitude); @(evt.Location.Longitude)
+                                </MudText>
+                            </div>
+                        </MudListItem>
+                        <MudDivider />
+                    }
+                </MudList>
+            }
+            else
+            {
+                <MudText Typo="Typo.body1" Class="text-center my-4">
+                    No upcoming events.
+                </MudText>
+            }
+        </div>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter]
+    public List<Event> UpcomingEventsList { get; set; } = new List<Event>()
+    {
+        new Event {StartTime=DateTime.UtcNow, EndTime = DateTime.UtcNow.AddDays(1), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}},
+        new Event {StartTime=DateTime.UtcNow.AddDays(1), EndTime = DateTime.UtcNow.AddDays(6), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}},
+        new Event {StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}}
+    };
+
+    private void NavigateToEventDetails(int eventId)
+    {
+        NavigationManager.NavigateTo($"/events/{eventId}");
+    }
+}
