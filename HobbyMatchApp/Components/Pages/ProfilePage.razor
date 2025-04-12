@@ -1,24 +1,31 @@
-﻿@page "/Profile"
+﻿@page "/profile"
 @rendermode InteractiveServer
 @inject IOrganizerApiService organizerApiService
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
 @using HobbyMatch.App.Services
+@using HobbyMatch.BL.Services.AppUser
+@using HobbyMatch.Domain.Entities
 
-<MudContainer Style="justify-content: center" MaxWidth="MaxWidth.Small">
+<MudContainer Class="d-flex" Style="justify-content: flex-start" MaxWidth="MaxWidth.Medium">
 
-    <MudPaper Class="pa-4">
+    <MudPaper Class="pa-4" MinWidth="400px">
         <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">My Profile</MudText>
         <MudForm @bind-IsValid="@success" @bind-Errors="@errors" ReadOnly="@(!editable)">
-            <MudTextField @ref="usernameField" T="string" Label="Username" Required="true" RequiredError="User name is required!" Style="margin-bottom:8px" />
-            <MudTextField @ref="emailField" T="string" Label="Email" Required="true" RequiredError="Email is required!"
-            Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" Style="margin-bottom:8px" />
+            <MudTextField @ref="usernameField" T="string" Label="Username" Required="true" RequiredError="User name is required!" Style="margin-bottom:8px" @bind-Value="formModel.UserName" />
+            <MudTextField @ref="emailField" T="string" Label="Email" Required="true" RequiredError="Email is required!" @bind-Value="formModel.Email"
+                          Immediate="true" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" Style="margin-bottom:8px" />
             <MudTextField @ref="passwordField" T="string" Label="Password" HelperText="Choose a strong password" InputType="InputType.Password"
-            Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
-            Style="margin-bottom:8px" RequiredError="Password is required!" />
-            <MudTextField T="string"
-            Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
-            Validation="@(new Func<string, string?>(PasswordMatch))" Style="margin-bottom:8px" />
+                          Immediate="true" ValueChanged="OnPasswordChanged" @bind-Value:event="oninput"
+                          Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true" @bind-Value="formModel.Password"
+                          Style="margin-bottom:8px" RequiredError="Password is required!" />
+            @if (editable)
+            {
+                <MudTextField @ref="repeatPasswordField" T="string"
+                              Label="Password" HelperText="Repeat the password" InputType="InputType.Password" @bind-Value="formModel.RepeatPassword"
+                              Immediate="true"
+                              Validation="@(new Func<string, string?>(PasswordMatch))" Style="margin-bottom:8px" />
+            }
             @if (accountType != null && accountType.Value == "BusinessClient")
             {
                 <MudTextField @ref="taxIdField" T="string" Label="TaxId" Required="true" RequiredError="Tax ID is required!" style="margin-bottom:8px" />
@@ -30,14 +37,14 @@
                 </MudRadioGroup>
             </div>
             <div class="d-flex align-center justify-space-between">
-                @if(!editable)
+                @if (!editable)
                 {
                     <button Type="button" Class="btn btn-primary" @onclick="EditAction">Edit</button>
 
                 }
                 else
                 {
-                    <button Type="button" Class="btn btn-primary" @onclick="EditAction">Save changes</button>
+                    <button Type="button" Class="btn btn-primary" @onclick="SaveAction">Save changes</button>
                 }
             </div>
         </MudForm>
@@ -48,11 +55,42 @@
     bool success;
     bool editable = false;
     string[] errors = { };
+    int userId = 0; //TODO: update when possible
+    private UserFormModel formModel = new();
+    User? user;
+#if DEBUG
+        IAppUserService? localAppUserService = new MockAppUserService();
+#else
+    IAppUserService? localAppUserService = null;
+#endif
     MudTextField<string>? usernameField;
     MudTextField<string>? emailField;
     MudTextField<string>? passwordField;
+    MudTextField<string>? repeatPasswordField;
     MudTextField<string>? taxIdField;
     MudRadioGroup<string>? accountType;
+    private async Task LoadData()
+    {
+        if (localAppUserService is not null)
+        {
+            user = await localAppUserService.GetUserByIdAsync(userId);
+            if (user is not null)
+            {
+                formModel = new UserFormModel
+                    {
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        Password = user.PasswordHash,
+                        RepeatPassword = user.PasswordHash
+                    };
+            }
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1);
+        await LoadData();
+    }
     private IEnumerable<string> PasswordStrength(string pw)
     {
         if (string.IsNullOrWhiteSpace(pw))
@@ -76,8 +114,42 @@
             return "Passwords don't match";
         return null;
     }
+    private async Task OnPasswordChanged(string newPassword)
+    {
+        formModel.Password = newPassword;
+
+        // Po zmianie hasła wymuszamy walidację pola powtórzonego hasła
+        if (repeatPasswordField is not null)
+        {
+            await repeatPasswordField.Validate();
+        }
+    }
     private void EditAction()
     {
         editable = !editable;
+    }
+    private async Task SaveAction()
+    {
+        var updatedUser = new User
+            {
+                UserName = formModel.UserName,
+                Email = formModel.Email,
+                PasswordHash = formModel.Password
+            };
+        if (localAppUserService is not null)
+        {
+            await localAppUserService.UpdateUserAsync(userId, updatedUser);
+        }
+        await LoadData();
+        EditAction();
+    }
+    public class UserFormModel
+    {
+        public string? UserName { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
+        public string? RepeatPassword { get; set; }
+        public string? TaxId { get; set; }
+        public string? AccountType { get; set; }
     }
 }
