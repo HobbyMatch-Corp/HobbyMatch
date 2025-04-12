@@ -1,7 +1,7 @@
 ﻿@inject NavigationManager NavigationManager
 
 <MudCard Class="ma-2 d-inline-flex flex-column align-center justify-center rounded-lg"
-         Style="width: 200px; height: 200px; cursor: pointer; border: 2px solid var(--mud-palette-secondary); border-radius: 16px;"
+         Style="width: calc(100% - 16px); cursor: pointer; border: 2px solid var(--mud-palette-secondary); border-radius: 16px;"
          Elevation="3"
          @onclick="NavigateToCreateEvent">
     <MudCardContent Class="d-flex flex-column align-center justify-center py-4">
