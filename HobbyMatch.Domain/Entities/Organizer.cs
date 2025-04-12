@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using HobbyMatch.Model.Entities;
+using Microsoft.AspNetCore.Identity;
+using System.Text.Json.Serialization;
 
 namespace HobbyMatch.Domain.Entities
 {
