@@ -5,6 +5,7 @@ using HobbyMatch.Database.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,9 +13,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HobbyMatch.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250410171747_AddedEvents")]
+    partial class AddedEvents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,11 +147,6 @@ namespace HobbyMatch.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
@@ -157,11 +155,6 @@ namespace HobbyMatch.Database.Migrations
 
                     b.Property<int>("MinUsers")
                         .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("OrganizerId")
                         .HasColumnType("int");
@@ -346,13 +339,13 @@ namespace HobbyMatch.Database.Migrations
                     b.HasOne("HobbyMatch.Model.Entities.Event", null)
                         .WithMany()
                         .HasForeignKey("SponsoredEventsId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HobbyMatch.Domain.Entities.BusinessClient", null)
                         .WithMany()
                         .HasForeignKey("SponsorsPartnersId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -361,20 +354,20 @@ namespace HobbyMatch.Database.Migrations
                     b.HasOne("HobbyMatch.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("SignUpListId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HobbyMatch.Model.Entities.Event", null)
                         .WithMany()
                         .HasForeignKey("SignedUpEventsId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("HobbyMatch.Model.Entities.Event", b =>
                 {
                     b.HasOne("HobbyMatch.Domain.Entities.Organizer", "Organizer")
-                        .WithMany("OrganizedEvents")
+                        .WithMany()
                         .HasForeignKey("OrganizerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -431,11 +424,6 @@ namespace HobbyMatch.Database.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("HobbyMatch.Domain.Entities.Organizer", b =>
-                {
-                    b.Navigation("OrganizedEvents");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,31 +1,42 @@
 ﻿
 using HobbyMatch.BL.Models.Auth;
+using HobbyMatch.Domain.Requests;
 
 namespace HobbyMatch.App.Services
 {
-	public class AuthApiService : IAuthApiService
-	{
-		private readonly HttpClient _httpClient;
+    public class AuthApiService : IAuthApiService
+    {
+        private readonly HttpClient _httpClient;
 
-		public AuthApiService(IHttpClientFactory httpClientFactory)
-		{
-			_httpClient = httpClientFactory.CreateClient("AuthClient");
-		}
+        public AuthApiService(IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient("AuthClient");
+        }
 
-		public async Task<AuthResult?> LoginAsync(string email, string password)
-		{
-			AuthResult? authResult = null;
-			var response = await _httpClient.PostAsJsonAsync("api/login", new { email, password });
-			if (response.IsSuccessStatusCode)
-			{
-				authResult = await response.Content.ReadFromJsonAsync<AuthResult>();
-			}
-			return authResult;
-		}
+        public async Task<AuthResult?> LoginAsync(string email, string password)
+        {
+            AuthResult? authResult = null;
+            var request = new LoginRequest(email, password);
+            var response = await _httpClient.PostAsJsonAsync("/api/auth/login", request);
+            if (response.IsSuccessStatusCode)
+            {
+                authResult = await response.Content.ReadFromJsonAsync<AuthResult>();
+            }
+            return authResult;
+        }
 
-		public Task<string?> RegisterAsync(string email, string password)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public async Task<HttpResponseMessage> RegisterUserAsync(string username, string email, string password)
+        {
+            var request = new UserRegisterRequest(email, password, username);
+            var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request);
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> RegisterBusinessClientAsync(string username, string email, string password, string taxId)
+        {
+            var request = new BusinessRegisterRequest(email, password, taxId, username);
+            var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request);
+            return response;
+        }
+    }
 }
