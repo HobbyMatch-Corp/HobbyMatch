@@ -1,9 +1,8 @@
-﻿using HobbyMatch.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace HobbyMatch.Model.Entities
+namespace HobbyMatch.Domain.Entities
 {
     public class Event
     {

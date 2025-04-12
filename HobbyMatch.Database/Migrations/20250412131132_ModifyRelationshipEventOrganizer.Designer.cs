@@ -139,7 +139,7 @@ namespace HobbyMatch.Database.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("HobbyMatch.Model.Entities.Event", b =>
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.Event", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -175,7 +175,7 @@ namespace HobbyMatch.Database.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Location", "HobbyMatch.Model.Entities.Event.Location#Location", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Location", "HobbyMatch.Domain.Entities.Event.Location#Location", b1 =>
                         {
                             b1.IsRequired();
 
@@ -346,7 +346,7 @@ namespace HobbyMatch.Database.Migrations
 
             modelBuilder.Entity("BusinessClientEvent", b =>
                 {
-                    b.HasOne("HobbyMatch.Model.Entities.Event", null)
+                    b.HasOne("HobbyMatch.Domain.Entities.Event", null)
                         .WithMany()
                         .HasForeignKey("SponsoredEventsId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -367,14 +367,14 @@ namespace HobbyMatch.Database.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("HobbyMatch.Model.Entities.Event", null)
+                    b.HasOne("HobbyMatch.Domain.Entities.Event", null)
                         .WithMany()
                         .HasForeignKey("SignedUpEventsId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("HobbyMatch.Model.Entities.Event", b =>
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.Event", b =>
                 {
                     b.HasOne("HobbyMatch.Domain.Entities.Organizer", "Organizer")
                         .WithMany("OrganizedEvents")

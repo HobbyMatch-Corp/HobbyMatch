@@ -1,5 +1,4 @@
-﻿using HobbyMatch.Model.Entities;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace HobbyMatch.Domain.Entities
 {

@@ -139,7 +139,7 @@ namespace HobbyMatch.Database.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("HobbyMatch.Model.Entities.Event", b =>
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.Event", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -175,7 +175,7 @@ namespace HobbyMatch.Database.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Location", "HobbyMatch.Model.Entities.Event.Location#Location", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Location", "HobbyMatch.Domain.Entities.Event.Location#Location", b1 =>
                         {
                             b1.IsRequired();
 
