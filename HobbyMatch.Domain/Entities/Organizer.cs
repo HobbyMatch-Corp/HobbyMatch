@@ -8,5 +8,8 @@ namespace HobbyMatch.Domain.Entities
     {
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiresAt { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Event> OrganizedEvents { get; set; }
     }
 }
