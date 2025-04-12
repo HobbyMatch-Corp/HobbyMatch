@@ -112,7 +112,7 @@ namespace HobbyMatch.Database.Data
 
             modelBuilder.Entity("BusinessClientEvent", b =>
             {
-                b.HasOne("HobbyMatch.Model.Entities.Event", null)
+                b.HasOne("HobbyMatch.Domain.Entities.Event", null)
                     .WithMany()
                     .HasForeignKey("SponsoredEventsId")
                     .OnDelete(DeleteBehavior.NoAction)
@@ -133,7 +133,7 @@ namespace HobbyMatch.Database.Data
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne("HobbyMatch.Model.Entities.Event", null)
+                b.HasOne("HobbyMatch.Domain.Entities.Event", null)
                     .WithMany()
                     .HasForeignKey("SignedUpEventsId")
                     .OnDelete(DeleteBehavior.NoAction)
