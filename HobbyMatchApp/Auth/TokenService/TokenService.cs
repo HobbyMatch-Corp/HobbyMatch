@@ -42,7 +42,9 @@ namespace HobbyMatch.App.Auth.TokenService
                     return _accessToken;
                 }
             }
-            catch (Exception) // Apparently protected local storage throws an exception, bcs of double render (once on server side), but should work anyways on client
+			// Apparently protected local storage throws an exception, bcs of double render (once on server side), but should work anyways on client
+			// TODO: Find out what exception exactly is being thrown
+			catch (Exception) 
             {
                 return null;
             }
