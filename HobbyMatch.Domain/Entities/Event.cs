@@ -6,6 +6,7 @@ namespace HobbyMatch.Domain.Entities
 {
     public class Event
     {
+        [Key]
         public int Id { get; set; }
 
         [MaxLength(50, ErrorMessage = "Event name must be 5-50 characters"), MinLength(5)]
