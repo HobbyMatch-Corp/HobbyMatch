@@ -1,11 +1,15 @@
 ﻿@page "/profile"
 @rendermode InteractiveServer
 @inject IOrganizerApiService organizerApiService
+@inject AuthenticationStateProvider authenticationStateProvider
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
 @using HobbyMatch.App.Services
 @using HobbyMatch.BL.Services.AppUser
 @using HobbyMatch.Domain.Entities
+@using HobbyMatch.App.Auth.CustomAuthStateProvider
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 
 <MudContainer Class="d-flex" Style="justify-content: flex-start" MaxWidth="MaxWidth.Medium">
 
@@ -56,21 +60,40 @@
     bool success;
     bool editable = false;
     string[] errors = { };
-    int userId = 0; //TODO: update when possible
+    int userId = 0;
     private UserFormModel formModel = new();
     Organizer? user;
 #if DEBUG
-        IAppUserService? localAppUserService = new MockAppUserService();
+    IAppUserService? localAppUserService = new MockAppUserService();
 #else
     IAppUserService? localAppUserService = null;
 #endif
-//TODO: link actual Service
     MudTextField<string>? usernameField;
     MudTextField<string>? emailField;
     MudTextField<string>? passwordField;
     MudTextField<string>? repeatPasswordField;
     MudTextField<string>? taxIdField;
     MudRadioGroup<string>? accountType;
+
+    private ClaimsPrincipal? currentUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1);
+#if !DEBUG
+        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        currentUser = authState.User;
+        if (currentUser.Identity is { IsAuthenticated: true })
+        {
+            var uId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (uId is not null)
+            {
+                userId = int.Parse(uId);
+            }
+        }
+#endif
+        await LoadData();
+    }
     private async Task LoadData()
     {
         if (localAppUserService is not null)
@@ -85,7 +108,7 @@
                         Password = user.PasswordHash,
                         RepeatPassword = user.PasswordHash
                     };
-                if(accountType is not null && accountType.Value == "BusinessClient")
+                if (accountType is not null && accountType.Value == "BusinessClient")
                 {
                     formModel.AccountType = "BusinessClient";
                     formModel.TaxId = ((BusinessClient)user).TaxID;
@@ -96,11 +119,6 @@
                 }
             }
         }
-    }
-    protected override async Task OnInitializedAsync()
-    {
-        await Task.Delay(1);
-        await LoadData();
     }
     private IEnumerable<string> PasswordStrength(string pw)
     {
