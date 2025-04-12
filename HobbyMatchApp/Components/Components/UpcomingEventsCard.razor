@@ -1,35 +1,63 @@
 ﻿@page "/eventList"
-
 @using System.Linq
+@using HobbyMatch.Domain.Entities
 @using HobbyMatch.Model.Entities
-
 @inject NavigationManager NavigationManager
 
 <MudCard Class="ma-2 d-inline-flex flex-column justify-center rounded-lg"
          Style="width: 350px; border: 2px solid var(--mud-palette-secondary); border-radius: 16px;"
          Elevation="3">
     <MudCardContent>
-        <MudText Typo="Typo.h6" Class="mb-3" Align="Align.Center">Upcoming Events</MudText>
-
+        <MudText Typo="Typo.h6" Class="mb-3" Align="Align.Center" 
+                 Style="cursor: pointer;" 
+                 @onclick="NavigateToUserPage">Upcoming Events</MudText>
         <div style="max-height: 300px; overflow-y: auto;">
             @if (UpcomingEventsList != null && UpcomingEventsList.Any())
             {
-                <MudList T="Event" Clickable="true">
+                <MudList T="Event" Clickable="false">
                     @foreach (var evt in UpcomingEventsList.OrderBy(e => e.StartTime))
                     {
-                        <MudListItem @onclick="() => NavigateToEventDetails(evt.Id)">
-                            <div class="d-flex align-center">
-                                <div class="mr-3">
+                        <MudListItem>
+                            <div class="d-flex">
+                                <!-- Start Time Only -->
+                                <div class="mr-3 text-center">
                                     <MudText Typo="Typo.body1" Class="mb-0 font-weight-bold">
-                                        @evt.StartTime.ToString("dd.MM")
-                                    </MudText>
-                                    <MudText Typo="Typo.body2" Class="mt-0">
                                         @evt.StartTime.ToString("HH:mm")
                                     </MudText>
+                                    <MudText Typo="Typo.body2" Class="mt-0">
+                                        @evt.StartTime.ToString("dd.MM.yyyy")
+                                    </MudText>
                                 </div>
-                                <MudText Typo="Typo.body1" Class="font-weight-bold text-uppercase">
-                                    @(evt.Location.Latitude); @(evt.Location.Longitude)
-                                </MudText>
+                                
+                                <div style="flex: 1">
+                                    <!-- Event Name - Clickable -->
+                                    <MudText Typo="Typo.h6" Class="mb-1" 
+                                             Style="cursor: pointer;"
+                                             @onclick="() => NavigateToEventDetails(evt.Id)">
+                                        @evt.Name
+                                    </MudText>
+                                    
+                                    <!-- Event Details -->
+                                    <MudText Typo="Typo.body2" Class="mb-1">
+                                        Price: @(evt.Price > 0 ? $"${evt.Price:F2}" : "Free") | 
+                                        Location: @(evt.Location.Latitude); @(evt.Location.Longitude) | 
+                                        Organizer: @(evt.User?.UserName ?? "Unknown")
+                                    </MudText>
+                                    
+                                    <!-- Description as a nested item -->
+                                    <MudNestedList Dense="true">
+                                        <ActivatorContent>
+                                            <MudText Typo="Typo.body2" Color="Color.Primary">View description</MudText>
+                                        </ActivatorContent>
+                                        <ChildContent>
+                                            <MudListItem Dense="true">
+                                                <MudText Typo="Typo.body2">
+                                                    @evt.Description
+                                                </MudText>
+                                            </MudListItem>
+                                        </ChildContent>
+                                    </MudNestedList>
+                                </div>
                             </div>
                         </MudListItem>
                         <MudDivider />
@@ -50,13 +78,18 @@
     [Parameter]
     public List<Event> UpcomingEventsList { get; set; } = new List<Event>()
     {
-        new Event {StartTime=DateTime.UtcNow, EndTime = DateTime.UtcNow.AddDays(1), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}},
-        new Event {StartTime=DateTime.UtcNow.AddDays(1), EndTime = DateTime.UtcNow.AddDays(6), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}},
-        new Event {StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}}
+        new Event {Id = 1, Name = "Event Football", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow, EndTime = DateTime.UtcNow.AddDays(1), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 15.50f, Organizer = new User { UserName = "SportsClub123" }},
+        new Event {Id = 2, Name = "Event Basketball", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(1), EndTime = DateTime.UtcNow.AddDays(6), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 0, Organizer = new User { UserName = "LocalTeam" }},
+        new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }}
     };
 
     private void NavigateToEventDetails(int eventId)
     {
         NavigationManager.NavigateTo($"/events/{eventId}");
+    }
+    
+    private void NavigateToUserPage()
+    {
+        NavigationManager.NavigateTo("/userPage");
     }
 }
