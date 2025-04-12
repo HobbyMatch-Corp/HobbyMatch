@@ -8,6 +8,12 @@ namespace HobbyMatch.Model.Entities
     public class Event
     {
         public int Id { get; set; }
+
+        [MaxLength(50, ErrorMessage = "Event name must be 5-50 characters"), MinLength(5)]
+        public string Name { get; set; }
+
+        [MaxLength(100, ErrorMessage = "Event description must be max 100 characters")]
+        public string Description { get; set; }
         public int OrganizerId { get; set; }
 
         [DataType(DataType.Date)]
