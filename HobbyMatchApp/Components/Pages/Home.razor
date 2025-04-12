@@ -2,21 +2,24 @@
 
 @using HobbyMatch.App.Components.Components
 @using HobbyMatch.Domain.Entities
+@using HobbyMatch.App.Components.Layout;
 
 <PageTitle>Home</PageTitle>
+
+<MudThemeProvider Theme="MyCustomTheme" />
 
 <MudText Typo="Typo.h1" Color="Color.Primary">Welcome, @(UserName)!</MudText>
 
 <MudGrid>
-    <MudItem xs="12" md="8"> 
-        <UpcomingEventsCard UpcomingEventsList="@UpcomingEventsList"/> 
+    <MudItem xs="12" md="8">
+        <UpcomingEventsCard UpcomingEventsList="@UpcomingEventsList" />
     </MudItem>
 
-    <MudItem xs="12" md="4"> 
+    <MudItem xs="12" md="4">
         <MudGrid>
             <MudItem xs="12">
                 <UserCard Username="@UserName" Email="@Email" TaxId="@TaxId"
-                    SignedUpEventCount="@EventsSignedUp" OrganizedEventCount="@EventsOrganized"/>
+                SignedUpEventCount="@EventsSignedUp" OrganizedEventCount="@EventsOrganized" />
             </MudItem>
             <MudItem xs="12">
                 <CreateEventShortcutCard />
@@ -27,6 +30,13 @@
 
 
 @code {
+    MudTheme MyCustomTheme = new CustomTheme();
+
+    protected override async Task OnInitializedAsync()
+    {
+        MyCustomTheme.PaletteLight.Background = new MudBlazor.Utilities.MudColor("#F5F5F5");
+    }
+
     public string UserName { get; set; } = "UserTest";
     public string Email { get; set; } = "user@test.com";
     public string? TaxId { get; set; }
@@ -48,3 +58,4 @@
          new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }}
      };
 }
+
