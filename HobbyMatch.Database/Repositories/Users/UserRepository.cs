@@ -2,7 +2,7 @@ using HobbyMatch.Database.Data;
 using HobbyMatch.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace HobbyMatch.Database.Repositories.User;
+namespace HobbyMatch.Database.Repositories.Users;
 
 public class UserRepository : IUserRepository
 {

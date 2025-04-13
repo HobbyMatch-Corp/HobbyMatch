@@ -1,4 +1,4 @@
-﻿namespace HobbyMatch.App.Services
+﻿namespace HobbyMatch.App.Services.Events
 {
     public interface IEventApiService
     {
