@@ -93,8 +93,9 @@ else
         Console.WriteLine($"Viewing details for event {eventId}");
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
+        IsLoading = true;
         FilteredEvents = await EventApiService.GetFilteredEvents(Filter);
         IsLoading = false;
     }
