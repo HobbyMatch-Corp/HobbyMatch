@@ -1,102 +1,101 @@
-@page "/Events/{Name}"
+@page "/Events/{Filter?}"
+@using HobbyMatch.App.Services.Events
+@using HobbyMatch.BL.DTOs.Event
 @using HobbyMatch.Domain.Entities
+@inject IEventApiService EventApiService
 
-<MudContainer Class="mt-4">
-    <MudText Typo="Typo.h4" Class="mb-4">Events @(string.IsNullOrEmpty(Filter) ? "" : $"matching '{Filter}'")</MudText>
-    
-    @if (FilteredEvents.Count == 0)
-    {
-        <MudPaper Elevation="0" Class="pa-4 mud-background-gray">
-            <MudText>No events found @(string.IsNullOrEmpty(Filter) ? "" : $"matching '{Filter}'").</MudText>
-        </MudPaper>
-    }
-    else
-    {
-        <MudGrid>
-            @foreach (var eventItem in FilteredEvents)
-            {
-                <MudItem xs="12" sm="6" md="4">
-                    <MudCard Elevation="2" Class="h-100">
-                        <MudCardContent>
-                            <MudText Typo="Typo.h5">@eventItem.Name</MudText>
-                            <MudText Typo="Typo.body2" Class="mt-2">
-                                <MudText Typo="Typo.subtitle2" Class="d-inline">When: </MudText>
-                                @eventItem.StartTime.ToString("MMM dd, yyyy - h:mm tt") to 
-                                @(eventItem.StartTime.Date == eventItem.EndTime.Date 
-                                    ? eventItem.EndTime.ToString("h:mm tt") 
-                                    : eventItem.EndTime.ToString("MMM dd, yyyy - h:mm tt"))
-                            </MudText>
-                            <MudText Typo="Typo.body2" Class="mt-1">
-                                <MudText Typo="Typo.subtitle2" Class="d-inline">Price: </MudText>
-                                @(eventItem.Price == 0 ? "Free" : $"${eventItem.Price:F2}")
-                            </MudText>
-                            <MudText Typo="Typo.body2" Class="mt-1">
-                                <MudText Typo="Typo.subtitle2" Class="d-inline">Organizer: </MudText>
-                                @eventItem.Organizer.UserName
-                            </MudText>
-                            <MudText Typo="Typo.body2" Class="mt-1">
-                                <MudText Typo="Typo.subtitle2" Class="d-inline">Location: </MudText>
-                                Lat: @eventItem.Location.Latitude, Long: @eventItem.Location.Longitude
-                            </MudText>
-                            <MudText Typo="Typo.body2" Class="mt-2" Style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                                @eventItem.Description
-                            </MudText>
-                        </MudCardContent>
-                        <MudCardActions>
-                            <MudButton Variant="Variant.Filled" 
-                                      Color="Color.Primary" 
-                                      OnClick="@(() => ViewEventDetails(eventItem.Id))">
-                                View Details
-                            </MudButton>
-                        </MudCardActions>
-                    </MudCard>
-                </MudItem>
-            }
-        </MudGrid>
-    }
-</MudContainer>
+
+@if (IsLoading)
+{
+<div class="d-flex justify-content-center">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+}
+else
+{
+    <MudContainer Class="mt-4">
+        @if (FilteredEvents == null)
+        {
+            <MudPaper Elevation="0" Class="pa-4 mud-background-gray">
+                <MudText>
+                     Error occured while fetching events @(string.IsNullOrEmpty(Filter) ? "" : $"matching '{Filter}'").
+                </MudText>
+            </MudPaper>
+        }
+        else if (FilteredEvents.Count == 0)
+        {
+            <MudPaper Elevation="0" Class="pa-4 mud-background-gray">
+                <MudText>
+                    No events found @(string.IsNullOrEmpty(Filter) ? "" : $"matching '{Filter}'").
+                </MudText>
+            </MudPaper>
+        }
+        else
+        {
+            <MudText Typo="Typo.h4" Class="mb-4">Events @(string.IsNullOrEmpty(Filter) ? "" : $"matching '{Filter}'")</MudText>
+            <MudGrid>
+                @foreach (var eventItem in FilteredEvents)
+                {
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudCard Elevation="2" Class="h-100">
+                            <MudCardContent>
+                                <MudText Typo="Typo.h5">@eventItem.Name</MudText>
+                                <MudText Typo="Typo.body2" Class="mt-2">
+                                    <MudText Typo="Typo.subtitle2" Class="d-inline">When: </MudText>
+                                    @eventItem.StartTime.ToString("MMM dd, yyyy - h:mm tt") to
+                                    @(eventItem.StartTime.Date == eventItem.EndTime.Date
+                                        ? eventItem.EndTime.ToString("h:mm tt")
+                                        : eventItem.EndTime.ToString("MMM dd, yyyy - h:mm tt"))
+                                </MudText>
+                                <MudText Typo="Typo.body2" Class="mt-1">
+                                    <MudText Typo="Typo.subtitle2" Class="d-inline">Price: </MudText>
+                                    @(eventItem.Price == 0 ? "Free" : $"${eventItem.Price:F2}")
+                                </MudText>
+                                <MudText Typo="Typo.body2" Class="mt-1">
+                                    <MudText Typo="Typo.subtitle2" Class="d-inline">Organizer: </MudText>
+                                    @eventItem.OrganizerName
+                                </MudText>
+                                <MudText Typo="Typo.body2" Class="mt-1">
+                                    <MudText Typo="Typo.subtitle2" Class="d-inline">Location: </MudText>
+                                    Lat: @eventItem.Location.Latitude, Long: @eventItem.Location.Longitude
+                                </MudText>
+                                <MudText Typo="Typo.body2" Class="mt-2" Style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                    @eventItem.Description
+                                </MudText>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           OnClick="@(() => ViewEventDetails(eventItem.Id))">
+                                    View Details
+                                </MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        }
+    </MudContainer>
+}
 
 @code
 {
-    [Parameter] public string? Name { get; set; }
-    
     [Parameter] public string? Filter { get; set; }
     
-    List<Event> UpcomingEventsList { get; } =
-    [
-        new Event { Id = 1, Name = "Event Football", Description = "Super long description about footbal, and if driks include sratatat", StartTime = DateTime.UtcNow, EndTime = DateTime.UtcNow.AddDays(1), Location = new Domain.Entities.Location { Latitude = 10.42f, Longitude = 53.42f }, Price = 15.50f, Organizer = new User { UserName = "SportsClub123" } },
-        new Event { Id = 2, Name = "Event Basketball", Description = "Super long description about footbal, and if driks include sratatat", StartTime = DateTime.UtcNow.AddDays(1), EndTime = DateTime.UtcNow.AddDays(6), Location = new Domain.Entities.Location { Latitude = 10.42f, Longitude = 53.42f }, Price = 0, Organizer = new User { UserName = "LocalTeam" } },
-        new Event { Id = 3, Name = "Event Gokarts", Description = "Super long description about footbal, and if driks include sratatat", StartTime = DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location = new Domain.Entities.Location { Latitude = 10.42f, Longitude = 53.42f }, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" } },
-        new Event { Id = 4, Name = "Event Gokarts", Description = "Super long description about footbal, and if driks include sratatat", StartTime = DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location = new Domain.Entities.Location { Latitude = 10.42f, Longitude = 53.42f }, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" } },
-        new Event { Id = 5, Name = "Event Gokarts", Description = "Super long description about footbal, and if driks include sratatat", StartTime = DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location = new Domain.Entities.Location { Latitude = 10.42f, Longitude = 53.42f }, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" } },
-        new Event { Id = 6, Name = "Event Gokarts", Description = "Super long description about footbal, and if driks include sratatat", StartTime = DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location = new Domain.Entities.Location { Latitude = 10.42f, Longitude = 53.42f }, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" } },
-        new Event { Id = 7, Name = "Event Gokarts", Description = "Super long description about footbal, and if driks include sratatat", StartTime = DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location = new Domain.Entities.Location { Latitude = 10.42f, Longitude = 53.42f }, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" } },
-        new Event { Id = 8, Name = "Event Gokarts", Description = "Super long description about footbal, and if driks include sratatat", StartTime = DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location = new Domain.Entities.Location { Latitude = 10.42f, Longitude = 53.42f }, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" } },
-        new Event { Id = 9, Name = "Event Gokarts", Description = "Super long description about footbal, and if driks include sratatat", StartTime = DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location = new Domain.Entities.Location { Latitude = 10.42f, Longitude = 53.42f }, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" } },
-        new Event { Id = 10, Name = "Event Gokarts", Description = "Super long description about footbal, and if driks include sratatat", StartTime = DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location = new Domain.Entities.Location { Latitude = 10.42f, Longitude = 53.42f }, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" } },
-        new Event { Id = 11, Name = "Event Gokarts", Description = "Super long description about footbal, and if driks include sratatat", StartTime = DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location = new Domain.Entities.Location { Latitude = 10.42f, Longitude = 53.42f }, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" } },
-        new Event { Id = 12, Name = "Event Gokarts", Description = "Super long description about footbal, and if driks include sratatat", StartTime = DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location = new Domain.Entities.Location { Latitude = 10.42f, Longitude = 53.42f }, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" } }
-    ];
-
-    List<Event> FilteredEvents => UpcomingEventsList.Where(e => string.IsNullOrEmpty(Filter) || e.Name.Contains(Filter, StringComparison.OrdinalIgnoreCase)).ToList();
-    
+    List<EventDto>? FilteredEvents { get; set; }
+    bool IsLoading { get; set; } = true;
     private void ViewEventDetails(int eventId)
     {
-        // This would typically navigate to a details page
         // Navigation.NavigateTo($"/event-details/{eventId}");
-        
-        // For now, just output to console
+
         Console.WriteLine($"Viewing details for event {eventId}");
     }
-    
-    protected override void OnInitialized()
+
+    protected override async Task OnInitializedAsync()
     {
-        // This is where you would fetch data from a service in the future
-        // As noted in your TODO comment
-        
-        // Example of what this would look like:
-        // await using var scope = ServiceProvider.CreateAsyncScope();
-        // var eventService = scope.ServiceProvider.GetRequiredService<IEventService>();
-        // UpcomingEventsList = await eventService.GetEventsAsync();
+        FilteredEvents = await EventApiService.GetFilteredEvents(Filter);
+        IsLoading = false;
     }
 }
