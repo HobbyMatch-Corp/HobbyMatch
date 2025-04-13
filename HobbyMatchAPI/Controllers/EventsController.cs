@@ -14,7 +14,7 @@ namespace HobbyMatch.API.Controllers
         private readonly IEventRepository _eventRepository = eventRepository;
         private readonly UserManager<User> _userManager = userManager;
 
-        [HttpPost("eventsignin")]
+        [HttpPost("signin")]
         [Authorize]
         public async Task<ActionResult> EventSignin([FromBody] EventSignDto dto)
         {
@@ -26,7 +26,7 @@ namespace HobbyMatch.API.Controllers
             var result = await _eventRepository.AddUserToEventAsync(eventId, user);
             return result ? Ok() : BadRequest("Could not sign in to event");
         }
-        [HttpPost("eventsignout")]
+        [HttpPost("signout")]
         [Authorize]
         public async Task<ActionResult> EventSignout([FromBody] EventSignDto dto)
         {

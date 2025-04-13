@@ -27,7 +27,7 @@ namespace HobbyMatch.Database.Repositories.Events
 
             if (ev.SignUpList.Any(u => u.Id == user.Id)) return false;
 
-            if (ev.SignUpList.Count >= ev.MaxUsers) return false; // Opcjonalne ograniczenie
+            if (ev.SignUpList.Count >= ev.MaxUsers) return false;
 
             ev.SignUpList.Add(user);
             await _context.SaveChangesAsync();
