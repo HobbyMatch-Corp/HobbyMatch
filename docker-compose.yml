@@ -1,0 +1,13 @@
+services:
+  hobbymatch.api:
+    image: ${DOCKER_REGISTRY-}hobbymatchapi
+    build:
+      context: .
+      dockerfile: HobbyMatchAPI/Dockerfile
+
+  hobbymatch.app:
+    image: ${DOCKER_REGISTRY-}hobbymatchapp
+    build:
+      context: .
+      dockerfile: HobbyMatchApp/Dockerfile
+
