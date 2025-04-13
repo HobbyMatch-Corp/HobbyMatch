@@ -5,7 +5,7 @@ namespace HobbyMatch.App.Services.Events
     public class EventApiService : IEventApiService
     {
         private readonly HttpClient _httpClient;
-        public EventApiService(IHttpClientFactory httpClientFactory) 
+        public EventApiService(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient("AuthClient");
         }

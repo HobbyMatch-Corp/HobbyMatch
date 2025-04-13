@@ -1,11 +1,9 @@
 ﻿using HobbyMatch.BL.DTOs.Event;
-using HobbyMatch.Database.Data;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace HobbyMatch.API.Controllers
 {
@@ -13,7 +11,7 @@ namespace HobbyMatch.API.Controllers
     [ApiController]
     public class EventsController(IEventRepository eventRepository, UserManager<User> userManager) : ControllerBase
     {
-        private readonly IEventRepository _eventRepository = eventRepository; 
+        private readonly IEventRepository _eventRepository = eventRepository;
         private readonly UserManager<User> _userManager = userManager;
 
         [HttpPost("eventsignin")]

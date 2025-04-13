@@ -13,7 +13,7 @@ namespace HobbyMatch.Database.Repositories.Events
             _context = context;
         }
 
-        public async Task<Event?> GetEventWithUsersAsync(int eventId)
+        public async Task<Event?> GetEventByIdAsync(int eventId)
         {
             return await _context.Events
                 .Include(e => e.SignUpList)
@@ -22,7 +22,7 @@ namespace HobbyMatch.Database.Repositories.Events
 
         public async Task<bool> AddUserToEventAsync(int eventId, User user)
         {
-            var ev = await GetEventWithUsersAsync(eventId);
+            var ev = await GetEventByIdAsync(eventId);
             if (ev == null || ev.SignUpList == null) return false;
 
             if (ev.SignUpList.Any(u => u.Id == user.Id)) return false;
@@ -36,7 +36,7 @@ namespace HobbyMatch.Database.Repositories.Events
 
         public async Task<bool> RemoveUserFromEventAsync(int eventId, User user)
         {
-            var ev = await GetEventWithUsersAsync(eventId);
+            var ev = await GetEventByIdAsync(eventId);
             if (ev == null || ev.SignUpList == null) return false;
 
             var existing = ev.SignUpList.FirstOrDefault(u => u.Id == user.Id);
