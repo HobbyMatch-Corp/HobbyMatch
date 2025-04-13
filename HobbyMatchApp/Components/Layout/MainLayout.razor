@@ -1,8 +1,10 @@
 ﻿@inherits LayoutComponentBase
 
+@using HobbyMatch.App.Auth.CustomAuthStateProvider
 @using Microsoft.AspNetCore.Components.Authorization
 @inject NavigationManager navigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject CustomAuthStateProvider _customAuthStateProvider
 
 @* Required *@
 <MudThemeProvider Theme="MyCustomTheme" />
@@ -23,7 +25,7 @@
             <div class="top-row px-4">
                 <AuthorizeView>
                     <Authorized>
-                        <button class="btn btn-primary">
+                        <button class="btn btn-primary" @onclick="LogOutAction">
                             Log out
                         </button>
                     </Authorized>
@@ -56,5 +58,9 @@
     private void SignInAction()
     {
         navigationManager.NavigateTo("/SignIn");
+    }
+    private async void LogOutAction()
+    {
+        await _customAuthStateProvider.Logout();
     }
 }

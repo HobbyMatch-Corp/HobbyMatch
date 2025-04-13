@@ -36,9 +36,9 @@ namespace HobbyMatch.App.Auth.CustomAuthStateProvider
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
             return authResult != null;
         }
-        public void Logout()
+        public async Task Logout()
         {
-            _tokenService.ClearAccessTokenAsync();
+            await _tokenService.ClearAccessTokenAsync();
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal())));
         }
     }
