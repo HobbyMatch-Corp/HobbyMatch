@@ -2,7 +2,10 @@
 
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
+@using HobbyMatch.App.Services.Api
 
+@inject IAuthApiService AuthApiService
+@inject NavigationManager navigationManager
 
 <MudContainer Style="justify-content: center" MaxWidth="MaxWidth.Small">
 
@@ -11,13 +14,13 @@
         <MudForm @bind-IsValid="@success" @bind-Errors="@errors">
             <MudTextField @ref="usernameField" T="string" Label="Username" Required="true" RequiredError="User name is required!" Style="margin-bottom:8px" />
             <MudTextField @ref="emailField" T="string" Label="Email" Required="true" RequiredError="Email is required!"
-                          Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" Style="margin-bottom:8px" />
+            Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" Style="margin-bottom:8px" />
             <MudTextField @ref="passwordField" T="string" Label="Password" HelperText="Choose a strong password" InputType="InputType.Password"
-                           Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
-                           Style="margin-bottom:8px" RequiredError="Password is required!" />
+            Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
+            Style="margin-bottom:8px" RequiredError="Password is required!" />
             <MudTextField T="string"
-                            Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
-                          Validation="@(new Func<string, string>(PasswordMatch))" Style="margin-bottom:8px" />
+            Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
+            Validation="@(new Func<string, string>(PasswordMatch))" Style="margin-bottom:8px" />
             @if (accountType != null && accountType.Value == "BusinessClient")
             {
                 <MudTextField @ref="taxIdField" T="string" Label="TaxId" Required="true" RequiredError="Tax ID is required!" style="margin-bottom:8px" />
@@ -28,24 +31,35 @@
                     <MudRadio Color="Color.Primary" Value="@("BusinessClient")">Business Client</MudRadio>
                 </MudRadioGroup>
             </div>
-            <div class="d-flex align-center justify-space-between">
-                <MudCheckBox Color="Color.Primary" T="bool" Required="true" RequiredError="You must agree" Label="I agree!" />
-                <button disabled="@(!success)" Class="btn btn-primary" @onclick="SignUpAction">Sign up</button>
-            </div>
         </MudForm>
+        <div class="d-flex align-center justify-space-between">
+            <MudCheckBox Color="Color.Primary" T="bool" Required="true" RequiredError="You must agree" Label="I agree!" />
+            <button disabled="@(!success)" Class="btn btn-primary" @onclick="SignUpAction">Sign up</button>
+        </div>
     </MudPaper>
 </MudContainer>
 
+@if (_showAlert)
+{
+    <MudCard Class="centered-top rounded-xl">
+        <MudAlert Class="rounded-xl" Severity="Severity.Error" ShowCloseIcon="true"
+        CloseIconClicked="(() => CloseAlert(true))">@_alertText</MudAlert>
+    </MudCard>
+}
 
 @code {
     bool success;
     string[] errors = { };
-    MudTextField<string> usernameField;
-    MudTextField<string> emailField;
-    MudTextField<string> passwordField;
-    MudTextField<string> taxIdField;
-    MudRadioGroup<string> accountType;
+    MudTextField<string>? usernameField;
+    MudTextField<string>? emailField;
+    MudTextField<string>? passwordField;
+    MudTextField<string>? taxIdField;
+    MudRadioGroup<string>? accountType;
 
+    private bool _showAlert = false;
+    private string _alertText = "";
+
+    // TODO: Proposition, to use a validation Service. This will be most likely needed in the future in "reset password" component
     private IEnumerable<string> PasswordStrength(string pw)
     {  
         if (string.IsNullOrWhiteSpace(pw))
@@ -70,14 +84,50 @@
         return null;
     }
 
-    private void SignUpAction()
+    private async Task SignUpAction()
     {
+        if (usernameField is null || emailField is null ||
+            passwordField is null || accountType is null) 
+            return;
+
         var username = usernameField.Value;
         var email = emailField.Value;
         var password = passwordField.Value;
-        if (accountType.Value == "BusinessClient")
+        var isBusinessClient = accountType.Value == "BusinessClient";
+        var taxId = taxIdField is not null ? taxIdField.Value : "";
+
+        HttpResponseMessage result;
+        if (isBusinessClient)
         {
-            var taxid = taxIdField.Value;
+            result = await AuthApiService.RegisterBusinessClientAsync(username, email, password, taxId);
         }
+
+        else{
+            result = await AuthApiService.RegisterUserAsync(username, email, password);
+
+        }
+        if (result is null)
+        {
+            await ShowAlert("Registration failed!", 5000);
+            return;
+        }
+
+        navigationManager.NavigateTo("/");
+        StateHasChanged();
+    }
+
+    public async Task ShowAlert(string text, int delay)
+    {
+        _alertText = text;
+        _showAlert = true;
+        StateHasChanged();
+        await Task.Delay(delay);
+        CloseAlert(true);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void CloseAlert(bool value)
+    {
+        _showAlert = !value;
     }
 }

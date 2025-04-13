@@ -1,36 +1,24 @@
 ﻿using HobbyMatch.Domain.Entities;
 
-namespace HobbyMatch.App.Services
+namespace HobbyMatch.App.Services.Api
 {
 	public class OrganizerApiService : IOrganizerApiService
 	{
 		// TODO: get rid of redundant try catch blocks, fix them
 		private readonly HttpClient _httpClient;
-
-		private readonly Dictionary<Type, string> _endpointMap = new() // TODO: Create endpoint provider using strategy pattern
-		{
-			{ typeof(User), "users" },
-			{ typeof(Organizer), "organizers" },
-		};
-		public OrganizerApiService(IHttpClientFactory httpClientFactory)
+		private readonly EndpointProvider _endpointProvider;
+		public OrganizerApiService(IHttpClientFactory httpClientFactory, EndpointProvider endpointProvider)
 		{
 			_httpClient = httpClientFactory.CreateClient("AuthenticatedClient");
-		}
-		private string GetEndpoint<T>() where T : BusinessClient
-		{
-			if (_endpointMap.TryGetValue(typeof(T), out var endpoint))
-			{
-				return endpoint;
-			}
-			throw new InvalidOperationException($"No endpoint declared for type: {typeof(T).Name}");
+			_endpointProvider = endpointProvider;	
 		}
 
-		public async Task<T[]?> GetUsersAsync<T>() where T : BusinessClient
+		public async Task<T[]?> GetUsersAsync<T>() where T : Organizer
 		{
 			string endpoint = "";
 			try
 			{
-				endpoint = GetEndpoint<T>();
+				endpoint = _endpointProvider.GetEndpoint<T>();
 			}
 			catch (Exception e)
 			{
@@ -48,12 +36,12 @@ namespace HobbyMatch.App.Services
 
 		}
 
-		public async Task<T?> GetUserAsync<T>(int id) where T : BusinessClient
+		public async Task<T?> GetUserAsync<T>(int id) where T : Organizer
 		{
 			string endpoint = "";
 			try
 			{
-				endpoint = GetEndpoint<T>();
+				endpoint = _endpointProvider.GetEndpoint<T>();
 			}
 			catch (Exception e)
 			{
@@ -70,12 +58,12 @@ namespace HobbyMatch.App.Services
 			return user;
 		}
 
-		public async Task<T?> EditUserAsync<T>(int id, T editedUser) where T : BusinessClient
+		public async Task<T?> EditUserAsync<T>(int id, T editedUser) where T : Organizer
 		{
 			string endpoint = "";
 			try
 			{
-				endpoint = GetEndpoint<T>();
+				endpoint = _endpointProvider.GetEndpoint<T>();
 			}
 			catch (Exception e)
 			{

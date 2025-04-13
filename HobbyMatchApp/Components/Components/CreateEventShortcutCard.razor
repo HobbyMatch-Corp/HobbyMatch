@@ -1,0 +1,25 @@
+﻿@inject NavigationManager NavigationManager
+
+<MudCard Class="ma-2 d-inline-flex flex-column align-center justify-center rounded-lg"
+         Style="width: calc(100% - 16px); cursor: pointer; border: 2px solid var(--mud-palette-secondary); border-radius: 16px;"
+         Elevation="3"
+         @onclick="NavigateToCreateEvent">
+    <MudCardContent Class="d-flex flex-column align-center justify-center py-4">
+        <MudIcon Icon="@Icons.Material.Filled.Add"
+                 Color="Color.Primary"
+                 Size="Size.Large"
+                 Style="font-size: 48px;" />
+        <MudText Typo="Typo.body1"
+                 Color="Color.Primary"
+                 Class="mt-2 text-center">
+            Create event
+        </MudText>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private void NavigateToCreateEvent()
+    {
+        NavigationManager.NavigateTo("createEvent"); // TODO change link
+    }
+}

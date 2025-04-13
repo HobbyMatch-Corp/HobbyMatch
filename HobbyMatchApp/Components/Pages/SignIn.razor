@@ -1,7 +1,12 @@
 ﻿@page "/SignIn"
 
+@using System.Threading 
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
+@using HobbyMatch.App.Auth.CustomAuthStateProvider
+@using HobbyMatch.App.Services
+@inject CustomAuthStateProvider AuthStateProvider
+@inject NavigationManager navigationManager
 
 
 <MudContainer Style="justify-content: center" MaxWidth="MaxWidth.Small">
@@ -10,37 +15,73 @@
         <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">Sign in to your account</MudText>
         <MudForm @bind-IsValid="@success" @bind-Errors="@errors">
             <MudTextField @ref="emailField" T="string" Label="Email" Required="true" RequiredError="Email is required!"
-                          Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" style="margin-bottom:8px"/>
+            Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" style="margin-bottom:8px"/>
             <MudTextField @ref="passwordField" T="string" Label="Password" InputType="InputType.Password"
-                             Required="true" RequiredError="Password is required!" Style="margin-bottom:8px"/>
-            <div class="d-flex">
+            Required="true" RequiredError="Password is required!" Style="margin-bottom:32px"/>
+            @* <div class="d-flex">
                 <MudRadioGroup @ref="accountType" T="string" Required="true" RequiredError="Account type is required!">
                     <MudRadio Color="Color.Primary" Value="@("User")">User</MudRadio>
                     <MudRadio Color="Color.Primary" Value="@("BusinessClient")">Business Client</MudRadio>
                 </MudRadioGroup>
-            </div>
-            <div class="d-flex align-center justify-space-between">
-                <MudText>Don’t have an account yet?  <MudLink Href="/SignUp">Sign up here</MudLink></MudText>
-                <button disabled="@(!success)" Class="btn btn-primary" @onclick="SignInAction">Sign in</button>
-            </div>
+            </div> *@
         </MudForm>
+
+        <div class="d-flex align-center justify-space-between">
+            <MudText>Don’t have an account yet?  <MudLink Href="/SignUp">Sign up here</MudLink></MudText>
+            <button disabled="@(!success)" Class="btn btn-primary" @onclick="SignInAction">Sign in</button>
+        </div>
     </MudPaper>
 </MudContainer>
+
+@if (_showAlert)
+{
+    <MudCard Class="centered-top rounded-xl">
+        <MudAlert Class="rounded-xl" Severity="Severity.Error" ShowCloseIcon="true"
+        CloseIconClicked="(() => CloseAlert(true))">@_alertText</MudAlert>
+    </MudCard>
+}
 
 
 @code {
     bool success;
     string[] errors = { };
-    MudTextField<string> emailField;
-    MudTextField<string> passwordField;
-    MudRadioGroup<string> accountType;
+    MudTextField<string>? emailField;
+    MudTextField<string>? passwordField;
+    MudRadioGroup<string>? accountType;
 
-    private void SignInAction()
+    private bool _showAlert = false;
+    private string _alertText = "";
+
+    private async Task SignInAction()
     {
-        var email = emailField.Value;
-        var password = passwordField.Value;
-        if (accountType.Value == "BusinessClient")
+        if (emailField is null || passwordField is null) return;
+
+        var email = emailField.Value ?? "";
+        var password = passwordField.Value ?? "";
+        var result = await AuthStateProvider.LoginAsync(email, password);
+        if (!result)
         {
+            await ShowAlert("Login failed!", 5000);
+            return;
         }
+
+        navigationManager.NavigateTo("/");
+        StateHasChanged();
+    }
+
+
+    public async Task ShowAlert(string text, int delay)
+    {
+        _alertText = text;
+        _showAlert = true;
+        StateHasChanged();
+        await Task.Delay(delay);
+        CloseAlert(true);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void CloseAlert(bool value)
+    {
+        _showAlert = !value;
     }
 }

@@ -3,6 +3,7 @@ using HobbyMatch.BL.Configuration;
 using HobbyMatch.BL.Services.AppUser;
 using HobbyMatch.BL.Services.Auth;
 using HobbyMatch.BL.Services.Auth.Account;
+using HobbyMatch.BL.Services.Auth.Tokens;
 using HobbyMatch.BL.Services.BusinessClient;
 using HobbyMatch.Database.Data;
 using HobbyMatch.Database.Repositories.AppUser;
@@ -71,10 +72,11 @@ builder.Services.AddAuthentication();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 var app = builder.Build();
 
-await using(var serviceScope = app.Services.CreateAsyncScope())
-    await using(var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>())
+await using (var serviceScope = app.Services.CreateAsyncScope())
+await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>())
 {
-    await dbContext.Database.EnsureCreatedAsync();
+    if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
+        await dbContext.Database.MigrateAsync();
 }
 
 if (app.Environment.IsDevelopment())
@@ -91,3 +93,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+public partial class Program { }

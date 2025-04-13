@@ -1,0 +1,74 @@
+﻿@inject NavigationManager NavigationManager
+
+<MudCard Class="ma-2 d-inline-flex flex-column justify-center rounded-lg"
+         Style="width: calc(100% - 16px); border: 2px solid var(--mud-palette-secondary); border-radius: 16px;"
+Elevation="3">
+    <MudCardContent>
+        <MudText Typo="Typo.h6" Class="mb-2" Align="Align.Center" Color="Color.Primary">User Profile</MudText>
+
+        <MudStack Spacing="2" Class="mb-3">
+            @foreach (var field in GetUserFields())
+            {
+                @if (field.Value != null)
+                {
+                    <MudText>
+                        <span class="mud-text-secondary font-weight-bold">@field.Label: </span>
+                        <span>@field.Value</span>
+                    </MudText>
+                }
+            }
+        </MudStack>
+    </MudCardContent>
+
+    <MudCardActions Class="justify-center pb-3">
+        <MudButton Variant="Variant.Outlined"
+        Color="Color.Secondary"
+        Style="border-width: 1px;"
+        Class="rounded-lg"
+        @onclick="NavigateToEditProfile">
+            Edit profile
+        </MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter]
+    public string Username { get; set; } = string.Empty;
+    [Parameter]
+    public string Email { get; set; } = string.Empty;
+    [Parameter]
+    public int OrganizedEventCount { get; set; }
+    [Parameter]
+    public int? SignedUpEventCount { get; set; }
+    [Parameter]
+    public string? TaxId { get; set; }
+
+    private void NavigateToEditProfile()
+    {
+        NavigationManager.NavigateTo("/editUserData"); // TODO change link
+    }
+
+    private List<(string Label, object? Value)> GetUserFields()
+    {
+        var fields = new List<(string Label, object? Value)>
+        {
+            ("Username", Username),
+            ("Email", Email),
+            ("Organized events", OrganizedEventCount)
+        };
+
+        // Only add TaxId for business clients
+        if (!string.IsNullOrEmpty(TaxId))
+        {
+            fields.Add(("Tax ID", TaxId));
+        }
+        
+        // If user signed up number of events
+        if (SignedUpEventCount is not null)
+        {
+            fields.Add(("Signed up events", SignedUpEventCount));
+        }
+
+        return fields;
+    }
+}
