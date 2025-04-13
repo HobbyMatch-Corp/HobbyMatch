@@ -1,5 +1,5 @@
 using HobbyMatch.BL.Models.Auth;
-using HobbyMatch.Database.Repositories.User;
+using HobbyMatch.Database.Repositories.Users;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Exceptions.AuthExceptions;
 using HobbyMatch.Domain.Requests;
