@@ -8,6 +8,7 @@
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/scalar</DockerServiceUrl>
     <DockerServiceName>hobbymatch.api</DockerServiceName>
+    <DependencyAwareStart>true</DependencyAwareStart>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">
