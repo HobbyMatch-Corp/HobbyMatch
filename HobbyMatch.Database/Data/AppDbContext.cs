@@ -45,7 +45,7 @@ namespace HobbyMatch.Database.Data
 					}).Wait();
 				}
 
-				var bclient = context.Set<User>().FirstOrDefault(u => u.Email == "businessclient@test.com");
+				var bclient = context.Set<BusinessClient>().FirstOrDefault(u => u.Email == "businessclient@test.com");
 				if (bclient == null)
 				{
 
@@ -112,24 +112,24 @@ namespace HobbyMatch.Database.Data
 					});
 				}
 
-				//var bclient = await context.Set<User>().FirstOrDefaultAsync(u => u.Email == "businessclient@test.com");
-				//if (bclient == null)
-				//{
+				var bclient = await context.Set<BusinessClient>().FirstOrDefaultAsync(u => u.Email == "businessclient@test.com");
+				if (bclient == null)
+				{
 
-				//	var userManager = context.GetService<UserManager<Organizer>>();
-				//	var newBC = new BusinessClient
-				//	{
-				//		UserName = "TestBusinessClient",
-				//		Email = "businessclient@test.com",
-				//		TaxID = "taxid_2147743"
-				//	};
+					var userManager = context.GetService<UserManager<Organizer>>();
+					var newBC = new BusinessClient
+					{
+						UserName = "TestBusinessClient",
+						Email = "businessclient@test.com",
+						TaxID = "taxid_2147743"
+					};
 
-				//	await userManager.CreateAsync(newBC, "Pass123!");
-				//	await userManager.AddClaimsAsync(newBC, new List<Claim>
-				//	{
-				//		new Claim(ClaimTypes.Name, "Business Client")
-				//	});
-				//}
+					await userManager.CreateAsync(newBC, "Pass123!");
+					await userManager.AddClaimsAsync(newBC, new List<Claim>
+					{
+						new Claim(ClaimTypes.Name, "Business Client")
+					});
+				}
 				var eventList = await context.Set<Event>().ToListAsync();
 				if (eventList.Count == 0)
 				{
