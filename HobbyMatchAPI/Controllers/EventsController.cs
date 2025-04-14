@@ -24,18 +24,10 @@ namespace HobbyMatch.API.Controllers
         [Authorize]
 		public async Task<ActionResult<Event?>> EventCreate([FromBody] CreateEventDto createDto)
 		{
-			Console.WriteLine($"IsAuthenticated: {User.Identity?.IsAuthenticated}");
-			Console.WriteLine($"Authentication Type: {User.Identity?.AuthenticationType}");
-			Console.WriteLine($"Name: {User.Identity?.Name}");
-
-			foreach (var claim in User.Claims)
-			{
-				Console.WriteLine($"Claim Type: {claim.Type}, Value: {claim.Value}");
-			}
 			var user = await _userManager.GetUserAsync(User);
 			if (user == null) return Unauthorized();
 			var result = await _eventService.CreateEventAsync(createDto, user.Id);
-			return result != null ? Ok(result) : BadRequest("Could not create event");
+			return result != null ? Ok(result.ToDto()) : BadRequest("Could not create event");
 		}
 
 		[HttpPost("signin")]
