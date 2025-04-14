@@ -1,8 +1,13 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
-EXPOSE 80
+USER $APP_UID
+EXPOSE 8080
+EXPOSE 8081
+
+USER root
 RUN apt-get update && apt-get install -y curl iputils-ping net-tools
+USER $APP_UID
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Development

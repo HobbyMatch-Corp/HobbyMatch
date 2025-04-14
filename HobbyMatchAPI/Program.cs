@@ -75,7 +75,9 @@ var app = builder.Build();
 await using (var serviceScope = app.Services.CreateAsyncScope())
 await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>())
 {
-    if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
+    var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
+
+    if (pendingMigrations.Any())
     {
         await dbContext.Database.MigrateAsync();
     }
