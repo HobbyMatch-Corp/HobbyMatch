@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using HobbyMatch.BL.Configuration;
 using HobbyMatch.Domain.Entities;
+using HobbyMatch.Domain.Enums;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -24,15 +25,19 @@ public class JwtTokenGenerator : ITokenGenerator
         var credentials = new SigningCredentials(
             signingKey, SecurityAlgorithms.HmacSha512);
 
+        var userType = user is User ? UserType.User : UserType.BussinessClient;
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Name, user.UserName),
+            new Claim("userType",userType.ToString()),
         };
 
         var expiration = DateTime.UtcNow.AddMinutes(_options.ExpirationMinutes);
         var token = new JwtSecurityToken(
+            claims: claims,
             issuer: _options.Issuer, audience: _options.Audience, expires: expiration, signingCredentials: credentials);
 
         var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
