@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using HobbyMatch.App.Services.Api;
 using Microsoft.AspNetCore.Components.Authorization;
 using HobbyMatch.App.Services;
+using HobbyMatch.App.Services.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ builder.Services.AddScoped<CustomAuthStateProvider, CustomAuthStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
 	provider.GetRequiredService<CustomAuthStateProvider>());
 builder.Services.AddScoped<IAuthApiService, AuthApiService>();
+builder.Services.AddScoped<IEventApiService, EventApiService>();
 builder.Services.AddScoped<EndpointProvider, EndpointProvider>();
 builder.Services.AddMudServices();
 

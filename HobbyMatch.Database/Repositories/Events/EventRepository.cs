@@ -46,5 +46,13 @@ namespace HobbyMatch.Database.Repositories.Events
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<List<Event>> GetEventsWithFilter(string? filter)
+        {
+            return await _context.Events
+                .Where(e => string.IsNullOrEmpty(filter) || e.Name.Contains(filter))
+                .Include(e => e.Organizer)
+                .ToListAsync();
+        }
     }
 }

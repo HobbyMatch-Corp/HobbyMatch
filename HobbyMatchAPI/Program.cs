@@ -16,6 +16,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
+using HobbyMatch.Database.Repositories.Events;
+using HobbyMatch.Database.Repositories.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +48,7 @@ builder.Services.AddScoped<IBusinessClientRepository, BusinessClientRepository>(
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAppUserService, AppUserService>();
 builder.Services.AddScoped<IBusinessClientService, BusinessClientService>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
 
 builder.Services.AddAuthentication(opt =>
 {

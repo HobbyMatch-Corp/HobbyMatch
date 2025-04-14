@@ -9,10 +9,12 @@ namespace HobbyMatch.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventsController(IEventRepository eventRepository, UserManager<User> userManager) : ControllerBase
+    public class EventsController(IEventRepository eventRepository, UserManager<Organizer> userManager) : ControllerBase
     {
-        private readonly IEventRepository _eventRepository = eventRepository;
-        private readonly UserManager<User> _userManager = userManager;
+        private readonly IEventRepository _eventRepository = eventRepository; 
+        //TODO Fix this logic : UserManager is only for the identity
+        //TODO class which is Organizer and it must be checked whether the organizer is actually a user or a business client
+        private readonly UserManager<Organizer> _userManager = userManager;
 
         [HttpPost("signin")]
         [Authorize]
@@ -23,7 +25,8 @@ namespace HobbyMatch.API.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Unauthorized();
 
-            var result = await _eventRepository.AddUserToEventAsync(eventId, user);
+            //TODO Fix this logic 
+            var result = await _eventRepository.AddUserToEventAsync(eventId, (user as User)!);
             return result ? Ok() : BadRequest("Could not sign in to event");
         }
         [HttpPost("signout")]
@@ -35,8 +38,16 @@ namespace HobbyMatch.API.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Unauthorized();
 
-            var result = await _eventRepository.RemoveUserFromEventAsync(eventId, user);
+            //TODO Fix this logic 
+            var result = await _eventRepository.RemoveUserFromEventAsync(eventId, (user as User)!);
             return result ? Ok() : BadRequest("Could not sign out from event");
+        }
+
+        [HttpGet("events")]
+        public async Task<IActionResult> GetFilteredEvents([FromQuery] string? filter)
+        {
+            var filteredResults = await _eventRepository.GetEventsWithFilter(filter);
+            return Ok(filteredResults.Select(result => result.ToDto()));
         }
     }
 }
