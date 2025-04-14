@@ -89,7 +89,10 @@ await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<App
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapScalarApiReference(options =>
+    {
+        options.Servers = Array.Empty<ScalarServer>();
+    });
 }
 
 app.UseExceptionHandler(_ => { });
