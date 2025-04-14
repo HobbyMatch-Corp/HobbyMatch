@@ -1,4 +1,6 @@
 ﻿using HobbyMatch.BL.DTOs.Event;
+using HobbyMatch.Domain.Entities;
+using HobbyMatch.Domain.Requests;
 
 namespace HobbyMatch.App.Services.Events
 {
@@ -6,6 +8,7 @@ namespace HobbyMatch.App.Services.Events
     {
         Task<bool?> EventSigninAsync(string eventId);
         Task<bool?> EventSignoutAsync(string eventId);
+        Task<Event?> CreateEventAsync(CreateEventRequest eventRequest);
 
         Task<List<EventDto>?> GetFilteredEvents(string? filter);
     }

@@ -6,7 +6,8 @@ namespace HobbyMatch.Database.Repositories.Events
     {
         Task<Event?> GetEventByIdAsync(int eventId);
         Task<bool> AddUserToEventAsync(int eventId, User user);
-        Task<bool> RemoveUserFromEventAsync(int eventId, User user);
+        Task<Event?> AddEvent(Event newEvent);
+		Task<bool> RemoveUserFromEventAsync(int eventId, User user);
         Task<List<Event>> GetEventsWithFilter(string? filter);
     }
 }
