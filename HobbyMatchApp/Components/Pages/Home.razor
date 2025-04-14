@@ -3,6 +3,9 @@
 @using HobbyMatch.App.Components.Components
 @using HobbyMatch.Domain.Entities
 @using HobbyMatch.App.Components.Layout;
+@using HobbyMatch.App.Auth.CustomAuthStateProvider
+@using System.Security.Claims
+@inject CustomAuthStateProvider authStateProvider
 
 <PageTitle>Home</PageTitle>
 
@@ -32,13 +35,8 @@
 @code {
     MudTheme MyCustomTheme = new CustomTheme();
 
-    protected override async Task OnInitializedAsync()
-    {
-        MyCustomTheme.PaletteLight.Background = new MudBlazor.Utilities.MudColor("#F5F5F5");
-    }
-
-    public string UserName { get; set; } = "UserTest";
-    public string Email { get; set; } = "user@test.com";
+    public string UserName { get; set; } = "UserTesst";
+    public string Email { get; set; }
     public string? TaxId { get; set; }
     public int EventsSignedUp { get; set; } = 12;
     public int EventsOrganized { get; set; } = 22;
@@ -57,5 +55,23 @@
          new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
          new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.Location{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }}
      };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        MyCustomTheme.PaletteLight.Background = new MudBlazor.Utilities.MudColor("#F5F5F5");
+
+        var authState = await authStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user is not null)
+        {
+            var email = user.FindFirst(ClaimTypes.Email);
+            if (email is not null) Email = email.Value;
+
+
+        }
+    }
 }
 
