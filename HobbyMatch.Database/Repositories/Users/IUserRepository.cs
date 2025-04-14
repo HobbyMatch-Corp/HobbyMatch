@@ -1,6 +1,6 @@
 using HobbyMatch.Domain.Entities;
 
-namespace HobbyMatch.Database.Repositories.User;
+namespace HobbyMatch.Database.Repositories.Users;
 
 public interface IUserRepository
 {

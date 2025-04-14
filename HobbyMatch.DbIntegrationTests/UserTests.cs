@@ -1,7 +1,7 @@
 ﻿using HobbyMatch.BL.Configuration;
 using HobbyMatch.BL.Services.Auth;
 using HobbyMatch.BL.Services.Auth.Account;
-using HobbyMatch.Database.Repositories.User;
+using HobbyMatch.Database.Repositories.Users;
 using HobbyMatch.DbIntegrationTests.Infrastrucutre;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Requests;

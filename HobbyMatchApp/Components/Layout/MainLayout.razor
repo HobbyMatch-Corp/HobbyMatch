@@ -1,29 +1,37 @@
 ﻿@inherits LayoutComponentBase
 
+@using HobbyMatch.App.Auth.CustomAuthStateProvider
 @using Microsoft.AspNetCore.Components.Authorization
-@inject NavigationManager navigationManager
+@inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject CustomAuthStateProvider CustomAuthStateProvider
 
 @* Required *@
-<MudThemeProvider Theme="MyCustomTheme" />
+<MudThemeProvider Theme="_myCustomTheme" />
 <MudPopoverProvider @rendermode="InteractiveServer"/>
 
 <div class="page">
     <CascadingAuthenticationState>
-        <AuthorizeView>
-            <Authorized>
-                <div class="sidebar">
-                    <NavMenu />
-                </div>
-            </Authorized>
-        </AuthorizeView>
-
-
         <main>
             <div class="top-row px-4">
                 <AuthorizeView>
+                <Authorized>
+                    <MudIconButton Icon="@Icons.Material.Filled.Home" OnClick="NavigateHome" Color="Color.Primary" />
+                </Authorized>
+                </AuthorizeView>
+                <div class="flex-grow-1 mx-4">
+                    <MudTextField @bind-Value="_searchText"
+                                  Placeholder="Search..."
+                                  Immediate="true"
+                                  Margin="Margin.Dense"
+                                  Variant="Variant.Outlined"
+                                  OnKeyDown="SearchKey"
+                                  Class="w-100"/>
+                </div>
+                <MudIconButton Icon="@Icons.Material.Filled.Search" OnClick="Search" Color="Color.Primary" />
+                <AuthorizeView>
                     <Authorized>
-                        <button class="btn btn-primary">
+                        <button class="btn btn-primary" @onclick="LogOutAction">
                             Log out
                         </button>
                     </Authorized>
@@ -51,10 +59,32 @@
 
 @code
 {
-    MudTheme MyCustomTheme = new CustomTheme();
-
+    readonly MudTheme _myCustomTheme = new CustomTheme();
+    private string _searchText = "";
     private void SignInAction()
     {
-        navigationManager.NavigateTo("/SignIn");
+        NavigationManager.NavigateTo("/SignIn");
+    }
+    private async void LogOutAction()
+    {
+        await CustomAuthStateProvider.Logout();
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void NavigateHome()
+    {
+        NavigationManager.NavigateTo("/home");
+    }
+    private void Search()
+    {
+        NavigationManager.NavigateTo($"/Events/{_searchText}");
+    }
+
+    private void SearchKey(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            Search();
+        }
     }
 }
