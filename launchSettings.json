@@ -4,8 +4,8 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "hobbymatch.api": "StartDebugging",
-        "hobbymatch.app": "StartDebugging",
+        "backend": "StartDebugging",
+        "frontend": "StartDebugging",
         "sqlserver": "StartWithoutDebugging"
       }
     },
@@ -13,11 +13,20 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "composeLaunchAction": "LaunchBrowser",
-      "composeLaunchServiceName": "hobbymatch.api",
+      "composeLaunchServiceName": "backend",
       "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/scalar",
       "serviceActions": {
-        "hobbymatch.api": "StartDebugging",
-        "hobbymatch.app": "DoNotStart",
+        "backend": "StartDebugging",
+        "frontend": "DoNotStart",
+        "sqlserver": "StartWithoutDebugging"
+      }
+    },
+    "mssql-server-db": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "backend": "DoNotStart",
+        "frontend": "DoNotStart",
         "sqlserver": "StartWithoutDebugging"
       }
     }

@@ -7,13 +7,10 @@
     <ProjectGuid>370cf59a-d69e-4496-829e-abe989da821f</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/scalar</DockerServiceUrl>
-    <DockerServiceName>hobbymatch.api</DockerServiceName>
+    <DockerServiceName>backend</DockerServiceName>
     <DependencyAwareStart>true</DependencyAwareStart>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>
