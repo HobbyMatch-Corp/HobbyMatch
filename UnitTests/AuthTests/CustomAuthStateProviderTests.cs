@@ -34,8 +34,8 @@ namespace UnitTests.AuthTests
 			var expectedAuthState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(responseClaims, "Bearer") ));
 
 			_tokenServiceMock
-				.Setup(s => s.GetClaimsFromTokenAsync())
-				.ReturnsAsync(responseClaims);
+				.Setup(s => s.GetClaimsFromToken())
+				.Returns(responseClaims);
 
 			// Act
 			var result = await _customAuthStateProvider.GetAuthenticationStateAsync();
