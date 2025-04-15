@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.App.UnitTests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyMatch.Api.UnitTests", "HobbyMatch.Api.UnitTests\HobbyMatch.Api.UnitTests.csproj", "{37CB3C60-7675-4A16-B42D-577017633928}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{370CF59A-D69E-4496-829E-ABE989DA821F}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "Docker\docker-compose.dcproj", "{370CF59A-D69E-4496-829E-ABE989DA821F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

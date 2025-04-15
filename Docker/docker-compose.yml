@@ -18,7 +18,7 @@ services:
       - app-network
   backend:
     build:
-      context: .
+      context: ../
       dockerfile: HobbyMatchAPI/Dockerfile
     ports:
       - "5000:8080"
@@ -36,7 +36,7 @@ services:
       - app-network
   frontend:
     build: 
-      context: .
+      context: ../
       dockerfile: HobbyMatchApp/Dockerfile
     ports:
       - "5001:8080"
