@@ -17,7 +17,6 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
 using HobbyMatch.Database.Repositories.Events;
-using HobbyMatch.Database.Repositories.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,14 +77,21 @@ var app = builder.Build();
 await using (var serviceScope = app.Services.CreateAsyncScope())
 await using (var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>())
 {
-    if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
+    var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
+
+    if (pendingMigrations.Any())
+    {
         await dbContext.Database.MigrateAsync();
+    }
 }
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapScalarApiReference(options =>
+    {
+        options.Servers = Array.Empty<ScalarServer>();
+    });
 }
 
 app.UseExceptionHandler(_ => { });

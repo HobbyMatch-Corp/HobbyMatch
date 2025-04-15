@@ -22,6 +22,7 @@ builder.Services.AddTransient<AuthHttpClientHandler>();
 
 builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<EndpointProvider>();
 builder.Services.AddScoped<IOrganizerApiService, OrganizerApiService>();
 
 builder.Services.AddHttpClient("AuthenticatedClient").AddHttpMessageHandler<AuthHttpClientHandler>();
