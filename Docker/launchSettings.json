@@ -1,0 +1,34 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "backend": "StartDebugging",
+        "frontend": "StartDebugging",
+        "sqlserver": "StartWithoutDebugging"
+      }
+    },
+    "backend-db": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "backend",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/scalar",
+      "serviceActions": {
+        "backend": "StartDebugging",
+        "frontend": "DoNotStart",
+        "sqlserver": "StartWithoutDebugging"
+      }
+    },
+    "mssql-server-db": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "backend": "DoNotStart",
+        "frontend": "DoNotStart",
+        "sqlserver": "StartWithoutDebugging"
+      }
+    }
+  }
+}
