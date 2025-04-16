@@ -2,16 +2,58 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 
 namespace HobbyMatch.Database.Data
 {
     public class DbSeeder
     {
+        /* POMYSL NA TA KLASE
+           Zrobić minimalny graf encji, który obejmuje większość przypadków
+            Kolejność kroków:
+            1. Stworzyc business klientów
+            2. Stworzyc venue
+            3. Przypisac venue do business klientow
+            4. Stworzyc jakies eventy z tymi venue i klientami
+            5. Stworzyc userow
+            6. Stworzyc jakies eventy gdzie userzy sa organizatorami
+            7. Pozapisywac userow na eventy
+        */
 
-        public static void Seed(DbContextOptionsBuilder optionsBuilder)
+        private struct MyStruct
         {
-            optionsBuilder.UseSeeding((context, _) =>
+            public object DbSet;
+            public Func<object, bool> Comparer;
+            public ICollection<object> objects;
+        }
+
+        private List<BusinessClient> clients = new()
+        {
+            new BusinessClient() {Email = "bclient1@test.com", UserName="BusinessClient1", TaxID="taxId1_16498+544684",
+                Venues=new[] { new Venue() {Name = "The Creative Canvas", Address = "123 Art Street, New York, NY", MaxUsers = 25, Price = 0,
+                    Location = new Location() { Latitude = 40.7128, Longitude = -74.0060 }, Description = "A cozy art studio for painting and drawing enthusiasts. Offers guided sessions and open studio hours."
+                }, new Venue() { Name = "Peak Climb Center", Address = "456 Mountain Ave, Denver, CO", MaxUsers = 100, Price = 50,
+                    Location = new Location() { Latitude = 39.7392, Longitude = -104.9903 }, Description = "Indoor rock climbing gym with various difficulty levels, great for climbing hobbyists of all skill levels."
+                },} },
+            new BusinessClient() {Email = "bclient2@test.com", UserName="BusinessClient2", TaxID="taxId1_189481815+8787",
+                Venues=new[] { new Venue() { Name = "Gamers' Haven", Address = "789 Pixel Blvd, Austin, TX", MaxUsers = 40, Price = 20,
+                    Location = new Location() { Latitude = 30.2672, Longitude = -97.7431 }, Description = "A dedicated space for tabletop games, RPGs, and board game meetups. Snacks and drinks available."
+                }, new Venue() { Name = "Strings & Things Music Hall", Address = "321 Melody Ln, Nashville, TN", MaxUsers = 60, Price = 35,
+                    Location = new Location() { Latitude = 36.1627, Longitude = -86.7816 }, Description = "A venue for music lovers to jam, take lessons, or perform. Equipped with instruments and sound systems."
+                }, new Venue() { Name = "Urban Garden Hub", Address = "159 Greenway Dr, Portland, OR", MaxUsers = 20, Price = 0,
+                    Location = new Location() { Latitude = 45.5152, Longitude = -122.6784 }, Description = "Community garden and workshop space for gardening enthusiasts. Offers tools, soil, and seasonal classes."
+                }} }
+        };
+
+
+
+        public void SetUpDbSeeding(DbContextOptionsBuilder optionsBuilder)
+        {
+            var v = clients[0].Venues.ElementAt(0);
+            optionsBuilder
+                .UseSeeding((context, _) =>
             {
                 var user = context.Set<User>().FirstOrDefault(u => u.Email == "user@test.com");
                 if (user == null)
@@ -78,7 +120,7 @@ namespace HobbyMatch.Database.Data
                 }
                 context.SaveChanges();
             })
-            .UseAsyncSeeding(async (context, _, ct) =>
+                .UseAsyncSeeding(async (context, _, ct) =>
             {
                 var user = await context.Set<User>().FirstOrDefaultAsync(u => u.Email == "user@test.com", ct);
                 if (user == null)

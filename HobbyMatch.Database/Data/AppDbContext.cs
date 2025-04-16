@@ -22,7 +22,7 @@ namespace HobbyMatch.Database.Data
 		{
 			base.OnConfiguring(optionsBuilder);
 
-			DbSeeder.Seed(optionsBuilder);
+			DbSeeder.SetUpDbSeeding(optionsBuilder);
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
