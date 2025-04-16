@@ -19,8 +19,9 @@ namespace HobbyMatch.Database.Data
 		public DbSet<User> AppUsers { get; set; }
 		public DbSet<BusinessClient> BusinessClients { get; set; }
 		public DbSet<Event> Events { get; set; }
+        public DbSet<Venue> Venues { get; set; }
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			base.OnConfiguring(optionsBuilder);
 
@@ -80,7 +81,7 @@ namespace HobbyMatch.Database.Data
 							Price = 1,
 							Name = "Siata",
 							Description = "Chcesz zagrać w siatę? Super, akurat się ciepło zrobiło. Zapraszamy na plażę w Kostaryce :).",
-							Location = new Location()
+							Location = new LocationNullable()
 						};
 						context.Add(newEvent);
 						context.SaveChanges();
@@ -146,7 +147,7 @@ namespace HobbyMatch.Database.Data
 							Price = 1,
 							Name = "Siata",
 							Description = "Chcesz zagrać w siatę? Super, akurat się ciepło zrobiło. Zapraszamy na plażę w Kostaryce :).",
-							Location = new Location()
+							Location = new LocationNullable()
 						};
 						await context.AddAsync(newEvent);
 					}

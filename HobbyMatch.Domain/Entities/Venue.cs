@@ -29,8 +29,12 @@ namespace HobbyMatch.Domain.Entities
         [MaxLength(100, ErrorMessage = "Venue description must be max 100 characters")]
         public string Description { get; set; }
 
+        public int BusinessClientId { get; set; }
+
+        public BusinessClient BusinessClient { get; set; }
+
         [JsonIgnore]
-        public ICollection<Event> Events { get; set; }  
+        public ICollection<Event> Events { get; set; }
 
     }
 }

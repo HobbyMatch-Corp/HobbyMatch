@@ -20,7 +20,7 @@ namespace HobbyMatch.Domain.Entities
 
         [DataType(DataType.Date)]
         public DateTime EndTime { get; set; }
-        public Location? Location { get; set; }
+        public LocationNullable Location { get; set; }
         public int? VenueId { get; set; }
 
         [DataType(DataType.Currency)]
