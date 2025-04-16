@@ -8,8 +8,8 @@ namespace HobbyMatch.App.Auth.TokenService
     public interface ITokenService
     {
         Task SetAccessTokenAsync(string token);
-        Task<string?> GetAccessTokenAsync();
+        Task LoadTokenFromLocalStorage();
         Task ClearAccessTokenAsync();
-        Task<IEnumerable<Claim>> GetClaimsFromTokenAsync();
+        IEnumerable<Claim> GetClaimsFromToken();
     }
 }

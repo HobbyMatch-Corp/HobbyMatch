@@ -21,22 +21,27 @@ builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSet
 builder.Services.AddTransient<AuthHttpClientHandler>();
 
 builder.Services.AddScoped<ProtectedLocalStorage>();
+builder.Services.AddSingleton<TokenStore>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<EndpointProvider>();
 builder.Services.AddScoped<IOrganizerApiService, OrganizerApiService>();
 
-builder.Services.AddHttpClient("AuthenticatedClient").AddHttpMessageHandler<AuthHttpClientHandler>();
+builder.Services.AddHttpClient("AuthenticatedClient", client => {
+	var baseUrl = builder.Configuration.GetSection("ApiSettings")["BaseUrl"];
+	client.BaseAddress = new Uri(baseUrl!);
+}).AddHttpMessageHandler<AuthHttpClientHandler>();
+
 builder.Services.AddHttpClient("AuthClient", client =>
 {
     var baseUrl = builder.Configuration.GetSection("ApiSettings")["BaseUrl"];
 	  client.BaseAddress = new Uri(baseUrl!);
 });
-builder.Services.AddScoped<CustomAuthStateProvider, CustomAuthStateProvider>();
+builder.Services.AddScoped<CustomAuthStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
 	provider.GetRequiredService<CustomAuthStateProvider>());
 builder.Services.AddScoped<IAuthApiService, AuthApiService>();
 builder.Services.AddScoped<IEventApiService, EventApiService>();
-builder.Services.AddScoped<EndpointProvider, EndpointProvider>();
+builder.Services.AddScoped<EndpointProvider>();
 builder.Services.AddMudServices();
 
 var app = builder.Build();

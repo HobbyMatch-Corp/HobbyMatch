@@ -1,6 +1,9 @@
-﻿using HobbyMatch.BL.DTOs.Event;
+﻿using Azure.Core;
+using HobbyMatch.BL.DTOs.Event;
+using HobbyMatch.BL.Services.Event;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
+using HobbyMatch.Domain.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,14 +12,25 @@ namespace HobbyMatch.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventsController(IEventRepository eventRepository, UserManager<Organizer> userManager) : ControllerBase
+    public class EventsController(IEventRepository eventRepository, UserManager<Organizer> userManager, IEventService eventService) : ControllerBase
     {
         private readonly IEventRepository _eventRepository = eventRepository; 
+        private readonly IEventService _eventService = eventService; 
         //TODO Fix this logic : UserManager is only for the identity
         //TODO class which is Organizer and it must be checked whether the organizer is actually a user or a business client
         private readonly UserManager<Organizer> _userManager = userManager;
 
-        [HttpPost("signin")]
+        [HttpPost("create")]
+        [Authorize]
+		public async Task<ActionResult<Event?>> EventCreate([FromBody] CreateEventDto createDto)
+		{
+			var user = await _userManager.GetUserAsync(User);
+			if (user == null) return Unauthorized();
+			var result = await _eventService.CreateEventAsync(createDto, user.Id);
+			return result != null ? Ok(result.ToDto()) : BadRequest("Could not create event");
+		}
+
+		[HttpPost("signin")]
         [Authorize]
         public async Task<ActionResult> EventSignin([FromBody] EventSignDto dto)
         {

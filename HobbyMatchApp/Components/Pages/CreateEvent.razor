@@ -1,0 +1,98 @@
+﻿@page "/create-event"
+@using HobbyMatch.App.Services.Events
+@using Microsoft.AspNetCore.Components.Authorization
+@inject IEventApiService _eventApiService
+@inject NavigationManager _navigationManager
+@inject ISnackbar Snackbar
+@* TODO: Try using [Authorize] instead *@
+<AuthorizeView>
+	<Authorized>
+		<MudContainer Style="max-width: 50vw; justify-content: center" Class="pt-4">
+			<MudPaper Class="pa-4">
+				<MudText Typo="Typo.h6" Align="Align.Center">Create new Event</MudText>
+				<MudForm @ref="form" @bind-IsValid="@success" Spacing="4">
+					<MudTextField @bind-Value="_eventName" T="string" Label="EventName" Required="true" RequiredError="Event Name is required!" />
+					<MudTextField @bind-Value="_eventDescription" T="string" Label="EventDescription" Required="true" RequiredError="Event description is required!" />
+					<MudGrid>
+						<MudItem xs="6">
+							<MudDatePicker Variant="Variant.Outlined" Label="Start Date" @bind-Date="_startDate" />
+						</MudItem>
+						<MudItem xs="6">
+							<MudTimePicker Variant="Variant.Outlined" Label="Start Time" Editable="true" @bind-Time="_startTime" />
+						</MudItem>
+						<MudItem xs="6">
+							<MudDatePicker Variant="Variant.Outlined" Label="End Date" @bind-Date="_endDate" />
+						</MudItem>
+						<MudItem xs="6">
+							<MudTimePicker Variant="Variant.Outlined" Label="End Time" Editable="true" @bind-Time="_endTime" />
+						</MudItem>
+					</MudGrid>
+					<MudTextField @bind-Value="_venue" T="string" Label="Venue" />
+					<MudNumericField @bind-Value="_location.Latitude" T="double" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
+					<MudNumericField @bind-Value="_location.Longitude" T="double" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />			<MudNumericField @bind-Value="_price" T="int" Min="0" Label="Price" Required="true" RequiredError="Price is required!" />
+					@* <MudSelect T="string" Label="Hobbies" MultiSelection="true" AdornmentIcon="@Icons.Material.Filled.Search" @bind-SelectedValues="_selectedHobbies"> *@
+					@* 	@foreach (var state in _hobbiesList) *@
+					@* 	{ *@
+					@* 		<MudSelectItem T="string" Value="@state">@state</MudSelectItem> *@
+					@* 	} *@
+					@* </MudSelect> *@
+				</MudForm>
+				<div class="d-flex align-center justify-end mt-4">
+					<button Class="btn btn-primary" @onclick="CreateEventAsync">Create Event</button>
+				</div>
+			</MudPaper>
+		</MudContainer>
+	</Authorized>
+</AuthorizeView>
+@code {
+	bool success;
+	private string _eventName = "";
+	private string _eventDescription = "";
+	private Domain.Entities.Location _location = new Domain.Entities.Location();
+	private int _price = 0;
+	private int _maxUsers = 0;
+	private int _minUsers = 0;
+	private string _venue = "";
+	private IEnumerable<string> _selectedHobbies = new HashSet<string> { "Alaska" };
+	private DateTime? _startDate = DateTime.Today;
+	private TimeSpan? _startTime = new TimeSpan(00, 00, 00);
+	private DateTime? _endDate = DateTime.Today;
+	private TimeSpan? _endTime = new TimeSpan(00, 00, 00);
+	// private string _value = "Nothing selected";
+	// private readonly string[] _hobbiesList =
+	// 			[
+	// "Alabama", "Alaska", "American Samoa", "Arizona",
+	// "Arkansas", "California", "Colorado", "Connecticut",
+	// "Delaware", "District of Columbia", "Federated States of Micronesia",
+	// "Florida", "Georgia", "Guam", "Hawaii", "Idaho",
+	// "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+	// "Louisiana", "Maine", "Marshall Islands", "Maryland",
+	// "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+	// "Missouri", "Montana", "Nebraska", "Nevada",
+	// "New Hampshire", "New Jersey", "New Mexico", "New York",
+	// "North Carolina", "North Dakota", "Northern Mariana Islands", "Ohio",
+	// "Oklahoma", "Oregon", "Palau", "Pennsylvania", "Puerto Rico",
+	// "Rhode Island", "South Carolina", "South Dakota", "Tennessee",
+	// "Texas", "Utah", "Vermont", "Virgin Island", "Virginia",
+	// "Washington", "West Virginia", "Wisconsin", "Wyoming"
+	// ];
+	MudForm form;
+
+	private async void CreateEventAsync()
+	{
+		var createEventRequest = new Domain.Requests.CreateEventRequest(_eventName, _eventDescription, _startDate ?? DateTime.Today
+	, _endDate ?? DateTime.Today
+	, _location, _price, _maxUsers, _minUsers);
+
+		var createdEvent = await _eventApiService.CreateEventAsync(createEventRequest);
+		if (createdEvent != null)
+		{
+			_navigationManager.NavigateTo("/", true);
+		}
+		else
+		{
+			Snackbar.Add("Error creating event", Severity.Error);
+		}
+	}
+
+}
