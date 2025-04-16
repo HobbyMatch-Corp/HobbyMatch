@@ -5,6 +5,7 @@ using HobbyMatch.Database.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,9 +13,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HobbyMatch.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250416121152_AddVenueEntity")]
+    partial class AddVenueEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,7 +95,7 @@ namespace HobbyMatch.Database.Migrations
                     b.Property<int?>("VenueId")
                         .HasColumnType("int");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Location", "HobbyMatch.Domain.Entities.Event.Location#LocationNullable", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Location", "HobbyMatch.Domain.Entities.Event.Location#Location", b1 =>
                         {
                             b1.IsRequired();
 
@@ -207,9 +210,6 @@ namespace HobbyMatch.Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("BusinessClientId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -230,16 +230,14 @@ namespace HobbyMatch.Database.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<double>("Latitude")
+                            b1.Property<double?>("Latitude")
                                 .HasColumnType("float");
 
-                            b1.Property<double>("Longitude")
+                            b1.Property<double?>("Longitude")
                                 .HasColumnType("float");
                         });
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BusinessClientId");
 
                     b.ToTable("Venues");
                 });
@@ -442,17 +440,6 @@ namespace HobbyMatch.Database.Migrations
                     b.Navigation("Venue");
                 });
 
-            modelBuilder.Entity("HobbyMatch.Domain.Entities.Venue", b =>
-                {
-                    b.HasOne("HobbyMatch.Domain.Entities.BusinessClient", "BusinessClient")
-                        .WithMany("Venues")
-                        .HasForeignKey("BusinessClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BusinessClient");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
@@ -512,11 +499,6 @@ namespace HobbyMatch.Database.Migrations
             modelBuilder.Entity("HobbyMatch.Domain.Entities.Venue", b =>
                 {
                     b.Navigation("Events");
-                });
-
-            modelBuilder.Entity("HobbyMatch.Domain.Entities.BusinessClient", b =>
-                {
-                    b.Navigation("Venues");
                 });
 #pragma warning restore 612, 618
         }
