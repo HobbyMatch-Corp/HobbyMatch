@@ -1,4 +1,5 @@
 using HobbyMatch.Database.Common.Pagination;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace HobbyMatch.App.Pagination;
 
@@ -11,12 +12,12 @@ public abstract class PaginatedQueryHandler<T>
     public int TotalPages { get; set; }
     public bool IsLoading { get; set; }
     private readonly Func<PaginationParameters, Task<PaginatedData<T>>> _fetchFunc;
-    private readonly Action? _onFetched;
+    private readonly Action _onChanged;
     
-    protected PaginatedQueryHandler(Func<PaginationParameters, Task<PaginatedData<T>>> fetchFunc,Action? onFetched, int pageSize)
+    protected PaginatedQueryHandler(Func<PaginationParameters, Task<PaginatedData<T>>> fetchFunc,Action onChanged, int pageSize)
     {
         _fetchFunc = fetchFunc;
-        _onFetched = onFetched;
+        _onChanged = onChanged;
         PageSize = pageSize;
         CurrentPage = 1;
     }
@@ -28,23 +29,23 @@ public abstract class PaginatedQueryHandler<T>
         
         IsLoading = true;
         
-        _onFetched?.Invoke();
+        _onChanged.Invoke();
         
-        var result = await _fetchFunc(new PaginationParameters(PageNumber: CurrentPage,PageSize: PageSize));
+        var result = await _fetchFunc(new PaginationParameters(PageNumber: page,PageSize: PageSize));
         
-        Data.AddRange(result.Data);
+        ModifyCurrentData(result);
         CurrentPage = result.CurrentPage;
         TotalPages = result.TotalPages;
         
         IsLoading = false;
         
-        _onFetched?.Invoke();
+        _onChanged.Invoke();
     }
 
     public async Task LoadNextPageAsync()
     {
         if (CurrentPage < TotalPages)
-            await LoadPageAsync(CurrentPage);
+            await LoadPageAsync(CurrentPage + 1);
     }
 
     public async Task LoadPreviousPageAsync()
