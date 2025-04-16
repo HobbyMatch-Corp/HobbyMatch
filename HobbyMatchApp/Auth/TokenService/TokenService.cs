@@ -14,54 +14,49 @@ namespace HobbyMatch.App.Auth.TokenService
     public class TokenService : ITokenService
     {
         private readonly ProtectedLocalStorage _localStorage;
-        private string? _accessToken;
-        private string _accessTokenName = "accessToken";
+        private TokenStore _tokenStore;
+        private string _accessTokenKey = "accessToken";
 
-        public TokenService(ProtectedLocalStorage localStorage)
+        public TokenService(ProtectedLocalStorage localStorage, TokenStore tokenStore)
         {
             _localStorage = localStorage;
+            _tokenStore = tokenStore;
         }
 
         public async Task SetAccessTokenAsync(string token)
         {
-            _accessToken = token;
-            await _localStorage.SetAsync(_accessTokenName, token);
+            _tokenStore.SetAccessToken(token);
+			await _localStorage.SetAsync(_accessTokenKey, token);
         }
 
-        public async Task<string?> GetAccessTokenAsync()
+        public async Task LoadTokenFromLocalStorage()
         {
-            if (!string.IsNullOrEmpty(_accessToken))
-                return _accessToken;
-
-            try
-            {
-                var result = await _localStorage.GetAsync<string>("accessToken");
-                if (result.Success)
-                {
-                    _accessToken = result.Value;
-                    return _accessToken;
-                }
-            }
+			try
+			{
+				var result = await _localStorage.GetAsync<string>(_accessTokenKey);
+				if (result.Success)
+				{
+					_tokenStore.SetAccessToken(result.Value);
+				}
+			}
 			// Apparently protected local storage throws an exception, bcs of double render (once on server side), but should work anyways on client
 			// TODO: Find out what exception exactly is being thrown
-			catch (Exception) 
-            {
-                return null;
-            }
+			catch (Exception ex)
+			{
+				Console.WriteLine($"{ex.Message}");
+			}
 
-
-            return null;
-        }
+		}
 
         public async Task ClearAccessTokenAsync()
         {
-            _accessToken = null;
-            await _localStorage.DeleteAsync(_accessTokenName);
+            _tokenStore.SetAccessToken(null);
+            await _localStorage.DeleteAsync(_accessTokenKey);
         }
 
-        public async Task<IEnumerable<Claim>> GetClaimsFromTokenAsync()
+        public IEnumerable<Claim> GetClaimsFromToken()
         {
-            var token = await GetAccessTokenAsync();
+            var token = _tokenStore.GetAccessToken();
             if (string.IsNullOrEmpty(token))
                 return Enumerable.Empty<Claim>();
 

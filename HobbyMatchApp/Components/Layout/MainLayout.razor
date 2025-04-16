@@ -5,9 +5,11 @@
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject CustomAuthStateProvider CustomAuthStateProvider
+@inject HobbyMatch.App.Auth.TokenService.ITokenService _tokenService;
 
 @* Required *@
 <MudThemeProvider Theme="_myCustomTheme" />
+<MudSnackbarProvider />
 <MudPopoverProvider @rendermode="InteractiveServer"/>
 
 <div class="page">
@@ -15,18 +17,18 @@
         <main>
             <div class="top-row px-4">
                 <AuthorizeView>
-                <Authorized>
-                    <MudIconButton Icon="@Icons.Material.Filled.Home" OnClick="NavigateHome" Color="Color.Primary" />
-                </Authorized>
+                    <Authorized>
+                        <MudIconButton Icon="@Icons.Material.Filled.Home" OnClick="NavigateHome" Color="Color.Primary" />
+                    </Authorized>
                 </AuthorizeView>
                 <div class="flex-grow-1 mx-4">
                     <MudTextField @bind-Value="_searchText"
-                                  Placeholder="Search..."
-                                  Immediate="true"
-                                  Margin="Margin.Dense"
-                                  Variant="Variant.Outlined"
-                                  OnKeyDown="SearchKey"
-                                  Class="w-100"/>
+                    Placeholder="Search..."
+                    Immediate="true"
+                    Margin="Margin.Dense"
+                    Variant="Variant.Outlined"
+                    OnKeyDown="SearchKey"
+                    Class="w-100"/>
                 </div>
                 <MudIconButton Icon="@Icons.Material.Filled.Search" OnClick="Search" Color="Color.Primary" />
                 <AuthorizeView>
@@ -61,6 +63,15 @@
 {
     readonly MudTheme _myCustomTheme = new CustomTheme();
     private string _searchText = "";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await _tokenService.LoadTokenFromLocalStorage();
+        }
+    }
+
     private void SignInAction()
     {
         NavigationManager.NavigateTo("/SignIn");

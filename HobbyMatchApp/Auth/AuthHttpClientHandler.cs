@@ -11,25 +11,18 @@ namespace HobbyMatch.App.Auth
     /// </summary>
     public class AuthHttpClientHandler : DelegatingHandler
     {
-        private readonly ITokenService _tokenService;
-        private readonly string _baseUrl;
-        public AuthHttpClientHandler(ITokenService tokenService, IOptions<ApiSettings> apiSettings)
+        private readonly TokenStore _tokenStore;
+        public AuthHttpClientHandler(TokenStore tokenStore)
         {
-            _tokenService = tokenService;
-            _baseUrl = apiSettings.Value.BaseUrl;
+			_tokenStore = tokenStore;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (!request.RequestUri.IsAbsoluteUri)
+			var token = _tokenStore.GetAccessToken();
+			if (token != null)
             {
-                var combinedUri = new Uri(new Uri(_baseUrl), request.RequestUri);
-                request.RequestUri = combinedUri;
-            }
-            var token = await _tokenService.GetAccessTokenAsync();
-            if (token != null)
-            {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+				request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var response = await base.SendAsync(request, cancellationToken);
                 return response;

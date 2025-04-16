@@ -1,4 +1,7 @@
 ﻿using HobbyMatch.BL.DTOs.Event;
+using HobbyMatch.Domain.Entities;
+using HobbyMatch.Domain.Requests;
+using Microsoft.Extensions.Logging;
 
 namespace HobbyMatch.App.Services.Events
 {
@@ -12,7 +15,19 @@ namespace HobbyMatch.App.Services.Events
             _unauthorizedClient = httpClientFactory.CreateClient("AuthClient");
 
         }
-        public async Task<bool?> EventSigninAsync(string eventId)
+
+		public async Task<EventDto?> CreateEventAsync(CreateEventRequest eventRequest)
+		{
+			EventDto? success = null;
+			var response = await _httpClient.PostAsJsonAsync("api/events/create", eventRequest);
+			if (response.IsSuccessStatusCode)
+			{
+				success = await response.Content.ReadFromJsonAsync<EventDto>();
+			}
+			return success;
+		}
+
+		public async Task<bool?> EventSigninAsync(string eventId)
         {
             bool success = false;
             var response = await _httpClient.PostAsJsonAsync("api/events/signin", new EventSignDto(eventId));
