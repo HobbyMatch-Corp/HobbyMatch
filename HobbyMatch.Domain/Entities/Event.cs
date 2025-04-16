@@ -20,7 +20,8 @@ namespace HobbyMatch.Domain.Entities
 
         [DataType(DataType.Date)]
         public DateTime EndTime { get; set; }
-        public Location Location { get; set; }
+        public Location? Location { get; set; }
+        public int? VenueId { get; set; }
 
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
@@ -29,6 +30,8 @@ namespace HobbyMatch.Domain.Entities
         public int MinUsers { get; set; }
 
         public Organizer Organizer { get; set; }
+
+        public Venue? Venue { get; set; }
 
         [JsonIgnore]
         public ICollection<User>? SignUpList { get; set; }
