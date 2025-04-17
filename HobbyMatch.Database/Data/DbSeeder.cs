@@ -15,17 +15,17 @@ namespace HobbyMatch.Database.Data
         {
             new BusinessClient() { Email = "bclient1@test.com", UserName="BusinessClient1", TaxID="taxId1_16498+544684", // 0
                 Venues=new[] { new Venue() {Name = "The Creative Canvas", Address = "123 Art Street, New York, NY", MaxUsers = 25, Price = 0, // 0
-                    Location = new Location() { Latitude = 40.7128, Longitude = -74.0060 }, Description = "A cozy art studio for painting and drawing enthusiasts. Offers guided sessions and open studio hours."
+                    Location = new Location() { Latitude = 40.7128, Longitude = -74.0060 }, Description = "Cozy art studio for painting lovers, with guided sessions and open studio time."
                 }, new Venue() { Name = "Peak Climb Center", Address = "456 Mountain Ave, Denver, CO", MaxUsers = 100, Price = 49.99M, // 1
-                    Location = new Location() { Latitude = 39.7392, Longitude = -104.9903 }, Description = "Indoor rock climbing gym with various difficulty levels, great for climbing hobbyists of all skill levels."
+                    Location = new Location() { Latitude = 39.7392, Longitude = -104.9903 }, Description = "Indoor climbing gym with routes for all skill levels. Perfect for climbing enthusiasts."
                 },} },
             new BusinessClient() {Email = "bclient2@test.com", UserName="BusinessClient2", TaxID="taxId1_189481815+8787", // 1
                 Venues=new[] { new Venue() { Name = "Gamers' Haven", Address = "789 Pixel Blvd, Austin, TX", MaxUsers = 40, Price = 20, // 0
-                    Location = new Location() { Latitude = 30.2672, Longitude = -97.7431 }, Description = "A dedicated space for tabletop games, RPGs, and board game meetups. Snacks and drinks available."
+                    Location = new Location() { Latitude = 30.2672, Longitude = -97.7431 }, Description = "Space for tabletop games, RPGs, and board game meetups. Snacks and drinks available."
                 }, new Venue() { Name = "Strings & Things Music Hall", Address = "321 Melody Ln, Nashville, TN", MaxUsers = 60, Price = 34.99M, // 1
-                    Location = new Location() { Latitude = 36.1627, Longitude = -86.7816 }, Description = "A venue for music lovers to jam, take lessons, or perform. Equipped with instruments and sound systems."
+                    Location = new Location() { Latitude = 36.1627, Longitude = -86.7816 }, Description = "Jam, learn, or perform at this music spot. Instruments and sound gear provided."
                 }, new Venue() { Name = "Urban Garden Hub", Address = "159 Greenway Dr, Portland, OR", MaxUsers = 20, Price = 0, // 2
-                    Location = new Location() { Latitude = 45.5152, Longitude = -122.6784 }, Description = "Community garden and workshop space for gardening enthusiasts. Offers tools, soil, and seasonal classes."
+                    Location = new Location() { Latitude = 45.5152, Longitude = -122.6784 }, Description = "Garden and workshop for enthusiasts. Tools, soil, and seasonal classes provided."
                 }} }
         };
 
@@ -33,7 +33,7 @@ namespace HobbyMatch.Database.Data
         {
             new Event() { // 0
                 Name = "Sunset Sketch Session",
-                Description = "An outdoor evening drawing meetup at the park. Bring your own supplies and enjoy nature-inspired art.",
+                Description = "Evening drawing meetup in the park. Bring supplies and create nature-inspired art.",
                 StartTime = DateTime.Now.AddDays(2).AddHours(17),
                 EndTime = DateTime.Now.AddDays(2).AddHours(19),
                 MinUsers = 2,
@@ -110,7 +110,7 @@ namespace HobbyMatch.Database.Data
             // Assign sponsors to event
             _events[0].SponsorsPartners = new List<BusinessClient>() { _clients[0], _clients[1] };
             _events[1].SponsorsPartners = new List<BusinessClient>() { _clients[1] };
-            _events[2].SponsorsPartners = new List<BusinessClient>() { _clients[0]};
+            _events[2].SponsorsPartners = new List<BusinessClient>() { _clients[0] };
             _events[4].SponsorsPartners = new List<BusinessClient>() { _clients[1] };
 
             // Assign users to event
@@ -126,137 +126,53 @@ namespace HobbyMatch.Database.Data
         {
             optionsBuilder
                 .UseSeeding((context, _) =>
-            {
-                var user = context.Set<User>().FirstOrDefault(u => u.Email == "user@test.com");
-                if (user == null)
                 {
-
-                    var userManager = context.GetService<UserManager<Organizer>>();
-                    var newUser = new User
-                    {
-                        UserName = "TestUser",
-                        Email = "user@test.com"
-                    };
-
-                    userManager.CreateAsync(newUser, "Pass123!").Wait();
-                    userManager.AddClaimsAsync(newUser, new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, "Test User")
-                    }).Wait();
-                }
-
-                var bclient = context.Set<BusinessClient>().FirstOrDefault(u => u.Email == "businessclient@test.com");
-                if (bclient == null)
-                {
-
                     var userManager = context.GetService<UserManager<Organizer>>();
 
-                    var newBC = new BusinessClient
+                    foreach (var newClient in _clients)
                     {
-                        UserName = "TestBusinessClient",
-                        Email = "businessclient@test.com",
-                        TaxID = "taxid_2147743"
-                    };
-
-                    userManager.CreateAsync(newBC, "Pass123!").Wait();
-                    userManager.AddClaimsAsync(newBC, new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, "Business Client")
-                    }).Wait();
-                }
-                var eventList = context.Set<Event>().ToList();
-                if (eventList.Count() == 0)
-                {
-                    var organizer = context.Set<User>().FirstOrDefault(u => u.Email == "user@test.com");
-                    if (organizer != null)
-                    {
-                        var newEvent = new Event
+                        var bclient = context.Set<BusinessClient>().FirstOrDefault(u => u.Email == newClient.Email);
+                        if (bclient == null)
                         {
-                            Organizer = organizer,
-                            StartTime = DateTime.UtcNow,
-                            EndTime = DateTime.UtcNow.AddDays(1),
-                            MaxUsers = 1,
-                            MinUsers = 1,
-                            Price = 1,
-                            Name = "Siata",
-                            Description = "Chcesz zagrać w siatę? Super, akurat się ciepło zrobiło. Zapraszamy na plażę w Kostaryce :).",
-                            Location = new LocationNullable()
-                        };
-                        context.Add(newEvent);
-                        context.SaveChanges();
+                            userManager.CreateAsync(newClient, "Pass123!").Wait();
+                        }
                     }
-                    else
+
+                    foreach (var newUser in _users)
                     {
-                        Console.WriteLine("Seeding error: Organizer with the specified email does not exist.");
+                        var user = context.Set<User>().FirstOrDefault(u => u.Email == newUser.Email);
+                        if (user == null)
+                        {
+                            userManager.CreateAsync(newUser, "Pass123!").Wait();
+                        }
                     }
-                }
-                context.SaveChanges();
-            })
+
+                    context.SaveChanges();
+                })
                 .UseAsyncSeeding(async (context, _, ct) =>
-            {
-                var user = await context.Set<User>().FirstOrDefaultAsync(u => u.Email == "user@test.com", ct);
-                if (user == null)
                 {
-
                     var userManager = context.GetService<UserManager<Organizer>>();
-                    var newUser = new User
-                    {
-                        UserName = "TestUser",
-                        Email = "user@test.com"
-                    };
 
-                    await userManager.CreateAsync(newUser, "Pass123!");
-                    await userManager.AddClaimsAsync(newUser, new List<Claim>
+                    foreach (var newClient in _clients)
                     {
-                        new Claim(ClaimTypes.Name, "Test User")
-                    });
-                }
-
-                var bclient = await context.Set<BusinessClient>().FirstOrDefaultAsync(u => u.Email == "businessclient@test.com");
-                if (bclient == null)
-                {
-
-                    var userManager = context.GetService<UserManager<Organizer>>();
-                    var newBC = new BusinessClient
-                    {
-                        UserName = "TestBusinessClient",
-                        Email = "businessclient@test.com",
-                        TaxID = "taxid_2147743"
-                    };
-
-                    await userManager.CreateAsync(newBC, "Pass123!");
-                    await userManager.AddClaimsAsync(newBC, new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, "Business Client")
-                    });
-                }
-                var eventList = await context.Set<Event>().ToListAsync();
-                if (eventList.Count == 0)
-                {
-                    var organizer = await context.Set<User>().FirstOrDefaultAsync(u => u.Email == "user@test.com");
-                    if (organizer != null)
-                    {
-                        var newEvent = new Event
+                        var bclient = await context.Set<BusinessClient>().FirstOrDefaultAsync(u => u.Email == newClient.Email);
+                        if (bclient == null)
                         {
-                            Organizer = organizer,
-                            StartTime = DateTime.UtcNow,
-                            EndTime = DateTime.UtcNow.AddDays(1),
-                            MaxUsers = 1,
-                            MinUsers = 1,
-                            Price = 1,
-                            Name = "Siata",
-                            Description = "Chcesz zagrać w siatę? Super, akurat się ciepło zrobiło. Zapraszamy na plażę w Kostaryce :).",
-                            Location = new LocationNullable()
-                        };
-                        await context.AddAsync(newEvent);
+                            var res = await userManager.CreateAsync(newClient, "Pass123!");
+                        }
                     }
-                    else
+
+                    foreach (var newUser in _users)
                     {
-                        Console.WriteLine("Seeding error: Organizer with the specified email does not exist.");
+                        var user = await context.Set<User>().FirstOrDefaultAsync(u => u.Email == newUser.Email);
+                        if (user == null)
+                        {
+                            var res = await userManager.CreateAsync(newUser, "Pass123!");
+                        }
                     }
-                }
-                await context.SaveChangesAsync();
-            });
+
+                    await context.SaveChangesAsync();
+                });
         }
 
 
@@ -264,7 +180,7 @@ namespace HobbyMatch.Database.Data
         {
             var users = new List<User>();
             for (int i = 0; i < n; i++)
-                users.Add(new User() { Email = $"user{i}@test.com", UserName = $"User {i}" });
+                users.Add(new User() { Email = $"user{i}@test.com", UserName = $"UserName{i}" });
 
             return users;
         }
