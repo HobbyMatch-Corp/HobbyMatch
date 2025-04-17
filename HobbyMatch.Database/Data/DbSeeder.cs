@@ -180,7 +180,7 @@ namespace HobbyMatch.Database.Data
         {
             var users = new List<User>();
             for (int i = 0; i < n; i++)
-                users.Add(new User() { Email = $"user{i}@test.com", UserName = $"UserName{i}" });
+                users.Add(new User() { Email = $"user{i+1}@test.com", UserName = $"UserName{i+1}" });
 
             return users;
         }
