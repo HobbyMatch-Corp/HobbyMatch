@@ -49,7 +49,6 @@ var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var settings = scope.ServiceProvider.GetRequiredService<IOptions<ApiSettings>>().Value;
 
-Console.WriteLine($"HERE : {settings.BaseUrl}");
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
