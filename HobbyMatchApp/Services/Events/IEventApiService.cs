@@ -6,8 +6,8 @@ namespace HobbyMatch.App.Services.Events
 {
     public interface IEventApiService
     {
-        Task<bool?> EventSigninAsync(string eventId);
-        Task<bool?> EventSignoutAsync(string eventId);
+        Task<bool?> EventSigninAsync(int eventId);
+        Task<bool?> EventSignoutAsync(int eventId);
         Task<EventDto?> CreateEventAsync(CreateEventRequest eventRequest);
 
         Task<List<EventDto>?> GetFilteredEvents(string? filter);

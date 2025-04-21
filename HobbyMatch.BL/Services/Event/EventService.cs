@@ -12,6 +12,12 @@ namespace HobbyMatch.BL.Services.Event
 	public class EventService(IEventRepository eventRepository) : IEventService
 	{
 		private readonly IEventRepository _eventRepository = eventRepository;
+
+		public async Task<bool> AddUserToEventAsync(int eventId, User user)
+		{
+			return await _eventRepository.AddUserToEventAsync(eventId, user);
+		}
+
 		public async Task<Domain.Entities.Event?> CreateEventAsync(CreateEventDto dto, int organizerId)
 		{
 			var entity = new Domain.Entities.Event
@@ -29,6 +35,16 @@ namespace HobbyMatch.BL.Services.Event
 
 			var result = await _eventRepository.AddEvent(entity);
 			return result;
+		}
+
+		public async Task<IEnumerable<HobbyMatch.Domain.Entities.Event>> GetEventsWithFilter(string? filter)
+		{
+			return await _eventRepository.GetEventsWithFilter(filter);
+		}
+
+		public async Task<bool> RemoveUserFromEventAsync(int eventId, User user)
+		{
+			return  await _eventRepository.RemoveUserFromEventAsync(eventId, user);
 		}
 	}
 }
