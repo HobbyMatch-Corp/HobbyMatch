@@ -8,7 +8,7 @@ public record EventDto(
     string Description,
     DateTime StartTime,
     DateTime EndTime,
-    Location Location,
+    LocationNullable Location,
     float Price,
     int MaxUsers,
     int MinUsers,

@@ -2,7 +2,7 @@ using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.Domain.Requests;
 
-public record CreateEventRequest(string Name, string Description, DateTime StartTime, DateTime EndTime, Location Location, float Price, int MaxUsers, int MinUsers)
+public record CreateEventRequest(string Name, string Description, DateTime StartTime, DateTime EndTime, LocationNullable Location, float Price, int MaxUsers, int MinUsers)
 {
 	public static Event FromEventRequest(CreateEventRequest eventRequest, User user)
 	{

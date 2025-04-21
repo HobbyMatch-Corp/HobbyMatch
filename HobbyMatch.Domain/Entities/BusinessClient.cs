@@ -8,5 +8,8 @@ namespace HobbyMatch.Domain.Entities
 
         [JsonIgnore]
         public ICollection<Event> SponsoredEvents { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Venue> Venues { get; set; }
     }
 }

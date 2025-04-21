@@ -1,0 +1,59 @@
+@using HobbyMatch.App.Pagination
+@using HobbyMatch.Database.Common.Pagination
+@typeparam TItem
+
+@if (_handler?.IsLoading == true)
+{
+    <p>Loading...</p>
+}
+else if (_handler?.Data.Any() == true)
+{
+    @foreach (var item in _handler.Data)
+    {
+        @ItemTemplate!(item)
+    }
+    @if (Type == PaginationType.Replace)
+    {
+        <div>
+            <button class="btn btn-primary" @onclick="PreviousAsync" disabled="@(_handler.CurrentPage == 1)">Previous</button>
+            <span>Page @_handler.CurrentPage of @_handler.TotalPages</span>
+            <button class="btn btn-primary" @onclick="NextAsync" disabled="@(_handler.CurrentPage == _handler.TotalPages)" >Next</button>
+        </div>
+    }
+}
+else
+{
+    <p>No items found.</p>
+}
+
+@code {
+    [Parameter] public Func<PaginationParameters, Task<PaginatedData<TItem>>>? FetchFunc { get; set; }
+    [Parameter] public RenderFragment<TItem>? ItemTemplate { get; set; }
+    [Parameter] public int PageSize { get; set; } = 10;
+    [Parameter] public PaginationType Type { get; set; } = PaginationType.Append;
+    
+    private PaginatedQueryHandler<TItem>? _handler;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (FetchFunc == null || ItemTemplate == null)
+        {
+            throw new InvalidOperationException("Fetch function and item template must be provided");
+        }
+
+        _handler = Type == PaginationType.Append
+            ? new AppendPaginatedHandler<TItem>(fetchFunc: FetchFunc, onChanged: StateHasChanged, pageSize: PageSize)
+            : new ReplacePaginatedHandler<TItem>(fetchFunc: FetchFunc, onChanged: StateHasChanged, pageSize: PageSize);
+        await _handler.LoadPageAsync(1);
+    }
+    
+    private async Task PreviousAsync()
+    {
+        await (_handler?.LoadPreviousPageAsync() ?? Task.CompletedTask);
+    }
+
+    private async Task NextAsync()
+    {
+        await (_handler?.LoadNextPageAsync() ?? Task.CompletedTask);
+    }
+}
