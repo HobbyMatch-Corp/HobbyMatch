@@ -2,6 +2,7 @@
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Requests;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,11 +33,11 @@ namespace HobbyMatch.BL.Services.Event
 			return result;
 		}
 
-		public async Task<Domain.Entities.Event?> EditEventAsync(CreateEventRequest dto, int eventId, int organizerId)
+		public async Task<Domain.Entities.Event?> EditEventAsync(CreateEventRequest dto, int eventId, int userId)
 		{
 			var eventToEdit = await _eventRepository.GetEventByIdAsync(eventId);
 
-			if (eventToEdit == null || eventToEdit.OrganizerId != organizerId)
+			if (eventToEdit == null || eventToEdit.OrganizerId != userId)
 			{
 				return null;
 			}

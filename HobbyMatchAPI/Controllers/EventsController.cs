@@ -16,8 +16,9 @@ namespace HobbyMatch.API.Controllers
     {
         private readonly IEventRepository _eventRepository = eventRepository; 
         private readonly IEventService _eventService = eventService; 
-        //TODO Fix this logic : UserManager is only for the identity
-        //TODO class which is Organizer and it must be checked whether the organizer is actually a user or a business client
+        // TODO Fix this logic : UserManager is only for the identity
+        // TODO class which is Organizer and it must be checked whether the organizer is actually a user or a business client
+        // TODO REPLY - Isn't it needed to for getting userId? I'm using it to check if user is allowed to modify certain Event
         private readonly UserManager<Organizer> _userManager = userManager;
 
         [HttpPost("create")]
