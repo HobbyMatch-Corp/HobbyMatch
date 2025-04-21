@@ -25,8 +25,8 @@
 				</MudItem>
 			</MudGrid>
 			<MudTextField @bind-Value="_venue" T="string" Label="Venue" />
-			<MudNumericField @bind-Value="_location.Latitude" T="double" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
-			<MudNumericField @bind-Value="_location.Longitude" T="double" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
+			<MudNumericField @bind-Value="_location.Latitude" T="double?" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
+			<MudNumericField @bind-Value="_location.Longitude" T="double?" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
 			<MudNumericField @bind-Value="_price" T="float" Min="0" Label="Price" Required="true" RequiredError="Price is required!" />
 		</MudForm>
 		<div class="d-flex align-center justify-end mt-4">
@@ -46,7 +46,7 @@
 	// Form fields
 	private string _eventName = "";
 	private string _eventDescription = "";
-	private Domain.Entities.Location _location = new Domain.Entities.Location();
+	private Domain.Entities.LocationNullable _location = new Domain.Entities.LocationNullable();
 	private float _price = 0;
 	private int _maxUsers = 0;
 	private int _minUsers = 0;

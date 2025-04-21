@@ -6,7 +6,14 @@
 @* TODO: Try using [Authorize] instead *@
 <AuthorizeView>
 	<Authorized>
-		<HobbyMatch.App.Components.Components.SaveEvent eventObj="_event"/>
+		@if (_event != null)
+		{
+			<HobbyMatch.App.Components.Components.SaveEvent eventObj="_event" />
+		}
+		else
+		{
+			<MudProgressCircular Indeterminate="true" Size="Size.Large" />
+		}
 	</Authorized>
 </AuthorizeView>
 @code {
@@ -19,6 +26,7 @@
 		if (firstRender)
 		{
 			_event = await _eventApiService.GetEventAsync(EventId);
+			StateHasChanged();
 		}
 	}
 

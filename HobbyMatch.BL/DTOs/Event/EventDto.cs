@@ -12,7 +12,7 @@ public record EventDto(
     float Price,
     int MaxUsers,
     int MinUsers,
-    int OrganizerId,
+    int? OrganizerId,
     string OrganizerName
 );
 
@@ -29,6 +29,6 @@ public static class EventExtensions
         ev.MaxUsers,
         ev.MinUsers,
         ev.OrganizerId,
-        ev.Organizer.UserName ?? ""
+        ev.Organizer != null? ev.Organizer.UserName : ""
     );
 }
