@@ -1,4 +1,5 @@
 ﻿using HobbyMatch.BL.DTOs.Event;
+using HobbyMatch.Domain.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace HobbyMatch.BL.Services.Event
 {
 	public interface IEventService
 	{
-		Task<HobbyMatch.Domain.Entities.Event?> CreateEventAsync(CreateEventDto dto, int organizerId);
-		Task<HobbyMatch.Domain.Entities.Event?> EditEventAsync(CreateEventDto createDto, int eventId, int id);
+		Task<HobbyMatch.Domain.Entities.Event?> CreateEventAsync(CreateEventRequest createRequest, int organizerId);
+		Task<HobbyMatch.Domain.Entities.Event?> EditEventAsync(CreateEventRequest createRequest, int eventId, int id);
 	}
 }

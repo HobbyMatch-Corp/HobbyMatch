@@ -1,6 +1,7 @@
 ﻿using HobbyMatch.BL.DTOs.Event;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
+using HobbyMatch.Domain.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +13,18 @@ namespace HobbyMatch.BL.Services.Event
 	public class EventService(IEventRepository eventRepository) : IEventService
 	{
 		private readonly IEventRepository _eventRepository = eventRepository;
-		public async Task<Domain.Entities.Event?> CreateEventAsync(CreateEventDto dto, int organizerId)
+		public async Task<Domain.Entities.Event?> CreateEventAsync(CreateEventRequest createEventRequest, int organizerId)
 		{
 			var entity = new Domain.Entities.Event
 			{
-				Name = dto.Name,
-				Description = dto.Description,
-				StartTime = dto.StartTime,
-				EndTime = dto.EndTime,
-				Location = dto.Location,
-				Price = dto.Price,
-				MaxUsers = dto.MaxUsers,
-				MinUsers = dto.MinUsers,
+				Name = createEventRequest.Name,
+				Description = createEventRequest.Description,
+				StartTime = createEventRequest.StartTime,
+				EndTime = createEventRequest.EndTime,
+				Location = createEventRequest.Location,
+				Price = createEventRequest.Price,
+				MaxUsers = createEventRequest.MaxUsers,
+				MinUsers = createEventRequest.MinUsers,
 				OrganizerId = organizerId
 			};
 
@@ -31,7 +32,7 @@ namespace HobbyMatch.BL.Services.Event
 			return result;
 		}
 
-		public async Task<Domain.Entities.Event?> EditEventAsync(CreateEventDto dto, int eventId, int organizerId)
+		public async Task<Domain.Entities.Event?> EditEventAsync(CreateEventRequest createEventRequest, int eventId, int organizerId)
 		{
 			var eventToEdit = await _eventRepository.GetEventByIdAsync(eventId);
 
@@ -40,12 +41,12 @@ namespace HobbyMatch.BL.Services.Event
 				return null;
 			}
 
-			eventToEdit.Name = dto.Name;
-			eventToEdit.Description = dto.Description;
-			eventToEdit.StartTime = dto.StartTime;
-			eventToEdit.EndTime = dto.EndTime;
-			eventToEdit.Location = dto.Location;
-			eventToEdit.Price = dto.Price;
+			eventToEdit.Name = createEventRequest.Name;
+			eventToEdit.Description = createEventRequest.Description;
+			eventToEdit.StartTime = createEventRequest.StartTime;
+			eventToEdit.EndTime = createEventRequest.EndTime;
+			eventToEdit.Location = createEventRequest.Location;
+			eventToEdit.Price = createEventRequest.Price;
 
 			await _eventRepository.UpdateEventAsync(eventToEdit); // Assuming this method exists
 

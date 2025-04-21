@@ -22,21 +22,20 @@ namespace HobbyMatch.API.Controllers
 
         [HttpPost("create")]
         [Authorize]
-		public async Task<ActionResult<Event?>> EventCreate([FromBody] CreateEventDto createDto)
+		public async Task<ActionResult<Event?>> EventCreate([FromBody] CreateEventRequest createRequest)
 		{
 			var user = await _userManager.GetUserAsync(User);
 			if (user == null) return Unauthorized();
-			var result = await _eventService.CreateEventAsync(createDto, user.Id);
+			var result = await _eventService.CreateEventAsync(createRequest, user.Id);
 			return result != null ? Ok(result.ToDto()) : BadRequest("Could not create event");
 		}
         [HttpPut("edit/{eventId}")]
         [Authorize]
-		public async Task<ActionResult<Event?>> EventEdit([FromBody] CreateEventDto createDto, [FromQuery] int eventId)
+		public async Task<ActionResult<Event?>> EventEdit([FromBody] CreateEventRequest createRequest, [FromRoute] int eventId)
 		{
-            // TODO
 			var user = await _userManager.GetUserAsync(User);
 			if (user == null) return Unauthorized();
-			var result = await _eventService.EditEventAsync(createDto, eventId, user.Id);
+			var result = await _eventService.EditEventAsync(createRequest, eventId, user.Id);
 			return result != null ? Ok(result.ToDto()) : BadRequest("Could not create event");
 		}
 		[HttpGet("{eventId}")]
