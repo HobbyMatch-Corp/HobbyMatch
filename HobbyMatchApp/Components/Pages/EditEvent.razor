@@ -1,0 +1,25 @@
+﻿@page "/edit-event/{EventId:int}"
+@using HobbyMatch.App.Services.Events
+@using Microsoft.AspNetCore.Components.Authorization
+@inject IEventApiService _eventApiService
+
+@* TODO: Try using [Authorize] instead *@
+<AuthorizeView>
+	<Authorized>
+		<HobbyMatch.App.Components.Components.SaveEvent eventObj="_event"/>
+	</Authorized>
+</AuthorizeView>
+@code {
+	[Parameter]
+	public int EventId { get; set; }
+
+	private HobbyMatch.BL.DTOs.Event.EventDto? _event { get; set; }
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			_event = await _eventApiService.GetEventAsync(EventId);
+		}
+	}
+
+}

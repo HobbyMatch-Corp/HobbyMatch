@@ -1,0 +1,113 @@
+﻿@using HobbyMatch.App.Services.Events
+@using Microsoft.AspNetCore.Components.Authorization
+@inject IEventApiService _eventApiService
+@inject NavigationManager _navigationManager
+@inject ISnackbar Snackbar
+
+<MudContainer Style="max-width: 50vw; justify-content: center" Class="pt-4">
+	<MudPaper Class="pa-4">
+		<MudText Typo="Typo.h6" Align="Align.Center">@(_isEditMode ? "Edit Event" : "Create new Event")</MudText>
+		<MudForm @ref="form" @bind-IsValid="@success" Spacing="4">
+			<MudTextField @bind-Value="_eventName" T="string" Label="EventName" Required="true" RequiredError="Event Name is required!" />
+			<MudTextField @bind-Value="_eventDescription" T="string" Label="EventDescription" Required="true" RequiredError="Event description is required!" />
+			<MudGrid>
+				<MudItem xs="6">
+					<MudDatePicker Variant="Variant.Outlined" Label="Start Date" @bind-Date="_startDate" />
+				</MudItem>
+				<MudItem xs="6">
+					<MudTimePicker Variant="Variant.Outlined" Label="Start Time" Editable="true" @bind-Time="_startTime" />
+				</MudItem>
+				<MudItem xs="6">
+					<MudDatePicker Variant="Variant.Outlined" Label="End Date" @bind-Date="_endDate" />
+				</MudItem>
+				<MudItem xs="6">
+					<MudTimePicker Variant="Variant.Outlined" Label="End Time" Editable="true" @bind-Time="_endTime" />
+				</MudItem>
+			</MudGrid>
+			<MudTextField @bind-Value="_venue" T="string" Label="Venue" />
+			<MudNumericField @bind-Value="_location.Latitude" T="double" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
+			<MudNumericField @bind-Value="_location.Longitude" T="double" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
+			<MudNumericField @bind-Value="_price" T="float" Min="0" Label="Price" Required="true" RequiredError="Price is required!" />
+		</MudForm>
+		<div class="d-flex align-center justify-end mt-4">
+			<button class="btn btn-primary" @onclick="HandleSubmitAsync">@(_isEditMode ? "Save Changes" : "Create Event")</button>
+		</div>
+	</MudPaper>
+</MudContainer>
+
+@code {
+	[Parameter]
+	public HobbyMatch.BL.DTOs.Event.EventDto? eventObj { get; set; }
+
+	private bool _isEditMode => eventObj != null;
+
+	bool success;
+
+	// Form fields
+	private string _eventName = "";
+	private string _eventDescription = "";
+	private Domain.Entities.Location _location = new Domain.Entities.Location();
+	private float _price = 0;
+	private int _maxUsers = 0;
+	private int _minUsers = 0;
+	private string _venue = "";
+	private DateTime? _startDate = DateTime.Today;
+	private TimeSpan? _startTime = new(0, 0, 0);
+	private DateTime? _endDate = DateTime.Today;
+	private TimeSpan? _endTime = new(0, 0, 0);
+
+	MudForm form;
+
+	protected override void OnInitialized()
+	{
+		if (_isEditMode && eventObj != null)
+		{
+			_eventName = eventObj.Name;
+			_eventDescription = eventObj.Description;
+			_startDate = eventObj.StartTime.Date;
+			_startTime = eventObj.StartTime.TimeOfDay;
+			_endDate = eventObj.EndTime.Date;
+			_endTime = eventObj.StartTime.TimeOfDay;
+			_location = eventObj.Location;
+			_price = eventObj.Price;
+			_maxUsers = eventObj.MaxUsers;
+			_minUsers = eventObj.MinUsers;
+		}
+	}
+
+	private async Task HandleSubmitAsync()
+	{
+		var startDateTime = (_startDate ?? DateTime.Today).Add(_startTime ?? TimeSpan.Zero);
+		var endDateTime = (_endDate ?? DateTime.Today).Add(_endTime ?? TimeSpan.Zero);
+
+		var request = new Domain.Requests.CreateEventRequest(
+			_eventName,
+			_eventDescription,
+			startDateTime,
+			endDateTime,
+			_location,
+			_price,
+			_maxUsers,
+			_minUsers);
+
+		bool result;
+
+		if (_isEditMode && eventObj != null)
+		{
+			result = await _eventApiService.EditEventAsync(request, eventObj.Id) != null;
+		}
+		else
+		{
+			result = await _eventApiService.CreateEventAsync(request) != null;
+		}
+
+		if (result)
+		{
+			_navigationManager.NavigateTo("/", true);
+		}
+		else
+		{
+			Snackbar.Add("Error while saving the event", Severity.Error);
+		}
+	}
+}

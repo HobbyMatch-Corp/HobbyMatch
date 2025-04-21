@@ -30,5 +30,27 @@ namespace HobbyMatch.BL.Services.Event
 			var result = await _eventRepository.AddEvent(entity);
 			return result;
 		}
+
+		public async Task<Domain.Entities.Event?> EditEventAsync(CreateEventDto dto, int eventId, int organizerId)
+		{
+			var eventToEdit = await _eventRepository.GetEventByIdAsync(eventId);
+
+			if (eventToEdit == null || eventToEdit.OrganizerId != organizerId)
+			{
+				return null;
+			}
+
+			eventToEdit.Name = dto.Name;
+			eventToEdit.Description = dto.Description;
+			eventToEdit.StartTime = dto.StartTime;
+			eventToEdit.EndTime = dto.EndTime;
+			eventToEdit.Location = dto.Location;
+			eventToEdit.Price = dto.Price;
+
+			await _eventRepository.UpdateEventAsync(eventToEdit); // Assuming this method exists
+
+			return eventToEdit;
+		}
+
 	}
 }

@@ -9,6 +9,7 @@ namespace HobbyMatch.BL.Services.Event
 {
 	public interface IEventService
 	{
-		 Task<HobbyMatch.Domain.Entities.Event?> CreateEventAsync(CreateEventDto dto, int organizerId);
+		Task<HobbyMatch.Domain.Entities.Event?> CreateEventAsync(CreateEventDto dto, int organizerId);
+		Task<HobbyMatch.Domain.Entities.Event?> EditEventAsync(CreateEventDto createDto, int eventId, int id);
 	}
 }

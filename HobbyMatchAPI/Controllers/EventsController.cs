@@ -29,7 +29,23 @@ namespace HobbyMatch.API.Controllers
 			var result = await _eventService.CreateEventAsync(createDto, user.Id);
 			return result != null ? Ok(result.ToDto()) : BadRequest("Could not create event");
 		}
-
+        [HttpPut("edit/{eventId}")]
+        [Authorize]
+		public async Task<ActionResult<Event?>> EventEdit([FromBody] CreateEventDto createDto, [FromQuery] int eventId)
+		{
+            // TODO
+			var user = await _userManager.GetUserAsync(User);
+			if (user == null) return Unauthorized();
+			var result = await _eventService.EditEventAsync(createDto, eventId, user.Id);
+			return result != null ? Ok(result.ToDto()) : BadRequest("Could not create event");
+		}
+		[HttpGet("{eventId}")]
+        //[Authorize]
+        public async Task<IActionResult> EventGetById([FromRoute] int eventId)
+		{
+			var result = await _eventRepository.GetEventByIdAsync(eventId);
+			return result != null ? Ok(result.ToDto()) : BadRequest("Could not get event");
+		}
 		[HttpPost("signin")]
         [Authorize]
         public async Task<ActionResult> EventSignin([FromBody] EventSignDto dto)
@@ -63,5 +79,6 @@ namespace HobbyMatch.API.Controllers
             var filteredResults = await _eventRepository.GetEventsWithFilter(filter);
             return Ok(filteredResults.Select(result => result.ToDto()));
         }
+
     }
 }

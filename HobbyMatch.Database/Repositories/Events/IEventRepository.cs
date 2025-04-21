@@ -9,5 +9,6 @@ namespace HobbyMatch.Database.Repositories.Events
         Task<Event?> AddEvent(Event newEvent);
 		Task<bool> RemoveUserFromEventAsync(int eventId, User user);
         Task<List<Event>> GetEventsWithFilter(string? filter);
-    }
+		Task UpdateEventAsync(Event eventToEdit);
+	}
 }
