@@ -1,6 +1,7 @@
 ﻿using HobbyMatch.BL.DTOs.Event;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,16 @@ namespace HobbyMatch.BL.Services.Event
 
 		public async Task<bool> AddUserToEventAsync(int eventId, User user)
 		{
-			return await _eventRepository.AddUserToEventAsync(eventId, user);
+			var ev = await _eventRepository.GetEventByIdAsync(eventId);
+			if (ev == null || ev.SignUpList == null) return false;
+
+			if (ev.SignUpList.Any(u => u.Id == user.Id)) return false;
+
+			if (ev.SignUpList.Count >= ev.MaxUsers) return false;
+
+			ev.SignUpList.Add(user);
+			await _eventRepository.SaveChangesAsync();
+			return true;
 		}
 
 		public async Task<Domain.Entities.Event?> CreateEventAsync(CreateEventDto dto, int organizerId)
@@ -44,7 +54,15 @@ namespace HobbyMatch.BL.Services.Event
 
 		public async Task<bool> RemoveUserFromEventAsync(int eventId, User user)
 		{
-			return  await _eventRepository.RemoveUserFromEventAsync(eventId, user);
+			var ev = await _eventRepository.GetEventByIdAsync(eventId);
+			if (ev == null || ev.SignUpList == null) return false;
+
+			var existing = ev.SignUpList.FirstOrDefault(u => u.Id == user.Id);
+			if (existing == null) return false;
+
+			ev.SignUpList.Remove(existing);
+			await _eventRepository.SaveChangesAsync();
+			return true;
 		}
 	}
 }

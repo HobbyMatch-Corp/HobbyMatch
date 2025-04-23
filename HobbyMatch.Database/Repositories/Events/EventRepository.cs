@@ -27,33 +27,6 @@ namespace HobbyMatch.Database.Repositories.Events
                 .FirstOrDefaultAsync(e => e.Id == eventId);
         }
 
-        public async Task<bool> AddUserToEventAsync(int eventId, User user)
-        {
-            var ev = await GetEventByIdAsync(eventId);
-            if (ev == null || ev.SignUpList == null) return false;
-
-            if (ev.SignUpList.Any(u => u.Id == user.Id)) return false;
-
-            if (ev.SignUpList.Count >= ev.MaxUsers) return false;
-
-            ev.SignUpList.Add(user);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> RemoveUserFromEventAsync(int eventId, User user)
-        {
-            var ev = await GetEventByIdAsync(eventId);
-            if (ev == null || ev.SignUpList == null) return false;
-
-            var existing = ev.SignUpList.FirstOrDefault(u => u.Id == user.Id);
-            if (existing == null) return false;
-
-            ev.SignUpList.Remove(existing);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
         public async Task<List<Event>> GetEventsWithFilter(string? filter)
         {
             return await _context.Events
@@ -61,5 +34,10 @@ namespace HobbyMatch.Database.Repositories.Events
                 .Include(e => e.Organizer)
                 .ToListAsync();
         }
-    }
+
+		public async Task SaveChangesAsync()
+		{
+            await _context.SaveChangesAsync();
+		}
+	}
 }
