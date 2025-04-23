@@ -8,9 +8,9 @@ namespace HobbyMatch.App.Services.Api
 		private readonly HttpClient _httpClient;
 		private readonly EndpointProvider _endpointProvider;
 		public OrganizerApiService(IHttpClientFactory httpClientFactory, EndpointProvider endpointProvider)
-		{
-			_httpClient = httpClientFactory.CreateClient("AuthenticatedClient");
-			_endpointProvider = endpointProvider;	
+        {
+            _httpClient = httpClientFactory.CreateClient("AuthenticatedClient");
+            _endpointProvider = endpointProvider;	
 		}
 
 		public async Task<T[]?> GetUsersAsync<T>() where T : Organizer
@@ -50,7 +50,7 @@ namespace HobbyMatch.App.Services.Api
 			}
 
 			T? user = null;
-			var response = await _httpClient.GetAsync($"{endpoint}/{id}");
+			var response = await _httpClient.GetAsync($"api/{endpoint}/{id}");
 			if (response.IsSuccessStatusCode)
 			{
 				user = await response.Content.ReadFromJsonAsync<T>();

@@ -46,9 +46,9 @@
     public string? UserName { get; set; }
     public string? Email { get; set; }
     public string? TaxId { get; set; }
-    public int EventsSignedUp { get; set; } = 0;
-    public int EventsSponsored { get; set; } = 0;
-    public int EventsOrganized { get; set; } = 0;
+    public int? EventsSignedUp { get; set; }
+    public int? EventsSponsored { get; set; }
+    public int? EventsOrganized { get; set; }
     public List<EventDto>? UpcomingEventsList { get; set; }
 
     protected override async Task OnInitializedAsync()

@@ -1,7 +1,5 @@
 ﻿using HobbyMatch.BL.DTOs.Event;
-using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Requests;
-using Microsoft.Extensions.Logging;
 
 namespace HobbyMatch.App.Services.Events
 {
