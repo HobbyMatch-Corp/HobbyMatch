@@ -61,5 +61,43 @@ namespace HobbyMatch.Database.Repositories.Events
                 .Include(e => e.Organizer)
                 .ToListAsync();
         }
+
+        public async Task<List<Event>?> GetSignedUpEvents(User user)
+        {
+            var dbUser = await _context.AppUsers
+                .Where(u => u.Email == user.Email)
+                .Include(u => u.SignedUpEvents)
+                .FirstOrDefaultAsync();
+
+            if (dbUser == null)
+                return null;
+
+            return dbUser.SignedUpEvents.ToList();
+        }
+
+        public async Task<List<Event>?> GetOrganizedEvents(Organizer organizer)
+        {
+            var dbOrganizer = await _context.Users
+                .Where(org => org.Email == organizer.Email)
+                .FirstOrDefaultAsync();
+
+            if (dbOrganizer == null)
+                return null;
+
+            return dbOrganizer.OrganizedEvents.ToList();
+        }
+
+        public async Task<List<Event>?> GetSponsoredEvents(BusinessClient businessClient)
+        {
+            var dbBusinessClient = await _context.BusinessClients
+                .Where(bc => bc.Email == businessClient.Email)
+                .Include(bc => bc.SponsoredEvents)
+                .FirstOrDefaultAsync();
+
+            if (dbBusinessClient == null)
+                return null;
+
+            return dbBusinessClient.SponsoredEvents.ToList();
+        }
     }
 }

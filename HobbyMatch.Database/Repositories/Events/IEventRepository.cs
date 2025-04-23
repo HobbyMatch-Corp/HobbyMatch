@@ -10,10 +10,10 @@ namespace HobbyMatch.Database.Repositories.Events
 		Task<bool> RemoveUserFromEventAsync(int eventId, User user);
         Task<List<Event>> GetEventsWithFilter(string? filter);
 
-        Task<List<Event>> GetSignedUpEvents(User user);
+        Task<List<Event>?> GetSignedUpEvents(User user);
 
-        Task<List<Event>> GetOrganizedEvents(Organizer organizer);
+        Task<List<Event>?> GetOrganizedEvents(Organizer organizer);
 
-        Task<List<Event>> GetSponsoredEvents(BusinessClient businessClient);
+        Task<List<Event>?> GetSponsoredEvents(BusinessClient businessClient);
     }
 }
