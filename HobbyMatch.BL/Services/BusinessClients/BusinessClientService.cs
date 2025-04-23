@@ -1,6 +1,6 @@
-﻿using HobbyMatch.Database.Repositories.BusinessClient;
+﻿using HobbyMatch.Database.Repositories.BusinessClients;
 
-namespace HobbyMatch.BL.Services.BusinessClient
+namespace HobbyMatch.BL.Services.BusinessClients
 {
     public class BusinessClientService : IBusinessClientService
     {

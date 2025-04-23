@@ -1,3 +1,3 @@
 ﻿namespace HobbyMatch.BL.DTOs.Events;
 
-public record EventSignDto(string eventId);
+public record EventSignDto(int eventId);

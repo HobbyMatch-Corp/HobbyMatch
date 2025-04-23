@@ -41,9 +41,9 @@ namespace HobbyMatch.DbIntegrationTests
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             Assert.NotNull(user);
-            Assert.Equal(user.Email, email);
-            Assert.NotEqual(user.PasswordHash, pass);
-            Assert.Equal(user.UserName, username);
+            Assert.Equal(email, user.Email);
+            Assert.NotEqual(pass, user.PasswordHash);
+            Assert.Equal(username, user.UserName);
         }
     }
 }

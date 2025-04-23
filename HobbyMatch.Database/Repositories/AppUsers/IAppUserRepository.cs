@@ -1,4 +1,4 @@
-﻿namespace HobbyMatch.Database.Repositories.AppUser
+﻿namespace HobbyMatch.Database.Repositories.AppUsers
 {
     public interface IAppUserRepository
     {

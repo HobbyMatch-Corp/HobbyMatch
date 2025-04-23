@@ -1,6 +1,5 @@
 ﻿using HobbyMatch.Database.Data;
 using HobbyMatch.Domain.Entities;
-using HobbyMatch.Domain.Requests;
 using Microsoft.EntityFrameworkCore;
 
 namespace HobbyMatch.Database.Repositories.Events
@@ -54,7 +53,7 @@ namespace HobbyMatch.Database.Repositories.Events
             return true;
         }
 
-        public async Task<List<Event>> GetEventsWithFilter(string? filter)
+        public async Task<List<Event>> GetEventsWithFilterAsync(string? filter)
         {
             return await _context.Events
                 .Where(e => string.IsNullOrEmpty(filter) || e.Name.Contains(filter))
@@ -62,6 +61,49 @@ namespace HobbyMatch.Database.Repositories.Events
                 .ToListAsync();
         }
 
+        public async Task<List<Event>?> GetSignedUpEventsAsync(string userEmail)
+        {
+            var dbUser = await _context.AppUsers
+                .Where(u => u.Email == userEmail)
+                .Include(u => u.SignedUpEvents)
+                .FirstOrDefaultAsync();
+
+            if (dbUser == null)
+                return null;
+
+            return dbUser.SignedUpEvents.ToList();
+        }
+
+        public async Task<List<Event>?> GetOrganizedEventsAsync(string organizerEmail)
+        {
+            var dbOrganizer = await _context.Users
+                .Where(org => org.Email == organizerEmail)
+                .Include (org => org.OrganizedEvents)
+                .FirstOrDefaultAsync();
+
+            if (dbOrganizer == null)
+                return null;
+
+            return dbOrganizer.OrganizedEvents.ToList();
+        }
+
+        public async Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail)
+        {
+            var dbBusinessClient = await _context.BusinessClients
+                .Where(bc => bc.Email == businessClientEmail)
+                .Include(bc => bc.SponsoredEvents)
+                .FirstOrDefaultAsync();
+
+            if (dbBusinessClient == null)
+                return null;
+
+            return dbBusinessClient.SponsoredEvents.ToList();
+        }
+
+		public async Task SaveChangesAsync()
+		{
+            await _context.SaveChangesAsync();
+		}
 		public async Task UpdateEventAsync(Event eventToEdit)
 		{
 			_context.Events.Update(eventToEdit);

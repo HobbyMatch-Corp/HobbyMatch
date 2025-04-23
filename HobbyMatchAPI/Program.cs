@@ -1,13 +1,13 @@
 using HobbyMatch.API.Handlers;
 using HobbyMatch.BL.Configuration;
-using HobbyMatch.BL.Services.AppUser;
+using HobbyMatch.BL.Services.AppUsers;
 using HobbyMatch.BL.Services.Auth;
 using HobbyMatch.BL.Services.Auth.Account;
 using HobbyMatch.BL.Services.Auth.Tokens;
-using HobbyMatch.BL.Services.BusinessClient;
+using HobbyMatch.BL.Services.BusinessClients;
 using HobbyMatch.Database.Data;
-using HobbyMatch.Database.Repositories.AppUser;
-using HobbyMatch.Database.Repositories.BusinessClient;
+using HobbyMatch.Database.Repositories.AppUsers;
+using HobbyMatch.Database.Repositories.BusinessClients;
 using HobbyMatch.Database.Repositories.Users;
 using HobbyMatch.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
