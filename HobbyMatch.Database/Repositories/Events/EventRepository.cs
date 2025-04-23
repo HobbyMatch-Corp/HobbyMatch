@@ -1,6 +1,5 @@
 ﻿using HobbyMatch.Database.Data;
 using HobbyMatch.Domain.Entities;
-using HobbyMatch.Domain.Requests;
 using Microsoft.EntityFrameworkCore;
 
 namespace HobbyMatch.Database.Repositories.Events
@@ -27,12 +26,78 @@ namespace HobbyMatch.Database.Repositories.Events
                 .FirstOrDefaultAsync(e => e.Id == eventId);
         }
 
-        public async Task<List<Event>> GetEventsWithFilter(string? filter)
+        public async Task<bool> AddUserToEventAsync(int eventId, User user)
+        {
+            var ev = await GetEventByIdAsync(eventId);
+            if (ev == null || ev.SignUpList == null) return false;
+
+            if (ev.SignUpList.Any(u => u.Id == user.Id)) return false;
+
+            if (ev.SignUpList.Count >= ev.MaxUsers) return false;
+
+            ev.SignUpList.Add(user);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RemoveUserFromEventAsync(int eventId, User user)
+        {
+            var ev = await GetEventByIdAsync(eventId);
+            if (ev == null || ev.SignUpList == null) return false;
+
+            var existing = ev.SignUpList.FirstOrDefault(u => u.Id == user.Id);
+            if (existing == null) return false;
+
+            ev.SignUpList.Remove(existing);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<Event>> GetEventsWithFilterAsync(string? filter)
         {
             return await _context.Events
                 .Where(e => string.IsNullOrEmpty(filter) || e.Name.Contains(filter))
                 .Include(e => e.Organizer)
                 .ToListAsync();
+        }
+
+        public async Task<List<Event>?> GetSignedUpEventsAsync(string userEmail)
+        {
+            var dbUser = await _context.AppUsers
+                .Where(u => u.Email == userEmail)
+                .Include(u => u.SignedUpEvents)
+                .FirstOrDefaultAsync();
+
+            if (dbUser == null)
+                return null;
+
+            return dbUser.SignedUpEvents.ToList();
+        }
+
+        public async Task<List<Event>?> GetOrganizedEventsAsync(string organizerEmail)
+        {
+            var dbOrganizer = await _context.Users
+                .Where(org => org.Email == organizerEmail)
+                .Include (org => org.OrganizedEvents)
+                .FirstOrDefaultAsync();
+
+            if (dbOrganizer == null)
+                return null;
+
+            return dbOrganizer.OrganizedEvents.ToList();
+        }
+
+        public async Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail)
+        {
+            var dbBusinessClient = await _context.BusinessClients
+                .Where(bc => bc.Email == businessClientEmail)
+                .Include(bc => bc.SponsoredEvents)
+                .FirstOrDefaultAsync();
+
+            if (dbBusinessClient == null)
+                return null;
+
+            return dbBusinessClient.SponsoredEvents.ToList();
         }
 
 		public async Task SaveChangesAsync()

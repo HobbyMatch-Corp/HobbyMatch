@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HobbyMatch.BL.Services.Events
 {
-	public class EventService(IEventRepository eventRepository) : IEventService
+    public class EventService(IEventRepository eventRepository) : IEventService
 	{
 		private readonly IEventRepository _eventRepository = eventRepository;
 
@@ -28,9 +28,9 @@ namespace HobbyMatch.BL.Services.Events
 			return true;
 		}
 
-		public async Task<Domain.Entities.Event?> CreateEventAsync(CreateEventDto dto, int organizerId)
+		public async Task<Event?> CreateEventAsync(CreateEventDto dto, int organizerId)
 		{
-			var entity = new Domain.Entities.Event
+			var entity = new Event
 			{
 				Name = dto.Name,
 				Description = dto.Description,
@@ -47,11 +47,20 @@ namespace HobbyMatch.BL.Services.Events
 			return result;
 		}
 
-		public async Task<IEnumerable<HobbyMatch.Domain.Entities.Event>> GetEventsWithFilter(string? filter)
+        public async Task<List<Event>?> GetOrganizedEventsAsync(string organizerEmail)
 		{
-			return await _eventRepository.GetEventsWithFilter(filter);
-		}
+			return await _eventRepository.GetOrganizedEventsAsync(organizerEmail);
 
+		}
+		public async Task<IEnumerable<HobbyMatch.Domain.Entities.Event>> GetEventsWithFilter(string? filter)
+        {
+			return await _eventRepository.GetEventsWithFilter(filter);
+        }
+
+        public async Task<List<Event>?> GetSignedUpEventsAsync(string userEmail)
+		{ 
+            return await _eventRepository.GetSignedUpEventsAsync(userEmail);
+        }
 		public async Task<bool> RemoveUserFromEventAsync(int eventId, User user)
 		{
 			var ev = await _eventRepository.GetEventByIdAsync(eventId);
@@ -64,5 +73,9 @@ namespace HobbyMatch.BL.Services.Events
 			await _eventRepository.SaveChangesAsync();
 			return true;
 		}
-	}
+        public async Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail)
+        {
+            return await _eventRepository.GetSponsoredEventsAsync(businessClientEmail);
+        }
+    }
 }
