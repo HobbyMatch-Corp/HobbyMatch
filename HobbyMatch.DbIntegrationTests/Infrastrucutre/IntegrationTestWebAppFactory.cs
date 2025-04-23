@@ -29,6 +29,7 @@ namespace HobbyMatch.DbIntegrationTests.Infrastrucutre
                 services.AddDbContext<AppDbContext>(options =>
                 {
                     options.UseSqlServer(DbContainer.GetConnectionString());
+                    new DbSeeder().SetUpDbSeeding(options);
                 });
             });
         }

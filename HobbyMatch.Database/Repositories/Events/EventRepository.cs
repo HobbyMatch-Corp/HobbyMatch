@@ -79,6 +79,7 @@ namespace HobbyMatch.Database.Repositories.Events
         {
             var dbOrganizer = await _context.Users
                 .Where(org => org.Email == organizer.Email)
+                .Include (org => org.OrganizedEvents)
                 .FirstOrDefaultAsync();
 
             if (dbOrganizer == null)
