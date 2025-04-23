@@ -63,5 +63,16 @@ namespace HobbyMatch.API.Controllers
             var filteredResults = await _eventRepository.GetEventsWithFilter(filter);
             return Ok(filteredResults.Select(result => result.ToDto()));
         }
+
+        [HttpGet("signedUpEvents")]
+        [Authorize]
+        public async Task<IActionResult> GetSignedUpEvents()
+        {
+            var emailJwt = User.FindFirst("email")?.Value;
+            if (emailJwt is null) return BadRequest("No email found in claims.");
+
+            var signedUpEvents = await _eventRepository.GetSignedUpEvents(emailJwt);
+            return Ok(signedUpEvents.Select(result => result.ToDto()));
+        }
     }
 }

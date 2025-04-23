@@ -61,10 +61,10 @@ namespace HobbyMatch.Database.Repositories.Events
                 .ToListAsync();
         }
 
-        public async Task<List<Event>?> GetSignedUpEvents(User user)
+        public async Task<List<Event>?> GetSignedUpEvents(string userEmail)
         {
             var dbUser = await _context.AppUsers
-                .Where(u => u.Email == user.Email)
+                .Where(u => u.Email == userEmail)
                 .Include(u => u.SignedUpEvents)
                 .FirstOrDefaultAsync();
 
@@ -74,10 +74,10 @@ namespace HobbyMatch.Database.Repositories.Events
             return dbUser.SignedUpEvents.ToList();
         }
 
-        public async Task<List<Event>?> GetOrganizedEvents(Organizer organizer)
+        public async Task<List<Event>?> GetOrganizedEvents(string organizerEmail)
         {
             var dbOrganizer = await _context.Users
-                .Where(org => org.Email == organizer.Email)
+                .Where(org => org.Email == organizerEmail)
                 .Include (org => org.OrganizedEvents)
                 .FirstOrDefaultAsync();
 
@@ -87,10 +87,10 @@ namespace HobbyMatch.Database.Repositories.Events
             return dbOrganizer.OrganizedEvents.ToList();
         }
 
-        public async Task<List<Event>?> GetSponsoredEvents(BusinessClient businessClient)
+        public async Task<List<Event>?> GetSponsoredEvents(string businessClientEmail)
         {
             var dbBusinessClient = await _context.BusinessClients
-                .Where(bc => bc.Email == businessClient.Email)
+                .Where(bc => bc.Email == businessClientEmail)
                 .Include(bc => bc.SponsoredEvents)
                 .FirstOrDefaultAsync();
 

@@ -26,19 +26,19 @@ namespace HobbyMatch.BL.Services.Events
 			return result;
 		}
 
-        public async Task<List<Event>?> GetOrganizedEvents(Organizer organizer)
+        public async Task<List<Event>?> GetOrganizedEvents(string organizerEmail)
         {
-            return await _eventRepository.GetOrganizedEvents(organizer);
+            return await _eventRepository.GetOrganizedEvents(organizerEmail);
         }
 
-        public async Task<List<Event>?> GetSignedUpEvents(User user)
+        public async Task<List<Event>?> GetSignedUpEvents(string userEmail)
         {
-            return await _eventRepository.GetSignedUpEvents(user);
+            return await _eventRepository.GetSignedUpEvents(userEmail);
         }
 
-        public async Task<List<Event>?> GetSponsoredEvents(BusinessClient businessClient)
+        public async Task<List<Event>?> GetSponsoredEvents(string businessClientEmail)
         {
-            return await _eventRepository.GetSponsoredEvents(businessClient);
+            return await _eventRepository.GetSponsoredEvents(businessClientEmail);
         }
     }
 }
