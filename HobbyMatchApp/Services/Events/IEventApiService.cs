@@ -13,6 +13,11 @@ namespace HobbyMatch.App.Services.Events
 
         Task<List<EventDto>?> GetFilteredEvents(string? filter);
 
-        a
+        Task<List<EventDto>?> GetSignedUpEventsAsync();
+
+        Task<List<EventDto>?> GetOrganizedEventsAsync();
+
+        Task<List<EventDto>?> GetSponsoredEventsAsync();
+
     }
 }
