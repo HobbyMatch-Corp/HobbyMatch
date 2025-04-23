@@ -19,5 +19,6 @@ namespace HobbyMatch.Database.Repositories.Events
         Task<List<Event>?> GetOrganizedEventsAsync(string organizerEmail);
 
         Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail);
-    }
+		Task SaveChangesAsync();
+	}
 }

@@ -27,7 +27,7 @@ namespace HobbyMatch.App.Services.Events
 			return success;
 		}
 
-		public async Task<bool?> EventSigninAsync(string eventId)
+		public async Task<bool?> EventSigninAsync(int eventId)
         {
             bool success = false;
             var response = await _httpClient.PostAsJsonAsync("api/events/signin", new EventSignDto(eventId));
@@ -38,7 +38,7 @@ namespace HobbyMatch.App.Services.Events
             return success;
         }
 
-        public async Task<bool?> EventSignoutAsync(string eventId)
+        public async Task<bool?> EventSignoutAsync(int eventId)
         {
             bool success = false;
             var response = await _httpClient.PostAsJsonAsync("api/events/signout", new EventSignDto(eventId));

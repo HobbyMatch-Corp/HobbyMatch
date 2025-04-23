@@ -99,5 +99,10 @@ namespace HobbyMatch.Database.Repositories.Events
 
             return dbBusinessClient.SponsoredEvents.ToList();
         }
-    }
+
+		public async Task SaveChangesAsync()
+		{
+            await _context.SaveChangesAsync();
+		}
+	}
 }
