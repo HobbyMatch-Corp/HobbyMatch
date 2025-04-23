@@ -52,9 +52,9 @@ namespace HobbyMatch.BL.Services.Events
 			return await _eventRepository.GetOrganizedEventsAsync(organizerEmail);
 
 		}
-		public async Task<IEnumerable<HobbyMatch.Domain.Entities.Event>> GetEventsWithFilter(string? filter)
+		public async Task<IEnumerable<HobbyMatch.Domain.Entities.Event>> GetEventsWithFilterAsync(string? filter)
         {
-			return await _eventRepository.GetEventsWithFilter(filter);
+			return await _eventRepository.GetEventsWithFilterAsync(filter);
         }
 
         public async Task<List<Event>?> GetSignedUpEventsAsync(string userEmail)
