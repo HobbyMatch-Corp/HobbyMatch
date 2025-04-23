@@ -1,7 +1,7 @@
-﻿using HobbyMatch.Database.Repositories.AppUser;
+﻿using HobbyMatch.Database.Repositories.AppUsers;
 using HobbyMatch.Domain.Entities;
 
-namespace HobbyMatch.BL.Services.AppUser
+namespace HobbyMatch.BL.Services.AppUsers
 {
 
     public class AppUserService : IAppUserService
