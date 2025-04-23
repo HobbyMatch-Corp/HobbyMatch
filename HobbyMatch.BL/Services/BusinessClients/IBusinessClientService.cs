@@ -1,4 +1,4 @@
-﻿namespace HobbyMatch.BL.Services.BusinessClient
+﻿namespace HobbyMatch.BL.Services.BusinessClients
 {
     public interface IBusinessClientService
     {

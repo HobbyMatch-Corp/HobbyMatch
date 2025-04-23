@@ -1,7 +1,7 @@
 ﻿using HobbyMatch.BL.DTOs.Event;
 using HobbyMatch.Database.Repositories.Events;
 
-namespace HobbyMatch.BL.Services.Event
+namespace HobbyMatch.BL.Services.Events
 {
     public class EventService(IEventRepository eventRepository) : IEventService
 	{
