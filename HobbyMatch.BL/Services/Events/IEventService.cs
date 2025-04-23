@@ -1,4 +1,4 @@
-﻿using HobbyMatch.BL.DTOs.Event;
+﻿using HobbyMatch.BL.DTOs.Events;
 using HobbyMatch.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HobbyMatch.BL.Services.Event
+namespace HobbyMatch.BL.Services.Events
 {
 	public interface IEventService
 	{

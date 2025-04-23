@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HobbyMatch.BL.DTOs.Event
+namespace HobbyMatch.BL.DTOs.Events
 {
 	public record CreateEventDto(
 		int Id,
