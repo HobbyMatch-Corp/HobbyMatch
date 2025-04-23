@@ -50,7 +50,7 @@ namespace HobbyMatch.App.Services.Api
 			}
 
 			T? user = null;
-			var response = await _httpClient.GetAsync($"api/login");
+			var response = await _httpClient.GetAsync($"{endpoint}/{id}");
 			if (response.IsSuccessStatusCode)
 			{
 				user = await response.Content.ReadFromJsonAsync<T>();
@@ -72,12 +72,13 @@ namespace HobbyMatch.App.Services.Api
 			}
 
 			T? user = null;
-			var response = await _httpClient.PostAsJsonAsync($"{endpoint}/" + id, editedUser);
+			var response = await _httpClient.PostAsJsonAsync($"{endpoint}/{id}", editedUser);
 			if (response.IsSuccessStatusCode)
 			{
 				user = await response.Content.ReadFromJsonAsync<T>();
 			}
 			return user;
 		}
-	}
+
+    }
 }
