@@ -21,13 +21,13 @@
                                 <div class="d-flex">
                                     <!-- Start Time Only -->
                                     <div class="mr-3 text-center align-content-center">
-                                            <MudText Typo="Typo.body1" Class="mb-0 font-weight-bold" Color="Color.Secondary">
-                                                @evt.StartTime.ToString("HH:mm")
-                                            </MudText>
-                                            <MudText Typo="Typo.body2" Class="mt-0" Color="Color.Secondary">
-                                                @evt.StartTime.ToString("dd.MM.yyyy")
-                                            </MudText>
-                                        
+                                        <MudText Typo="Typo.body1" Class="mb-0 font-weight-bold" Color="Color.Secondary">
+                                            @evt.StartTime.ToString("HH:mm")
+                                        </MudText>
+                                        <MudText Typo="Typo.body2" Class="mt-0" Color="Color.Secondary">
+                                            @evt.StartTime.ToString("dd.MM.yyyy")
+                                        </MudText>
+
                                     </div>
 
                                     <div style="flex: 1">
@@ -48,7 +48,7 @@
                                     </div>
                                 </div>
                             </ChildContent>
-                            
+
                             <!-- Description using MudListItem -->
                             <NestedList>
                                 <MudListItem Dense="false"
@@ -64,7 +64,17 @@
                     }
                 </MudList>
             }
-            else
+            else if (UpcomingEventsList is null)
+            {
+                <MudContainer Class="align-content-center">
+                    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+                    <MudText Typo="Typo.body1" Class="text-center my-4">
+                        Loading...
+                    </MudText>
+                </MudContainer>
+
+            }
+            else if (!UpcomingEventsList.Any())
             {
                 <MudText Typo="Typo.body1" Class="text-center my-4">
                     No upcoming events.
