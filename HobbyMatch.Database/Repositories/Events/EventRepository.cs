@@ -1,6 +1,5 @@
 ﻿using HobbyMatch.Database.Data;
 using HobbyMatch.Domain.Entities;
-using HobbyMatch.Domain.Requests;
 using Microsoft.EntityFrameworkCore;
 
 namespace HobbyMatch.Database.Repositories.Events
