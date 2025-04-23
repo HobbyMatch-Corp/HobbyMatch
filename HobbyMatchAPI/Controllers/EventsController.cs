@@ -72,7 +72,35 @@ namespace HobbyMatch.API.Controllers
             if (emailJwt is null) return BadRequest("No email found in claims.");
 
             var signedUpEvents = await _eventRepository.GetSignedUpEvents(emailJwt);
+            if (signedUpEvents is null) return BadRequest("Wrong email.");
+
             return Ok(signedUpEvents.Select(result => result.ToDto()));
+        }
+
+        [HttpGet("organizedEvents")]
+        [Authorize]
+        public async Task<IActionResult> GetOrganizedEvents()
+        {
+            var emailJwt = User.FindFirst("email")?.Value;
+            if (emailJwt is null) return BadRequest("No email found in claims.");
+
+            var organizedEvents = await _eventRepository.GetOrganizedEvents(emailJwt);
+            if (organizedEvents is null) return BadRequest("Wrong email.");
+
+            return Ok(organizedEvents.Select(result => result.ToDto()));
+        }
+
+        [HttpGet("sponsoredEvents")]
+        [Authorize]
+        public async Task<IActionResult> GetSponsoredEvents()
+        {
+            var emailJwt = User.FindFirst("email")?.Value;
+            if (emailJwt is null) return BadRequest("No email found in claims.");
+
+            var sponsoredEvents = await _eventRepository.GetSponsoredEvents(emailJwt);
+            if (sponsoredEvents is null) return BadRequest("Wrong email.");
+
+            return Ok(sponsoredEvents.Select(result => result.ToDto()));
         }
     }
 }
