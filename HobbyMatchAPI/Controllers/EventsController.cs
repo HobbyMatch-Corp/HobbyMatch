@@ -1,4 +1,4 @@
-﻿using HobbyMatch.BL.DTOs.Event;
+﻿using HobbyMatch.BL.DTOs.Events;
 using HobbyMatch.BL.Services.Events;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
