@@ -7,7 +7,7 @@ using HobbyMatch.Domain.Requests;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using MockQueryable;
-using HobbyMatch.BL.Services.Event;
+using HobbyMatch.BL.Services.Events;
 using HobbyMatch.Database.Repositories.Events;
 
 namespace UnitTests

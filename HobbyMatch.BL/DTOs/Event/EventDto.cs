@@ -1,6 +1,6 @@
 using HobbyMatch.Domain.Entities;
 
-namespace HobbyMatch.BL.DTOs.Event;
+namespace HobbyMatch.BL.DTOs.Events;
 
 public record EventDto(
     int Id,

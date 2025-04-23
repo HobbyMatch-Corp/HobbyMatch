@@ -1,6 +1,6 @@
 ﻿using Azure.Core;
-using HobbyMatch.BL.DTOs.Event;
-using HobbyMatch.BL.Services.Event;
+using HobbyMatch.BL.DTOs.Events;
+using HobbyMatch.BL.Services.Events;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Requests;

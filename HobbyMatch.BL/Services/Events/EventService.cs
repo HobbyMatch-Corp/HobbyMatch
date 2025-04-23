@@ -1,4 +1,4 @@
-﻿using HobbyMatch.BL.DTOs.Event;
+﻿using HobbyMatch.BL.DTOs.Events;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Requests;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HobbyMatch.BL.Services.Event
+namespace HobbyMatch.BL.Services.Events
 {
 	public class EventService(IEventRepository eventRepository) : IEventService
 	{

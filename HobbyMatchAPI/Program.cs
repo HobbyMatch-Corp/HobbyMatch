@@ -17,7 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
 using HobbyMatch.Database.Repositories.Events;
-using HobbyMatch.BL.Services.Event;
+using HobbyMatch.BL.Services.Events;
 
 
 var builder = WebApplication.CreateBuilder(args);

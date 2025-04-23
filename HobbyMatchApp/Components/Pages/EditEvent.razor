@@ -20,7 +20,7 @@
 	[Parameter]
 	public int EventId { get; set; }
 
-	private HobbyMatch.BL.DTOs.Event.EventDto? _event { get; set; }
+	private HobbyMatch.BL.DTOs.Events.EventDto? _event { get; set; }
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (firstRender)
