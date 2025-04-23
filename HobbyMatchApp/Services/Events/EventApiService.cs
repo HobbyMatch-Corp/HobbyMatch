@@ -26,6 +26,26 @@ namespace HobbyMatch.App.Services.Events
 			}
 			return success;
 		}
+        public async Task<EventDto?> GetEventAsync(int eventId)
+		{
+			EventDto? success = null;
+			var response = await _httpClient.GetAsync($"api/events/{eventId}");
+			if (response.IsSuccessStatusCode)
+			{
+				success = await response.Content.ReadFromJsonAsync<EventDto>();
+			}
+			return success;
+		}
+        public async Task<EventDto?> EditEventAsync(CreateEventRequest eventRequest, int eventId)
+		{
+			EventDto? success = null;
+			var response = await _httpClient.PutAsJsonAsync($"api/events/edit/{eventId}", eventRequest);
+			if (response.IsSuccessStatusCode)
+			{
+				success = await response.Content.ReadFromJsonAsync<EventDto>();
+			}
+			return success;
+		}
 
 		public async Task<bool?> EventSigninAsync(int eventId)
         {

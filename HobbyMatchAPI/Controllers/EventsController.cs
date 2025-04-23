@@ -19,18 +19,33 @@ namespace HobbyMatch.API.Controllers
 
 		private readonly IEventService _eventService = eventService; 
         private readonly UserManager<Organizer> _userManager = userManager;
-        // TODO: Think about moving userType check to service and adding "if result is ActionResult actionResult" check 
+		// TODO: Think about moving userType check to service and adding "if result is ActionResult actionResult" check 
 
-        [HttpPost("create")]
-        [Authorize]
-		public async Task<ActionResult<Event?>> EventCreate([FromBody] CreateEventDto createDto)
+		[HttpPost("create")]
+		[Authorize]
+		public async Task<ActionResult<Event?>> EventCreate([FromBody] CreateEventRequest createRequest)
 		{
 			var user = await _userManager.GetUserAsync(User);
 			if (user == null) return Unauthorized();
-			var result = await _eventService.CreateEventAsync(createDto, user.Id);
+			var result = await _eventService.CreateEventAsync(createRequest, user.Id);
 			return result != null ? Ok(result.ToDto()) : BadRequest("Could not create event");
 		}
-
+		[HttpPut("edit/{eventId}")]
+		[Authorize]
+		public async Task<ActionResult<Event?>> EventEdit([FromBody] CreateEventRequest createRequest, [FromRoute] int eventId)
+		{
+			var user = await _userManager.GetUserAsync(User);
+			if (user == null) return Unauthorized();
+			var result = await _eventService.EditEventAsync(createRequest, eventId, user.Id);
+			return result != null ? Ok(result.ToDto()) : BadRequest("Could not create event");
+		}
+		[HttpGet("{eventId}")]
+        //[Authorize]
+        public async Task<IActionResult> EventGetById([FromRoute] int eventId)
+		{
+			var result = await _eventRepository.GetEventByIdAsync(eventId);
+			return result != null ? Ok(result.ToDto()) : BadRequest("Could not get event");
+		}
 		[HttpPost("signin")]
         [Authorize]
         public async Task<ActionResult> EventSignin([FromBody] EventSignDto dto)

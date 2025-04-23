@@ -1,4 +1,5 @@
 ﻿using HobbyMatch.BL.DTOs.Events;
+using HobbyMatch.Domain.Requests;
 using HobbyMatch.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,13 @@ namespace HobbyMatch.BL.Services.Events
 		Task<bool> AddUserToEventAsync(int eventId, User user);
 		Task<IEnumerable<Event>> GetEventsWithFilterAsync(string? filter);
 		Task<bool> RemoveUserFromEventAsync(int eventId, User user);
-        Task<Event?> CreateEventAsync(CreateEventDto dto, int organizerId);
+        Task<Event?> CreateEventAsync(CreateEventRequest dto, int organizerId);
 
         Task<List<Event>?> GetSignedUpEventsAsync(string userEmail);
 
         Task<List<Event>?> GetOrganizedEventsAsync(string organizerEmail);
 
         Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail);
+		Task<Event?> EditEventAsync(CreateEventRequest createRequest, int eventId, int id);
     }
 }
