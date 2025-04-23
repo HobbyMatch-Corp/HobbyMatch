@@ -39,15 +39,6 @@ namespace HobbyMatch.API.Controllers
 			var result = await _eventService.EditEventAsync(createRequest, eventId, user.Id);
 			return result != null ? Ok(result.ToDto()) : BadRequest("Could not create event");
 		}
-		[HttpPut("edit/{eventId}")]
-        [Authorize]
-		public async Task<ActionResult<Event?>> EventEdit([FromBody] CreateEventRequest createRequest, [FromRoute] int eventId)
-		{
-			var user = await _userManager.GetUserAsync(User);
-			if (user == null) return Unauthorized();
-			var result = await _eventService.EditEventAsync(createRequest, eventId, user.Id);
-			return result != null ? Ok(result.ToDto()) : BadRequest("Could not create event");
-		}
 		[HttpGet("{eventId}")]
         //[Authorize]
         public async Task<IActionResult> EventGetById([FromRoute] int eventId)

@@ -30,7 +30,7 @@ namespace HobbyMatch.BL.Services.Events
 			return true;
 		}
 
-		public async Task<Event?> CreateEventAsync(CreateEventDto dto, int organizerId)
+		public async Task<Event?> CreateEventAsync(CreateEventRequest dto, int organizerId)
 		{
 			var entity = new Event
 			{
