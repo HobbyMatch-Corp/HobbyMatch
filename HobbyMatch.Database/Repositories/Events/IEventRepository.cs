@@ -9,5 +9,11 @@ namespace HobbyMatch.Database.Repositories.Events
         Task<Event?> AddEvent(Event newEvent);
 		Task<bool> RemoveUserFromEventAsync(int eventId, User user);
         Task<List<Event>> GetEventsWithFilter(string? filter);
+
+        Task<List<Event>> GetSignedUpEvents(User user);
+
+        Task<List<Event>> GetOrganizedEvents(Organizer organizer);
+
+        Task<List<Event>> GetSponsoredEvents(Domain.Entities.BusinessClient businessClient);
     }
 }
