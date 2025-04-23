@@ -7,10 +7,10 @@ namespace HobbyMatch.BL.Services.Events
     {
         Task<Event?> CreateEventAsync(CreateEventDto dto, int organizerId);
 
-        Task<List<Event>?> GetSignedUpEvents(string userEmail);
+        Task<List<Event>?> GetSignedUpEventsAsync(string userEmail);
 
-        Task<List<Event>?> GetOrganizedEvents(string organizerEmail);
+        Task<List<Event>?> GetOrganizedEventsAsync(string organizerEmail);
 
-        Task<List<Event>?> GetSponsoredEvents(string businessClientEmail);
+        Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail);
     }
 }

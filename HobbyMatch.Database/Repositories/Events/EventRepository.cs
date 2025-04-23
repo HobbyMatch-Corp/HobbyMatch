@@ -53,7 +53,7 @@ namespace HobbyMatch.Database.Repositories.Events
             return true;
         }
 
-        public async Task<List<Event>> GetEventsWithFilter(string? filter)
+        public async Task<List<Event>> GetEventsWithFilterAsync(string? filter)
         {
             return await _context.Events
                 .Where(e => string.IsNullOrEmpty(filter) || e.Name.Contains(filter))
@@ -61,7 +61,7 @@ namespace HobbyMatch.Database.Repositories.Events
                 .ToListAsync();
         }
 
-        public async Task<List<Event>?> GetSignedUpEvents(string userEmail)
+        public async Task<List<Event>?> GetSignedUpEventsAsync(string userEmail)
         {
             var dbUser = await _context.AppUsers
                 .Where(u => u.Email == userEmail)
@@ -74,7 +74,7 @@ namespace HobbyMatch.Database.Repositories.Events
             return dbUser.SignedUpEvents.ToList();
         }
 
-        public async Task<List<Event>?> GetOrganizedEvents(string organizerEmail)
+        public async Task<List<Event>?> GetOrganizedEventsAsync(string organizerEmail)
         {
             var dbOrganizer = await _context.Users
                 .Where(org => org.Email == organizerEmail)
@@ -87,7 +87,7 @@ namespace HobbyMatch.Database.Repositories.Events
             return dbOrganizer.OrganizedEvents.ToList();
         }
 
-        public async Task<List<Event>?> GetSponsoredEvents(string businessClientEmail)
+        public async Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail)
         {
             var dbBusinessClient = await _context.BusinessClients
                 .Where(bc => bc.Email == businessClientEmail)
