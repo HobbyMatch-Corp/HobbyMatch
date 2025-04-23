@@ -1,4 +1,4 @@
-﻿namespace HobbyMatch.Database.Repositories.BusinessClient
+﻿namespace HobbyMatch.Database.Repositories.BusinessClients
 {
     public interface IBusinessClientRepository
     {

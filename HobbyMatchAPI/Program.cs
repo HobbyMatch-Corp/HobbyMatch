@@ -7,7 +7,7 @@ using HobbyMatch.BL.Services.Auth.Tokens;
 using HobbyMatch.BL.Services.BusinessClient;
 using HobbyMatch.Database.Data;
 using HobbyMatch.Database.Repositories.AppUser;
-using HobbyMatch.Database.Repositories.BusinessClient;
+using HobbyMatch.Database.Repositories.BusinessClients;
 using HobbyMatch.Database.Repositories.Users;
 using HobbyMatch.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

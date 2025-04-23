@@ -1,4 +1,4 @@
-﻿using HobbyMatch.Database.Repositories.BusinessClient;
+﻿using HobbyMatch.Database.Repositories.BusinessClients;
 
 namespace HobbyMatch.BL.Services.BusinessClient
 {

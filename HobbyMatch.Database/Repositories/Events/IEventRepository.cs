@@ -14,6 +14,6 @@ namespace HobbyMatch.Database.Repositories.Events
 
         Task<List<Event>> GetOrganizedEvents(Organizer organizer);
 
-        Task<List<Event>> GetSponsoredEvents(Domain.Entities.BusinessClient businessClient);
+        Task<List<Event>> GetSponsoredEvents(BusinessClient businessClient);
     }
 }
