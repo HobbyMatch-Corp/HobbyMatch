@@ -1,6 +1,5 @@
-﻿using Azure.Core;
-using HobbyMatch.BL.DTOs.Event;
-using HobbyMatch.BL.Services.Event;
+﻿using HobbyMatch.BL.DTOs.Event;
+using HobbyMatch.BL.Services.Events;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Enums;
@@ -59,6 +58,45 @@ namespace HobbyMatch.API.Controllers
         {
             var filteredResults = await _eventService.GetEventsWithFilter(filter);
             return Ok(filteredResults.Select(result => result.ToDto()));
+        }
+
+        [HttpGet("signedUpEvents")]
+        [Authorize]
+        public async Task<IActionResult> GetSignedUpEvents()
+        {
+            var emailJwt = User.FindFirst("email")?.Value;
+            if (emailJwt is null) return BadRequest("No email found in claims.");
+
+            var signedUpEvents = await _eventRepository.GetSignedUpEventsAsync(emailJwt);
+            if (signedUpEvents is null) return BadRequest("Wrong email.");
+
+            return Ok(signedUpEvents.Select(result => result.ToDto()));
+        }
+
+        [HttpGet("organizedEvents")]
+        [Authorize]
+        public async Task<IActionResult> GetOrganizedEvents()
+        {
+            var emailJwt = User.FindFirst("email")?.Value;
+            if (emailJwt is null) return BadRequest("No email found in claims.");
+
+            var organizedEvents = await _eventRepository.GetOrganizedEventsAsync(emailJwt);
+            if (organizedEvents is null) return BadRequest("Wrong email.");
+
+            return Ok(organizedEvents.Select(result => result.ToDto()));
+        }
+
+        [HttpGet("sponsoredEvents")]
+        [Authorize]
+        public async Task<IActionResult> GetSponsoredEvents()
+        {
+            var emailJwt = User.FindFirst("email")?.Value;
+            if (emailJwt is null) return BadRequest("No email found in claims.");
+
+            var sponsoredEvents = await _eventRepository.GetSponsoredEventsAsync(emailJwt);
+            if (sponsoredEvents is null) return BadRequest("Wrong email.");
+
+            return Ok(sponsoredEvents.Select(result => result.ToDto()));
         }
     }
 }

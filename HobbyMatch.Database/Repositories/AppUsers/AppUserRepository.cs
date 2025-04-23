@@ -1,7 +1,7 @@
 ﻿using HobbyMatch.Database.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace HobbyMatch.Database.Repositories.AppUser
+namespace HobbyMatch.Database.Repositories.AppUsers
 {
     public class AppUserRepository : IAppUserRepository
     {

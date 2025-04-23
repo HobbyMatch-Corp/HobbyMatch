@@ -54,5 +54,20 @@ namespace HobbyMatch.App.Services.Events
             var response = await _unauthorizedClient.GetFromJsonAsync<List<EventDto>>($"api/events/events?filter={filter}");
             return response;
         }
+
+        public async Task<List<EventDto>?> GetOrganizedEventsAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<List<EventDto>?>("api/events/organizedEvents");
+        }
+
+        public async Task<List<EventDto>?> GetSignedUpEventsAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<List<EventDto>?>("api/events/signedUpEvents");
+        }
+
+        public async Task<List<EventDto>?> GetSponsoredEventsAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<List<EventDto>?>("api/events/sponsoredEvents");
+        }
     }
 }

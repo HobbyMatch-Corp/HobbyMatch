@@ -1,7 +1,7 @@
 ﻿using HobbyMatch.Database.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace HobbyMatch.Database.Repositories.BusinessClient
+namespace HobbyMatch.Database.Repositories.BusinessClients
 {
     public class BusinessClientRepository : IBusinessClientRepository
     {

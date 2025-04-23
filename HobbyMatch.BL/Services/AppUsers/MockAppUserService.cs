@@ -1,6 +1,6 @@
 ﻿using HobbyMatch.Domain.Entities;
 
-namespace HobbyMatch.BL.Services.AppUser
+namespace HobbyMatch.BL.Services.AppUsers
 {
     public class MockAppUserService: IAppUserService
     {
