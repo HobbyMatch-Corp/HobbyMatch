@@ -44,7 +44,7 @@ services:
       - backend
     environment: 
       - ASPNETCORE_ENVIRONMENT=Development
-      - ApiSettings__BaseUrl=http://backend:8080
+      - ApiSettings__BaseUrl=http://backend:8080/api/
     networks:
       - app-network
 networks:

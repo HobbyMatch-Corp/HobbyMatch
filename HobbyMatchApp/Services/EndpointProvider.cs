@@ -6,8 +6,8 @@ namespace HobbyMatch.App.Services
 	{
 		private readonly Dictionary<Type, string> _endpointMap = new() 
 		{
-			{ typeof(User), "/users" },
-			{ typeof(BusinessClient), "/businessClients" },
+			{ typeof(User), "users" },
+			{ typeof(BusinessClient), "businessClients" },
 		};
 		public string GetEndpoint<T>()  where T : Organizer
 		{

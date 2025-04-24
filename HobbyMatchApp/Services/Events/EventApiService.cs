@@ -17,7 +17,7 @@ namespace HobbyMatch.App.Services.Events
 		public async Task<EventDto?> CreateEventAsync(CreateEventRequest eventRequest)
 		{
 			EventDto? success = null;
-			var response = await _httpClient.PostAsJsonAsync("api/events/create", eventRequest);
+			var response = await _httpClient.PostAsJsonAsync("events/create", eventRequest);
 			if (response.IsSuccessStatusCode)
 			{
 				success = await response.Content.ReadFromJsonAsync<EventDto>();
@@ -28,7 +28,7 @@ namespace HobbyMatch.App.Services.Events
 		public async Task<bool?> EventSigninAsync(string eventId)
         {
             bool success = false;
-            var response = await _httpClient.PostAsJsonAsync("api/events/signin", new EventSignDto(eventId));
+            var response = await _httpClient.PostAsJsonAsync("events/signin", new EventSignDto(eventId));
             if (response.IsSuccessStatusCode)
             {
                 success = await response.Content.ReadFromJsonAsync<bool>();
@@ -39,7 +39,7 @@ namespace HobbyMatch.App.Services.Events
         public async Task<bool?> EventSignoutAsync(string eventId)
         {
             bool success = false;
-            var response = await _httpClient.PostAsJsonAsync("api/events/signout", new EventSignDto(eventId));
+            var response = await _httpClient.PostAsJsonAsync("events/signout", new EventSignDto(eventId));
             if (response.IsSuccessStatusCode)
             {
                 success = await response.Content.ReadFromJsonAsync<bool>();
@@ -49,7 +49,7 @@ namespace HobbyMatch.App.Services.Events
 
         public async Task<List<EventDto>?> GetFilteredEvents(string? filter)
         {
-            var response = await _unauthorizedClient.GetFromJsonAsync<List<EventDto>>($"api/events/events?filter={filter}");
+            var response = await _unauthorizedClient.GetFromJsonAsync<List<EventDto>>($"events/events?filter={filter}");
             return response;
         }
 
