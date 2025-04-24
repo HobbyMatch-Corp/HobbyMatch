@@ -90,12 +90,12 @@ Elevation="3">
 
     private void NavigateToEventDetails(int eventId)
     {
-        NavigationManager.NavigateTo($"/events/{eventId}");
+        //NavigationManager.NavigateTo($"/events/{eventId}"); //TODO update uri
     }
 
     private void NavigateToUserPage()
     {
-        NavigationManager.NavigateTo("/userPage");
+        NavigationManager.NavigateTo("/profile");
     }
 
     private string GetLocationString(EventDto e)
