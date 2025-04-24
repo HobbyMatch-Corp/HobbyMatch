@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace HobbyMatch.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {

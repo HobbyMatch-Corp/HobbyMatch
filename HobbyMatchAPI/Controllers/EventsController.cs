@@ -13,7 +13,7 @@ using System.Security.Claims;
 
 namespace HobbyMatch.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class EventsController(IEventRepository eventRepository, UserManager<Organizer> userManager, IEventService eventService) : ControllerBase
     {
