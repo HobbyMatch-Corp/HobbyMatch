@@ -33,41 +33,49 @@ Elevation="3">
 
 @code {
     [Parameter]
-    public string Username { get; set; } = string.Empty;
+    public string? Username { get; set; }
     [Parameter]
-    public string Email { get; set; } = string.Empty;
+    public string? Email { get; set; }
     [Parameter]
-    public int OrganizedEventCount { get; set; }
+    public int? OrganizedEventCount { get; set; }
     [Parameter]
     public int? SignedUpEventCount { get; set; }
+    [Parameter]
+    public int? SponsoredEventCount { get; set; }
     [Parameter]
     public string? TaxId { get; set; }
 
     private void NavigateToEditProfile()
     {
-        NavigationManager.NavigateTo("/editUserData"); // TODO change link
+        NavigationManager.NavigateTo("/profile");
     }
 
     private List<(string Label, object? Value)> GetUserFields()
     {
         var fields = new List<(string Label, object? Value)>
         {
-            ("Username", Username),
-            ("Email", Email),
-            ("Organized events", OrganizedEventCount)
+            ("Username", Username ?? "no username"),
+            ("Email", Email ?? "..."),
+            ("Organized events", OrganizedEventCount ?? 0)
         };
 
         // Only add TaxId for business clients
         if (!string.IsNullOrEmpty(TaxId))
         {
-            fields.Add(("Tax ID", TaxId));
+            fields.Add(("Tax ID", TaxId ?? "..."));
         }
         
         // If user signed up number of events
         if (SignedUpEventCount is not null)
         {
-            fields.Add(("Signed up events", SignedUpEventCount));
+            fields.Add(("Signed up events", SignedUpEventCount ?? 0));
         }
+
+        if (SponsoredEventCount is not null)
+        {
+            fields.Add(("Sponsored events", SponsoredEventCount ?? 0));
+        }
+
 
         return fields;
     }

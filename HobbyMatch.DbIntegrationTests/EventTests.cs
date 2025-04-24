@@ -16,7 +16,7 @@ namespace HobbyMatch.DbIntegrationTests
         public async Task GetSigndUpEvents_ValidSeededData_ShouldPass()
         {
             // Arrange
-            string userEmail = "user1@test.com";
+            string userEmail = "user2@test.com";
             var eventRepo = new EventRepository(DbContext);
 
             // Act
@@ -24,7 +24,9 @@ namespace HobbyMatch.DbIntegrationTests
 
             // Assert
             Assert.NotNull(res);
-            Assert.Equal(3, res.Count);
+            Assert.NotNull(res.Where(e => e.Name == "Sunset Sketch Session").First().Location.Longitude);
+            Assert.NotNull(res.Where(e => e.Name == "Sunset Sketch Session").First().Location.Latitude);
+            Assert.Equal(4, res.Count);
         }
 
         [Fact]
