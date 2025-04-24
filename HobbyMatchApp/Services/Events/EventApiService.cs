@@ -55,17 +55,17 @@ namespace HobbyMatch.App.Services.Events
 
         public async Task<List<EventDto>?> GetOrganizedEventsAsync()
         {
-            return await _httpClient.GetFromJsonAsync<List<EventDto>?>("api/events/organizedEvents");
+            return await _httpClient.GetFromJsonAsync<List<EventDto>?>("events/organizedEvents");
         }
 
         public async Task<List<EventDto>?> GetSignedUpEventsAsync()
         {
-            return await _httpClient.GetFromJsonAsync<List<EventDto>?>("api/events/signedUpEvents");
+            return await _httpClient.GetFromJsonAsync<List<EventDto>?>("events/signedUpEvents");
         }
 
         public async Task<List<EventDto>?> GetSponsoredEventsAsync()
         {
-            return await _httpClient.GetFromJsonAsync<List<EventDto>?>("api/events/sponsoredEvents");
+            return await _httpClient.GetFromJsonAsync<List<EventDto>?>("events/sponsoredEvents");
         }
     }
 }

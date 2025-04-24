@@ -50,7 +50,7 @@ namespace HobbyMatch.App.Services.Api
 			}
 
 			T? user = null;
-			var response = await _httpClient.GetAsync($"api/{endpoint}/{id}");
+			var response = await _httpClient.GetAsync($"{endpoint}/{id}");
 			if (response.IsSuccessStatusCode)
 			{
 				user = await response.Content.ReadFromJsonAsync<T>();
