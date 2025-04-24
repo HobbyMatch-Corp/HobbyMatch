@@ -4,12 +4,12 @@
 @inject NavigationManager NavigationManager
 
 <MudCard Class="ma-2 d-flex flex-column justify-center rounded-lg"
-         Style="width: calc(100% - 16px); border: 2px solid var(--mud-palette-secondary); border-radius: 16px;"
-         Elevation="3">
+Style="width: calc(100% - 16px); border: 2px solid var(--mud-palette-secondary); border-radius: 16px;"
+Elevation="3">
     <MudCardContent>
         <MudText Typo="Typo.h6" Class="mb-3" Align="Align.Center"
-                 Style="cursor: pointer;" Color="Color.Primary"
-                 @onclick="NavigateToUserPage">Upcoming Events</MudText>
+        Style="cursor: pointer;" Color="Color.Primary"
+        @onclick="NavigateToUserPage">Upcoming Events</MudText>
         <div style="overflow-y: auto;">
             @if (UpcomingEventsList != null && UpcomingEventsList.Any())
             {
@@ -33,15 +33,15 @@
                                     <div style="flex: 1">
                                         <!-- Event Name - Clickable -->
                                         <MudText Typo="Typo.h6" Class="mb-1"
-                                                 Style="cursor: pointer;"
-                                                 @onclick="() => NavigateToEventDetails(evt.Id)">
+                                        Style="cursor: pointer;"
+                                        @onclick="() => NavigateToEventDetails(evt.Id)">
                                             @evt.Name
                                         </MudText>
 
                                         <!-- Event Details -->
                                         <MudText Typo="Typo.body2" Class="mb-1">
                                             Price: @(evt.Price > 0 ? $"${evt.Price:F2}" : "Free") |
-                                            Location: @($"{evt.Location.Latitude:F2}; {evt.Location.Longitude:F2}") |
+                                            Location: @(GetLocationString(evt)) |
                                             Organizer: @(string.IsNullOrEmpty(evt.OrganizerName) ? "Unknown" : evt.OrganizerName)
                                         </MudText>
 
@@ -52,8 +52,8 @@
                             <!-- Description using MudListItem -->
                             <NestedList>
                                 <MudListItem Dense="false"
-                                             Class="pa-0 mt-1"
-                                             Style="min-height: auto;">
+                                Class="pa-0 mt-1"
+                                Style="min-height: auto;">
                                     <MudText Typo="Typo.body1" Class="mt-1" Align="Align.Left" Style="margin-left:100px">
                                         @evt.Description
                                     </MudText>
@@ -96,5 +96,13 @@
     private void NavigateToUserPage()
     {
         NavigationManager.NavigateTo("/userPage");
+    }
+
+    private string GetLocationString(EventDto e)
+    {
+        if (e.Venue is null)
+            return $"{e.Location.Latitude:F2}; {e.Location.Longitude:F2}";
+        else
+            return e.Venue.Name;
     }
 }

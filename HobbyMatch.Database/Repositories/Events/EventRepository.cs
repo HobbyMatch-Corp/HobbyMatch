@@ -58,6 +58,7 @@ namespace HobbyMatch.Database.Repositories.Events
             return await _context.Events
                 .Where(e => string.IsNullOrEmpty(filter) || e.Name.Contains(filter))
                 .Include(e => e.Organizer)
+                .Include(e => e.Venue)
                 .ToListAsync();
         }
 
@@ -66,6 +67,7 @@ namespace HobbyMatch.Database.Repositories.Events
             return await _context.Events
                 .Where(e => e.SignUpList.Where(u => u.Email == userEmail).Any())
                 .Include(e => e.Organizer)
+                .Include(e => e.Venue)
                 .ToListAsync();
         }
 
@@ -74,6 +76,7 @@ namespace HobbyMatch.Database.Repositories.Events
             return await _context.Events
                 .Where(e => e.Organizer.Email == organizerEmail)
                 .Include(e => e.Organizer)
+                .Include(e => e.Venue)
                 .ToListAsync();
         }
 
@@ -82,6 +85,7 @@ namespace HobbyMatch.Database.Repositories.Events
             return await _context.Events
                 .Where(e => e.SponsorsPartners.Where(b => b.Email == businessClientEmail).Any())
                 .Include(e => e.Organizer)
+                .Include(e => e.Venue)
                 .ToListAsync();
         }
     }
