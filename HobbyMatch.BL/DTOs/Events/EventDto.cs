@@ -1,6 +1,6 @@
 using HobbyMatch.Domain.Entities;
 
-namespace HobbyMatch.BL.DTOs.Event;
+namespace HobbyMatch.BL.DTOs.Events;
 
 public record EventDto(
     int Id,
@@ -13,7 +13,7 @@ public record EventDto(
     float Price,
     int MaxUsers,
     int MinUsers,
-    int OrganizerId,
+    int? OrganizerId,
     string OrganizerName
 );
 
@@ -31,6 +31,6 @@ public static class EventExtensions
         ev.MaxUsers,
         ev.MinUsers,
         ev.OrganizerId,
-        ev.Organizer.UserName ?? ""
+        ev.Organizer != null? ev.Organizer.UserName : ""
     );
 }

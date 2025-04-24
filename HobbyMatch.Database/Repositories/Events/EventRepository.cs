@@ -88,5 +88,15 @@ namespace HobbyMatch.Database.Repositories.Events
                 .Include(e => e.Venue)
                 .ToListAsync();
         }
-    }
+
+		public async Task SaveChangesAsync()
+		{
+            await _context.SaveChangesAsync();
+		}
+		public async Task UpdateEventAsync(Event eventToEdit)
+		{
+			_context.Events.Update(eventToEdit);
+			await _context.SaveChangesAsync();
+		}
+	}
 }
