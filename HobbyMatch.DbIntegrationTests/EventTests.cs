@@ -7,9 +7,11 @@ namespace HobbyMatch.DbIntegrationTests
     public class EventTests : BaseIntegrationTest
     {
 
+        private readonly IEventRepository _eventRepository;
+
         public EventTests(IntegrationTestWebAppFactory factory) : base(factory)
         {
-
+            _eventRepository = new EventRepository(DbContext);
         }
 
         [Fact]
@@ -17,10 +19,9 @@ namespace HobbyMatch.DbIntegrationTests
         {
             // Arrange
             string userEmail = "user2@test.com";
-            var eventRepo = new EventRepository(DbContext);
 
             // Act
-            var res = await eventRepo.GetSignedUpEventsAsync(userEmail);
+            var res = await _eventRepository.GetSignedUpEventsAsync(userEmail);
 
             // Assert
             Assert.NotNull(res);
@@ -34,10 +35,9 @@ namespace HobbyMatch.DbIntegrationTests
         {
             // Arrange
             string organizerEmail = "user1@test.com";
-            var eventRepo = new EventRepository(DbContext);
 
             // Act
-            var res = await eventRepo.GetOrganizedEventsAsync(organizerEmail);
+            var res = await _eventRepository.GetOrganizedEventsAsync(organizerEmail);
 
             // Assert
             Assert.NotNull(res);
@@ -49,10 +49,9 @@ namespace HobbyMatch.DbIntegrationTests
         {
             // Arrange
             var bcEmail = "bclient1@test.com";
-            var eventRepo = new EventRepository(DbContext);
 
             // Act
-            var res = await eventRepo.GetSponsoredEventsAsync(bcEmail);
+            var res = await _eventRepository.GetSponsoredEventsAsync(bcEmail);
 
             // Assert
             Assert.NotNull(res);
