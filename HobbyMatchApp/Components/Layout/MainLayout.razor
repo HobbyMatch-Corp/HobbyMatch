@@ -14,13 +14,19 @@
 
 <div class="page">
     <CascadingAuthenticationState>
+        <AuthorizeView>
+            <Authorized>
+                <div class="sidebar">
+                    <NavMenu />
+                </div>
+            </Authorized>
+        </AuthorizeView>
         <main>
             <div class="top-row px-4">
                 <AuthorizeView>
                     <Authorized>
                         <MudIconButton Icon="@Icons.Material.Filled.Home" OnClick="NavigateHome" Color="Color.Primary" />
-                    </Authorized>
-                </AuthorizeView>
+                    
                 <div class="flex-grow-1 mx-4">
                     <MudTextField @bind-Value="_searchText"
                     Placeholder="Search..."
@@ -31,8 +37,6 @@
                     Class="w-100"/>
                 </div>
                 <MudIconButton Icon="@Icons.Material.Filled.Search" OnClick="Search" Color="Color.Primary" />
-                <AuthorizeView>
-                    <Authorized>
                         <button class="btn btn-primary" @onclick="LogOutAction">
                             Log out
                         </button>
