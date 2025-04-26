@@ -1,14 +1,6 @@
-﻿using HobbyMatch.BL.DTOs.Events;
-using HobbyMatch.Database.Repositories.Events;
+﻿using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Requests;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HobbyMatch.BL.Services.Events
 {
@@ -74,7 +66,7 @@ namespace HobbyMatch.BL.Services.Events
 			return await _eventRepository.GetOrganizedEventsAsync(organizerEmail);
 
 		}
-		public async Task<IEnumerable<HobbyMatch.Domain.Entities.Event>> GetEventsWithFilterAsync(string? filter)
+		public async Task<IEnumerable<Event>> GetEventsWithFilterAsync(string? filter)
 		{
 			return await _eventRepository.GetEventsWithFilterAsync(filter);
 		}
