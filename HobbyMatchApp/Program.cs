@@ -23,8 +23,6 @@ builder.Services.AddTransient<AuthHttpClientHandler>();
 builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddSingleton<TokenStore>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<EndpointProvider>();
-builder.Services.AddScoped<IOrganizerApiService, OrganizerApiService>();
 
 builder.Services.AddHttpClient("AuthenticatedClient", client => {
 	var baseUrl = builder.Configuration.GetSection("ApiSettings")["BaseUrl"];
@@ -39,9 +37,10 @@ builder.Services.AddHttpClient("AuthClient", client =>
 builder.Services.AddScoped<CustomAuthStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
 	provider.GetRequiredService<CustomAuthStateProvider>());
+builder.Services.AddScoped<EndpointProvider>();
+builder.Services.AddScoped<IOrganizerApiService, OrganizerApiService>();
 builder.Services.AddScoped<IAuthApiService, AuthApiService>();
 builder.Services.AddScoped<IEventApiService, EventApiService>();
-builder.Services.AddScoped<EndpointProvider>();
 builder.Services.AddMudServices();
 
 var app = builder.Build();

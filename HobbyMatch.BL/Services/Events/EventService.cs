@@ -1,14 +1,6 @@
-﻿using HobbyMatch.BL.DTOs.Events;
-using HobbyMatch.Database.Repositories.Events;
+﻿using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Requests;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HobbyMatch.BL.Services.Events
 {
@@ -39,7 +31,6 @@ namespace HobbyMatch.BL.Services.Events
 
 			return true;
 		}
-
 
 		public async Task<Event?> CreateEventAsync(CreateEventRequest dto, int organizerId)
 		{
@@ -80,21 +71,9 @@ namespace HobbyMatch.BL.Services.Events
 
 			return eventToEdit;
         }
-		public async Task<List<Event>?> GetOrganizedEventsAsync(string organizerEmail)
-		{
-			return await _eventRepository.GetOrganizedEventsAsync(organizerEmail);
 
-		}
-		public async Task<IEnumerable<HobbyMatch.Domain.Entities.Event>> GetEventsWithFilterAsync(string? filter)
-		{
-			return await _eventRepository.GetEventsWithFilterAsync(filter);
-		}
 
-		public async Task<List<Event>?> GetSignedUpEventsAsync(string userEmail)
-		{
-			return await _eventRepository.GetSignedUpEventsAsync(userEmail);
-		}
-		public async Task<bool> RemoveUserFromEventAsync(int eventId, User user)
+        public async Task<bool> RemoveUserFromEventAsync(int eventId, User user)
 		{
 			var ev = await _eventRepository.GetEventByIdAsync(eventId);
 			if (ev == null || ev.SignUpList == null) return false;
@@ -105,8 +84,25 @@ namespace HobbyMatch.BL.Services.Events
 			ev.SignUpList.Remove(existing);
 			await _eventRepository.SaveChangesAsync();
 			return true;
-		}
-		public async Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail)
+        }
+
+        public async Task<IEnumerable<Event>> GetEventsWithFilterAsync(string? filter)
+        {
+            return await _eventRepository.GetEventsWithFilterAsync(filter);
+        }
+
+        public async Task<List<Event>?> GetOrganizedEventsAsync(string organizerEmail)
+        {
+            return await _eventRepository.GetOrganizedEventsAsync(organizerEmail);
+
+        }
+
+        public async Task<List<Event>?> GetSignedUpEventsAsync(string userEmail)
+        {
+            return await _eventRepository.GetSignedUpEventsAsync(userEmail);
+        }
+
+        public async Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail)
 		{
 			return await _eventRepository.GetSponsoredEventsAsync(businessClientEmail);
 		}

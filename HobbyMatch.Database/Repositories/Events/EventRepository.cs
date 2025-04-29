@@ -58,46 +58,35 @@ namespace HobbyMatch.Database.Repositories.Events
             return await _context.Events
                 .Where(e => string.IsNullOrEmpty(filter) || e.Name.Contains(filter))
                 .Include(e => e.Organizer)
+                .Include(e => e.Venue)
                 .ToListAsync();
         }
 
         public async Task<List<Event>?> GetSignedUpEventsAsync(string userEmail)
         {
-            var dbUser = await _context.AppUsers
-                .Where(u => u.Email == userEmail)
-                .Include(u => u.SignedUpEvents)
-                .FirstOrDefaultAsync();
-
-            if (dbUser == null)
-                return null;
-
-            return dbUser.SignedUpEvents.ToList();
+            return await _context.Events
+                .Where(e => e.SignUpList.Where(u => u.Email == userEmail).Any())
+                .Include(e => e.Organizer)
+                .Include(e => e.Venue)
+                .ToListAsync();
         }
 
         public async Task<List<Event>?> GetOrganizedEventsAsync(string organizerEmail)
         {
-            var dbOrganizer = await _context.Users
-                .Where(org => org.Email == organizerEmail)
-                .Include (org => org.OrganizedEvents)
-                .FirstOrDefaultAsync();
-
-            if (dbOrganizer == null)
-                return null;
-
-            return dbOrganizer.OrganizedEvents.ToList();
+            return await _context.Events
+                .Where(e => e.Organizer.Email == organizerEmail)
+                .Include(e => e.Organizer)
+                .Include(e => e.Venue)
+                .ToListAsync();
         }
 
         public async Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail)
         {
-            var dbBusinessClient = await _context.BusinessClients
-                .Where(bc => bc.Email == businessClientEmail)
-                .Include(bc => bc.SponsoredEvents)
-                .FirstOrDefaultAsync();
-
-            if (dbBusinessClient == null)
-                return null;
-
-            return dbBusinessClient.SponsoredEvents.ToList();
+            return await _context.Events
+                .Where(e => e.SponsorsPartners.Where(b => b.Email == businessClientEmail).Any())
+                .Include(e => e.Organizer)
+                .Include(e => e.Venue)
+                .ToListAsync();
         }
 
 		public async Task SaveChangesAsync()

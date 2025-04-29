@@ -8,10 +8,12 @@ using HobbyMatch.Domain.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace HobbyMatch.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class EventsController(IEventRepository eventRepository, UserManager<Organizer> userManager, IEventService eventService) : ControllerBase
     {
@@ -96,10 +98,10 @@ namespace HobbyMatch.API.Controllers
         [Authorize]
         public async Task<IActionResult> GetSignedUpEvents()
         {
-            var emailJwt = User.FindFirst("email")?.Value;
+            var emailJwt = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             if (emailJwt is null) return BadRequest("No email found in claims.");
 
-            var signedUpEvents = await _eventRepository.GetSignedUpEventsAsync(emailJwt);
+            var signedUpEvents = await _eventService.GetSignedUpEventsAsync(emailJwt);
             if (signedUpEvents is null) return BadRequest("Wrong email.");
 
             return Ok(signedUpEvents.Select(result => result.ToDto()));
@@ -109,10 +111,10 @@ namespace HobbyMatch.API.Controllers
         [Authorize]
         public async Task<IActionResult> GetOrganizedEvents()
         {
-            var emailJwt = User.FindFirst("email")?.Value;
+            var emailJwt = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             if (emailJwt is null) return BadRequest("No email found in claims.");
 
-            var organizedEvents = await _eventRepository.GetOrganizedEventsAsync(emailJwt);
+            var organizedEvents = await _eventService.GetOrganizedEventsAsync(emailJwt);
             if (organizedEvents is null) return BadRequest("Wrong email.");
 
             return Ok(organizedEvents.Select(result => result.ToDto()));
@@ -122,10 +124,10 @@ namespace HobbyMatch.API.Controllers
         [Authorize]
         public async Task<IActionResult> GetSponsoredEvents()
         {
-            var emailJwt = User.FindFirst("email")?.Value;
+            var emailJwt = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             if (emailJwt is null) return BadRequest("No email found in claims.");
 
-            var sponsoredEvents = await _eventRepository.GetSponsoredEventsAsync(emailJwt);
+            var sponsoredEvents = await _eventService.GetSponsoredEventsAsync(emailJwt);
             if (sponsoredEvents is null) return BadRequest("Wrong email.");
 
             return Ok(sponsoredEvents.Select(result => result.ToDto()));

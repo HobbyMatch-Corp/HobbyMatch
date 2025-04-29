@@ -1,8 +1,19 @@
 ﻿@page "/home"
 
+@using HobbyMatch.App.Auth.TokenService
 @using HobbyMatch.App.Components.Components
+@using HobbyMatch.App.Services.Api
+@using HobbyMatch.App.Services.Events
+@using HobbyMatch.BL.DTOs.Events
 @using HobbyMatch.Domain.Entities
 @using HobbyMatch.App.Components.Layout;
+@using System.Security.Claims
+@using HobbyMatch.Domain.Enums
+@using System.IdentityModel.Tokens.Jwt
+
+@inject IEventApiService EventApiService
+@inject IOrganizerApiService OrganizerApiService
+@inject ITokenService TokenService
 
 <PageTitle>Home</PageTitle>
 
@@ -10,7 +21,7 @@
 
 <MudText Typo="Typo.h1" Color="Color.Primary">Welcome, @(UserName)!</MudText>
 
-<MudGrid> 
+<MudGrid>
     <MudItem xs="12" md="8">
         <UpcomingEventsCard UpcomingEventsList="@UpcomingEventsList" />
     </MudItem>
@@ -19,7 +30,7 @@
         <MudGrid>
             <MudItem xs="12">
                 <UserCard Username="@UserName" Email="@Email" TaxId="@TaxId"
-                SignedUpEventCount="@EventsSignedUp" OrganizedEventCount="@EventsOrganized" />
+                SignedUpEventCount="@EventsSignedUp" OrganizedEventCount="@EventsOrganized" SponsoredEventCount="@EventsSponsored" />
             </MudItem>
             <MudItem xs="12">
                 <CreateEventShortcutCard />
@@ -32,30 +43,44 @@
 @code {
     MudTheme MyCustomTheme = new CustomTheme();
 
+    public string? UserName { get; set; }
+    public string? Email { get; set; }
+    public string? TaxId { get; set; }
+    public int? EventsSignedUp { get; set; }
+    public int? EventsSponsored { get; set; }
+    public int? EventsOrganized { get; set; }
+    public List<EventDto>? UpcomingEventsList { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         MyCustomTheme.PaletteLight.Background = new MudBlazor.Utilities.MudColor("#F5F5F5");
-    }
 
-    public string UserName { get; set; } = "UserTest";
-    public string Email { get; set; } = "user@test.com";
-    public string? TaxId { get; set; }
-    public int EventsSignedUp { get; set; } = 12;
-    public int EventsOrganized { get; set; } = 22;
-    public List<Event> UpcomingEventsList { get; set; } = new List<Event>()
-     {
-         new Event {Id = 1, Name = "Event Football", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow, EndTime = DateTime.UtcNow.AddDays(1), Location=new Domain.Entities.LocationNullable{Latitude = 10.42f, Longitude=53.42f}, Price = 15.50f, Organizer = new User { UserName = "SportsClub123" }},
-         new Event {Id = 2, Name = "Event Basketball", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(1), EndTime = DateTime.UtcNow.AddDays(6), Location=new Domain.Entities.LocationNullable{Latitude = 10.42f, Longitude=53.42f}, Price = 0, Organizer = new User { UserName = "LocalTeam" }},
-         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.LocationNullable{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
-         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.LocationNullable{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
-         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.LocationNullable{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
-         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.LocationNullable{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
-         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.LocationNullable{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
-         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.LocationNullable{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
-         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.LocationNullable{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
-         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.LocationNullable{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
-         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.LocationNullable{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }},
-         new Event {Id = 3, Name = "Event Gokarts", Description="Super long description about footbal, and if driks include sratatat", StartTime=DateTime.UtcNow.AddDays(4), EndTime = DateTime.UtcNow.AddDays(9), Location=new Domain.Entities.LocationNullable{Latitude = 10.42f, Longitude=53.42f}, Price = 25.99f, Organizer = new User { UserName = "SpeedRacers" }}
-     };
+        var claims = TokenService.GetClaimsFromToken();
+        int.TryParse(claims.First(c => c.Type == JwtRegisteredClaimNames.Sub).Value, out int orgId);
+        var userType = claims.First(c => c.Type == "userType").Value;
+
+        if (userType == UserType.User.ToString())
+        {
+            User? user = await OrganizerApiService.GetUserAsync<User>(orgId);
+            UserName = user?.UserName;
+            Email = user?.Email;
+
+
+            UpcomingEventsList = await EventApiService.GetSignedUpEventsAsync() ?? new List<EventDto>();
+            EventsSignedUp = UpcomingEventsList.Count;
+        }
+        else
+        {
+            BusinessClient? bc = await OrganizerApiService.GetUserAsync<BusinessClient>(orgId);
+            UserName = bc?.UserName;
+            Email = bc?.Email;
+            TaxId = bc?.TaxID;
+
+            UpcomingEventsList = await EventApiService.GetSponsoredEventsAsync() ?? new List<EventDto>();
+            EventsSponsored = UpcomingEventsList.Count;
+        }
+
+        EventsOrganized = (await EventApiService.GetOrganizedEventsAsync() ?? new List<EventDto>()).Count;
+    }
 }
 
