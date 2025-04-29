@@ -1,6 +1,17 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 @inject NavigationManager navigationManager
+@using Microsoft.AspNetCore.Components.Authorization
+
+<CascadingAuthenticationState>
+    <AuthorizeView>
+        <Authorized>
+            @{
+                navigationManager.NavigateTo("/home");
+            }
+        </Authorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>
 
 <MudContainer>
     <div class="full-background" />
@@ -28,7 +39,7 @@
         </MudItem>
 
         <MudItem xs="12" md="6" Class="d-flex justify-center">
-            
+
         </MudItem>
     </MudGrid>
 </MudContainer>
