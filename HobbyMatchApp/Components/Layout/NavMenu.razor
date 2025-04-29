@@ -1,27 +1,9 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">HobbyMatch</a>
-    </div>
-</div>
+﻿<MudNavMenu Color="Color.Info" Bordered="true">
+    <MudText Typo="Typo.h4" Class="px-4" Style="@($"color:{Colors.Gray.Lighten4};")">HobbyMatch</MudText>
+    <MudDivider Class="my-2" />
+    <MudNavLink Href="/home" Style="@($"color:{Colors.Gray.Lighten4};")">Home</MudNavLink>
+    <MudNavLink Href="/profile" Style="@($"color:{Colors.Gray.Lighten4};")">My Profile</MudNavLink>
+    <MudNavLink Href="/Events" Style="@($"color:{Colors.Gray.Lighten4};")">Events</MudNavLink>
+    <MudNavLink Href="/create-event" Style="@($"color:{Colors.Gray.Lighten4};")">Create Event</MudNavLink>
+</MudNavMenu>
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="home">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="profile">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> My Profile
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Events">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Search Events
-            </NavLink>
-        </div>
-    </nav>
-</div>
