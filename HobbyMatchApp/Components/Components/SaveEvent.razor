@@ -1,4 +1,5 @@
 ﻿@using HobbyMatch.App.Services.Events
+@using HobbyMatch.BL.DTOs.Events
 @using Microsoft.AspNetCore.Components.Authorization
 @inject IEventApiService _eventApiService
 @inject NavigationManager _navigationManager
@@ -90,20 +91,20 @@
 			_maxUsers,
 			_minUsers);
 
-		bool result;
+		EventDto? result;
 
 		if (_isEditMode && eventObj != null)
 		{
-			result = await _eventApiService.EditEventAsync(request, eventObj.Id) != null;
+			result = await _eventApiService.EditEventAsync(request, eventObj.Id) ;
 		}
 		else
 		{
-			result = await _eventApiService.CreateEventAsync(request) != null;
+			result = await _eventApiService.CreateEventAsync(request) ;
 		}
 
-		if (result)
+		if (result != null)
 		{
-			_navigationManager.NavigateTo("/", true);
+			_navigationManager.NavigateTo($"/event/{result.Id}", true);
 		}
 		else
 		{

@@ -1,0 +1,73 @@
+﻿@using HobbyMatch.App.Services.Events
+@using HobbyMatch.BL.DTOs.Events
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Globalization
+@inject IEventApiService _eventApiService
+@inject NavigationManager _navigationManager
+@inject ISnackbar Snackbar
+
+<MudContainer Style="max-width: 50vw; justify-content: center;" Class="pt-4">
+	<MudPaper Class="pa-4">
+		<MudText Typo="Typo.h4" Align="Align.Center">Event Details</MudText>
+		<LabelValueComponent label="Title" value="@Event.Name" />
+		<LabelValueComponent label="Description" value="@Event.Description" />
+		<LabelValueComponent label="Organizer" value="@Event.OrganizerName" />
+		<LabelValueComponent label="Price" value="@Event.Price.ToString(CultureInfo.InvariantCulture)" />
+		<LabelValueComponent label="Start Time" value="@Event.StartTime.ToString("HH:mm dd.MM.yyyy")" />
+		<LabelValueComponent label="End Time" value="@Event.EndTime.ToString("HH:mm dd.MM.yyyy")" />
+		<LocationDisplay Location="@Event.Location" />
+		<div class="d-flex align-center justify-center mt-4">
+			@if (_signedIn)
+			{
+				<button class="btn btn-primary" @onclick="handleSignOut">Sign Out</button>
+			}
+			else
+			{
+				<button class="btn btn-primary" @onclick="handleSignIn">Sign In</button>
+			}
+		</div>
+	</MudPaper>
+</MudContainer>
+
+@code {
+	[Parameter]
+	[EditorRequired]
+	public required EventDto Event { get; set; }
+
+	[Parameter]
+	public EventCallback<string> OnStateChangedCallback { get; set; }
+
+	bool success;
+	bool _signedIn;
+
+	protected override async Task OnInitializedAsync()
+	{
+		_signedIn = await _eventApiService.AmISignedInAsync(Event.Id);
+		await base.OnInitializedAsync();
+	}
+
+	private async void handleSignOut()
+	{
+		if (await _eventApiService.EventSignoutAsync(Event.Id))
+		{
+			_signedIn = false;
+			Snackbar.Add("Signed out succesfully", Severity.Success);
+			await OnStateChangedCallback.InvokeAsync();
+			StateHasChanged();
+		}
+		else
+			Snackbar.Add("ERROR: Couldn't sign out of event", Severity.Error);
+	}
+	private async void handleSignIn()
+	{
+		if (await _eventApiService.EventSigninAsync(Event.Id))
+		{
+			_signedIn = true;
+			Snackbar.Add("Signed in succesfully", Severity.Success);
+			await OnStateChangedCallback.InvokeAsync();
+			StateHasChanged();
+		}
+		else
+			Snackbar.Add("ERROR: Couldn't sign in to event", Severity.Error);
+	}
+}

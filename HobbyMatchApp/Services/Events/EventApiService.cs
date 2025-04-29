@@ -47,18 +47,18 @@ namespace HobbyMatch.App.Services.Events
 			return success;
 		}
 
-		public async Task<bool?> EventSigninAsync(int eventId)
+		public async Task<bool> EventSigninAsync(int eventId)
         {
             bool success = false;
             var response = await _httpClient.PostAsJsonAsync("api/events/signin", new EventSignDto(eventId));
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode) 
             {
                 success = await response.Content.ReadFromJsonAsync<bool>();
             }
             return success;
         }
 
-        public async Task<bool?> EventSignoutAsync(int eventId)
+        public async Task<bool> EventSignoutAsync(int eventId)
         {
             bool success = false;
             var response = await _httpClient.PostAsJsonAsync("api/events/signout", new EventSignDto(eventId));
@@ -69,7 +69,18 @@ namespace HobbyMatch.App.Services.Events
             return success;
         }
 
-        public async Task<List<EventDto>?> GetFilteredEvents(string? filter)
+		public async Task<bool> AmISignedInAsync(int eventId)
+		{
+			bool success = false;
+			var response = await _httpClient.PostAsJsonAsync("api/events/amISignedIn", new EventSignDto(eventId));
+			if (response.IsSuccessStatusCode)
+			{
+				success = await response.Content.ReadFromJsonAsync<bool>();
+			}
+			return success;
+		}
+
+		public async Task<List<EventDto>?> GetFilteredEvents(string? filter)
         {
             var response = await _unauthorizedClient.GetFromJsonAsync<List<EventDto>>($"api/events/events?filter={filter}");
             return response;

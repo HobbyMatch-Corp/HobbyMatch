@@ -1,0 +1,59 @@
+﻿@using HobbyMatch.App.Auth.CustomAuthStateProvider
+@using HobbyMatch.App.Services.Events
+@using Microsoft.AspNetCore.Components.Authorization
+@using HobbyMatch.BL.DTOs.Events
+@using System.Security.Claims
+@using Microsoft.IdentityModel.JsonWebTokens
+@inject IEventApiService _eventApiService
+@inject NavigationManager _navigationManager
+@inject ISnackbar Snackbar
+@inject CustomAuthStateProvider _customAuthStateProvider
+
+<MudContainer Style="max-width: 50vw justify-content: center" Class="pt-4">
+	<MudPaper Class="pa-4">
+		<MudText Typo="Typo.h6" Align="Align.Center">Admin Details</MudText>
+		<div>
+			<span><h3>Participants</h3></span>
+			<MudList T="string" style="max-height: 30vh" Class="overflow-x-scroll">
+				@if (Event.Participants != null)
+				{
+					@foreach (var participant in Event.Participants)
+					{
+						<MudListItem>
+							<AvatarContent>
+								<MudAvatar Color="Color.Tertiary"> @char.ToUpper(@participant.name.First())</MudAvatar>
+							</AvatarContent>
+							<ChildContent>
+								<span> @participant.name </span>
+							</ChildContent>
+						</MudListItem>
+					}
+				}
+			</MudList>
+		</div>
+		@if (Event.OrganizerId.ToString() == (_user?.FindFirst(JwtRegisteredClaimNames.Sub)?.Value ?? ""))
+		{
+			<div class="d-flex align-center justify-center mt-4">
+				<button class="btn btn-primary" @onclick="goToEdit">Edit Event</button>
+			</div>
+		}
+	</MudPaper>
+</MudContainer>
+
+@code {
+	[Parameter]
+	[EditorRequired]
+	public required EventDto Event { get; set; }
+	private bool _success { get; set;  }
+	private ClaimsPrincipal? _user { get; set; }
+	protected override async Task OnInitializedAsync()
+	{
+		var authState = await _customAuthStateProvider.GetAuthenticationStateAsync();
+		_user = authState.User;
+	}
+
+	private async Task goToEdit()
+	{
+		_navigationManager.NavigateTo($"/edit-event/{Event.Id}", true);
+	}
+}

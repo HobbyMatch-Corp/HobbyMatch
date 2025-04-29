@@ -1,0 +1,56 @@
+﻿@page "/event/{EventId:int}"
+@using HobbyMatch.App.Auth.CustomAuthStateProvider
+@using HobbyMatch.App.Services.Events
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject NavigationManager _navigationManager
+@inject CustomAuthStateProvider _authStateProvider
+@inject IEventApiService _eventApiService
+
+@if (!_isLoading)
+{
+	@if (_event != null)
+	{
+		<MudGrid Style="align-items: center; justify-content:center; height: 100vh; ">
+			<MudItem xs="12" sm="6">
+				<HobbyMatch.App.Components.Components.EventDetailsCard Event="_event" OnStateChangedCallback="Reload"/>
+			</MudItem>
+
+			<MudItem xs="12" sm="6">
+				<HobbyMatch.App.Components.Components.EventParticipantsListCard Event="_event" />
+			</MudItem>
+		</MudGrid>
+	}
+	else
+	{
+		_navigationManager.NavigateTo("/error");
+	}
+}
+else
+{
+	<MudProgressCircular Indeterminate="true" Size="Size.Large" />
+}
+
+@code {
+	[Parameter]
+	public int EventId { get; set; }
+
+	private HobbyMatch.BL.DTOs.Events.EventDto? _event { get; set; }
+	private bool _isLoading { get; set; } = true;
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await Reload();
+		}
+	}
+
+	private async Task Reload()
+	{
+		_isLoading = true;
+		_event = await _eventApiService.GetEventAsync(EventId);
+		_isLoading = false;
+		StateHasChanged();
+	}
+
+}

@@ -30,6 +30,17 @@ namespace HobbyMatch.BL.Services.Events
 			return true;
 		}
 
+		public async Task<bool> CheckIfUserInSignInList(int eventId, User user)
+		{
+			var ev = await _eventRepository.GetEventByIdAsync(eventId);
+			if (ev == null || ev.SignUpList == null) return false;
+
+			if (!ev.SignUpList.Any(u => u.Id == user.Id)) return false;
+
+			return true;
+		}
+
+
 		public async Task<Event?> CreateEventAsync(CreateEventRequest dto, int organizerId)
 		{
 			var entity = new Event

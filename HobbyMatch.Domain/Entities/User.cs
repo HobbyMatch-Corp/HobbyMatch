@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace HobbyMatch.Domain.Entities
 {
@@ -7,5 +8,5 @@ namespace HobbyMatch.Domain.Entities
 
         [JsonIgnore]
         public ICollection<Event> SignedUpEvents { get; set; }
-    }
+	}
 }
