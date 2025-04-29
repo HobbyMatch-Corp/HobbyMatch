@@ -10,7 +10,7 @@
 @* Required *@
 <MudThemeProvider Theme="_myCustomTheme" />
 <MudSnackbarProvider />
-<MudPopoverProvider @rendermode="InteractiveServer"/>
+<MudPopoverProvider @rendermode="InteractiveServer" />
 
 <div class="page">
     <CascadingAuthenticationState>
@@ -26,22 +26,25 @@
                 <AuthorizeView>
                     <Authorized>
                         <MudIconButton Icon="@Icons.Material.Filled.Home" OnClick="NavigateHome" Color="Color.Primary" />
-                    
-                <div class="flex-grow-1 mx-4">
-                    <MudTextField @bind-Value="_searchText"
-                    Placeholder="Search..."
-                    Immediate="true"
-                    Margin="Margin.Dense"
-                    Variant="Variant.Outlined"
-                    OnKeyDown="SearchKey"
-                    Class="w-100"/>
-                </div>
-                <MudIconButton Icon="@Icons.Material.Filled.Search" OnClick="Search" Color="Color.Primary" />
+
+                        <div class="flex-grow-1 mx-4">
+                            <MudTextField @bind-Value="_searchText"
+                                          Placeholder="Search..."
+                                          Immediate="true"
+                                          Margin="Margin.Dense"
+                                          Variant="Variant.Outlined"
+                                          OnKeyDown="SearchKey"
+                                          Class="w-100" />
+                        </div>
+                        <MudIconButton Icon="@Icons.Material.Filled.Search" OnClick="Search" Color="Color.Primary" />
                         <button class="btn btn-primary" @onclick="LogOutAction">
                             Log out
                         </button>
                     </Authorized>
-                    <NotAuthorized >
+                    <NotAuthorized>
+                        <div style="margin-right: auto;" >
+                            <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Primary"><b>HobbyMatch</b></MudText>
+                        </div>
                         <button class="btn btn-primary" @onclick="SignInAction">
                             Log in
                         </button>
