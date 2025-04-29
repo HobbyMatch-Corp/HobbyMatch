@@ -1,0 +1,10 @@
+﻿<div style="display: flex; justify-content:center; align-items: start; gap: 12px;">
+	<MudText Typo="Typo.h5" Align="Align.End" Class="col-6" Style="font-weight: 600; color: #333;">@label:</MudText>
+	<MudText Typo="Typo.h6" Align="Align.Start" Class="col-6" Style="color: #555;">@value</MudText>
+</div>
+@code {
+	[Parameter]
+	public string label { get; set; }
+	[Parameter]
+	public string value { get; set; }
+}

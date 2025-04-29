@@ -8,6 +8,30 @@ namespace HobbyMatch.BL.Services.Events
 	{
 		private readonly IEventRepository _eventRepository = eventRepository;
 
+		public async Task<bool> AddUserToEventAsync(int eventId, User user)
+		{
+			var ev = await _eventRepository.GetEventByIdAsync(eventId);
+			if (ev == null || ev.SignUpList == null) return false;
+
+			if (ev.SignUpList.Any(u => u.Id == user.Id)) return false;
+
+			if (ev.SignUpList.Count >= ev.MaxUsers) return false;
+
+			ev.SignUpList.Add(user);
+			await _eventRepository.SaveChangesAsync();
+			return true;
+		}
+
+		public async Task<bool> CheckIfUserInSignInList(int eventId, User user)
+		{
+			var ev = await _eventRepository.GetEventByIdAsync(eventId);
+			if (ev == null || ev.SignUpList == null) return false;
+
+			if (!ev.SignUpList.Any(u => u.Id == user.Id)) return false;
+
+			return true;
+		}
+
 		public async Task<Event?> CreateEventAsync(CreateEventRequest dto, int organizerId)
 		{
 			var entity = new Event
@@ -48,19 +72,6 @@ namespace HobbyMatch.BL.Services.Events
 			return eventToEdit;
         }
 
-        public async Task<bool> AddUserToEventAsync(int eventId, User user)
-        {
-            var ev = await _eventRepository.GetEventByIdAsync(eventId);
-            if (ev == null || ev.SignUpList == null) return false;
-
-            if (ev.SignUpList.Any(u => u.Id == user.Id)) return false;
-
-            if (ev.SignUpList.Count >= ev.MaxUsers) return false;
-
-            ev.SignUpList.Add(user);
-            await _eventRepository.SaveChangesAsync();
-            return true;
-        }
 
         public async Task<bool> RemoveUserFromEventAsync(int eventId, User user)
 		{

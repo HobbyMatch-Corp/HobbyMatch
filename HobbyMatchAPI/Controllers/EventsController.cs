@@ -48,19 +48,33 @@ namespace HobbyMatch.API.Controllers
 			var result = await _eventRepository.GetEventByIdAsync(eventId);
 			return result != null ? Ok(result.ToDto()) : BadRequest("Could not get event");
 		}
-		[HttpPost("signin")]
+
+		[HttpPost("AmISignedIn")]
         [Authorize]
-        public async Task<ActionResult> EventSignin([FromBody] EventSignDto dto)
+        public async Task<ActionResult> EventSigninStateCheck([FromBody] EventSignDto dto)
         {
             var user = await _userManager.GetUserAsync(User);
 			var userType = User.FindFirst("userType")?.Value;
 			if (user == null || userType != UserType.User.ToString()) // Check if user is actually "User" and not "Business Client"
 				return Unauthorized();
 
-			var result = await _eventService.AddUserToEventAsync(dto.eventId, (user as User)!);
-            return result ? Ok() : BadRequest("Could not sign in to event");
+			var result = await _eventService.CheckIfUserInSignInList(dto.eventId, (user as User)!);
+            return Ok(result);
         }
-        [HttpPost("signout")]
+		[HttpPost("signin")]
+		[Authorize]
+		public async Task<ActionResult> EventSignin([FromBody] EventSignDto dto)
+		{
+			var user = await _userManager.GetUserAsync(User);
+			var userType = User.FindFirst("userType")?.Value;
+			if (user == null || userType != UserType.User.ToString()) // Check if user is actually "User" and not "Business Client"
+				return Unauthorized();
+
+			var result = await _eventService.AddUserToEventAsync(dto.eventId, (user as User)!);
+			return result ? Ok(result) : BadRequest("Could not sign in to event");
+		}
+
+		[HttpPost("signout")]
         [Authorize]
         public async Task<ActionResult> EventSignout([FromBody] EventSignDto dto)
         {
@@ -70,7 +84,7 @@ namespace HobbyMatch.API.Controllers
 				return Unauthorized();
 
 			var result = await _eventService.RemoveUserFromEventAsync(dto.eventId, (user as User)!);
-            return result ? Ok() : BadRequest("Could not sign out from event");
+            return result ? Ok(result) : BadRequest("Could not sign out from event");
         }
 
         [HttpGet("events")]
