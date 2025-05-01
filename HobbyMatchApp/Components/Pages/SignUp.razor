@@ -6,7 +6,17 @@
 
 @inject IAuthApiService AuthApiService
 @inject NavigationManager navigationManager
+@using Microsoft.AspNetCore.Components.Authorization
 
+<CascadingAuthenticationState>
+    <AuthorizeView>
+        <Authorized>
+            @{
+                navigationManager.NavigateTo("/home");
+            }
+        </Authorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>
 <MudContainer Style="justify-content: center" MaxWidth="MaxWidth.Small">
 
     <MudPaper Class="pa-4">
