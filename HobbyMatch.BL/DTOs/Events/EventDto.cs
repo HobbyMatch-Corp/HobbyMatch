@@ -20,19 +20,22 @@ public record EventDto(
 
 public static class EventExtensions
 {
-    public static EventDto ToDto(this Domain.Entities.Event ev) => new(
-        ev.Id,
-        ev.Name,
-        ev.Description,
-        ev.StartTime,
-        ev.EndTime,
-        ev.Location, 
-        ev.Venue,
-        ev.Price,
-        ev.MaxUsers,
-        ev.MinUsers,
-        ev.OrganizerId,
-        ev.Organizer != null? ev.Organizer.UserName : "",
-        ev.SignUpList?.Select((el) => el.ToDto()).ToArray() ?? []
-    );
+    public static EventDto ToDto(this Event ev)
+    {
+        return new EventDto(
+            ev.Id,
+            ev.Name,
+            ev.Description,
+            ev.StartTime,
+            ev.EndTime,
+            ev.Location,
+            ev.Venue,
+            ev.Price,
+            ev.MaxUsers,
+            ev.MinUsers,
+            ev.OrganizerId,
+            ev.Organizer.UserName ?? "",
+            ev.SignUpList?.Select(el => el.ToDto()).ToArray() ?? []
+        );
+    }
 }
