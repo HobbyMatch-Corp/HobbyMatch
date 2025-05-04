@@ -3,14 +3,14 @@
 @using HobbyMatch.Domain.Entities
 @inject NavigationManager NavigationManager
 
-<MudCard Class="ma-2 d-flex flex-column justify-center rounded-lg"
-         Style="width: calc(100% - 16px); border: 2px solid var(--mud-palette-secondary); border-radius: 16px;"
+<MudCard Class="ma-2 d-flex flex-column justify-center"
+         Style="width: calc(100% - 16px);"
          Elevation="3">
     <MudCardContent>
         <div style="overflow-y: auto;">
             @if (VenuesList != null && VenuesList.Any())
             {
-                <MudList T="Venue" Clickable="false" Style="max-height: 70vh; overflow-y: scroll;">
+                <MudList T="Venue" Clickable="false">
                     @foreach (var ven in VenuesList.OrderBy(v => v.Name))
                     {
                         <MudListItem Expanded="false">
@@ -36,7 +36,7 @@
                                 </div>
                             </ChildContent>
                         </MudListItem>
-                        <MudDivider />
+                        <MudDivider Class="my-2" Color="Color.Primary"/>
                     }
                 </MudList>
             }
