@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using HobbyMatch.BL.DTOs.Venues;
 using HobbyMatch.BL.Services.Venues;
 using HobbyMatch.Database.Common.Pagination;
@@ -27,13 +28,13 @@ public class VenueController : ControllerBase
     public async Task<IActionResult> GetVenueDetails([FromRoute] int venueId)
     {
         var venue = await _venueService.GetVenueByIdAsync(venueId);
-        return venue == null ? NotFound() : Ok(venue.ToDto());
+        return venue == null ? NotFound() : Ok(venue.ToDetailsDto());
     }
 
     [Authorize]
     [HttpGet("client")]
     public async Task<IActionResult> GetClientVenues(
-        [FromBody] PaginationParameters paginationParams)
+        [FromQuery] PaginationParameters paginationParams)
     {
         var user = await _userManager.GetUserAsync(User);
         var userType = User.FindFirst("userType")?.Value;
@@ -45,10 +46,12 @@ public class VenueController : ControllerBase
         return Ok(paginatedVenues.MapItems(venue => venue.ToDto()));
     }
 
-    [HttpGet("filtered/{filter}")]
-    public async Task<IActionResult> GetFilteredVenues([FromQuery] string filter,
-        [FromBody] PaginationParameters paginationParams)
+    [HttpGet("filtered")]
+    public async Task<IActionResult> GetFilteredVenues([FromQuery] [Length(2, 50)] string filter,
+        [FromQuery] PaginationParameters paginationParams)
     {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
         var paginatedVenues = await _venueService.GetFilteredVenuesAsync(filter, paginationParams);
         return Ok(paginatedVenues.MapItems(venue => venue.ToDto()));
     }
@@ -66,6 +69,6 @@ public class VenueController : ControllerBase
                 .ToString())
             return Unauthorized();
         var venue = await _venueService.CreateVenue(request, user.Id);
-        return Ok(venue);
+        return Ok(venue.ToDetailsDto());
     }
 }

@@ -19,13 +19,21 @@ public class VenueService : IVenueService
         return await _venueRepository.GetVenueByIdAsync(venueId);
     }
 
-    public async Task<PaginatedData<Venue>> GetClientVenuesAsync(int businessClientId,
-        PaginationParameters paginationParams)
+    public async Task<PaginatedData<Venue>> GetClientVenuesAsync(
+        int businessClientId,
+        PaginationParameters paginationParams
+    )
     {
-        return await _venueRepository.GetBusinessClientVenuesAsync(businessClientId, paginationParams);
+        return await _venueRepository.GetBusinessClientVenuesAsync(
+            businessClientId,
+            paginationParams
+        );
     }
 
-    public async Task<PaginatedData<Venue>> GetFilteredVenuesAsync(string filter, PaginationParameters paginationParams)
+    public async Task<PaginatedData<Venue>> GetFilteredVenuesAsync(
+        string filter,
+        PaginationParameters paginationParams
+    )
     {
         return await _venueRepository.GetFilteredVenuesAsync(filter, paginationParams);
     }
@@ -37,9 +45,10 @@ public class VenueService : IVenueService
             Name = createRequest.Name,
             Description = createRequest.Description,
             Location = createRequest.Location,
+            Address = createRequest.Address,
             BusinessClientId = businessClientId,
             MaxUsers = createRequest.MaxUsers,
-            Price = createRequest.Price
+            Price = createRequest.Price,
         };
 
         await _venueRepository.AddVenueAsync(venue);
