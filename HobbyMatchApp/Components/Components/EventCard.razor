@@ -17,29 +17,18 @@
             <MudText Typo="Typo.subtitle2" Class="d-inline">Price: </MudText>
             @(Event.Price == 0 ? "Free" : $"${Event.Price:F2}")
         </MudText>
-        <!--<MudText Typo="Typo.body2" Class="mt-1">
-            <MudText Typo="Typo.subtitle2" Class="d-inline">Organizer: </MudText>
-            @Event.OrganizerName
-        </MudText>-->
+        <!--Location-->
         <MudText Typo="Typo.body2" Class="mt-1">
             <MudText Typo="Typo.subtitle2" Class="d-inline">Location: </MudText>
-            Lat: @Event.Location.Latitude, Long: @Event.Location.Longitude
+                @(Event.Location.Latitude == null || Event.Location.Longitude == null ? "No data" : $"Lat: {Event.Location.Latitude}, Long: {Event.Location.Longitude}")
         </MudText>
-        <!--<MudText Typo="Typo.body2" Class="mt-2" Style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-            @Event.Description
-        </MudText>-->
+        <!--Capacity-->
         <MudText Typo="Typo.body2" Class="mt-1">
             <MudText Typo="Typo.subtitle2" Class="d-inline">Capacity: </MudText>
             @Event.Participants.Length / @Event.MaxUsers
         </MudText>
     </MudCardContent>
     <MudCardActions>
-        <!--<MudButton Variant="Variant.Filled"
-                   Color="Color.Primary"
-                   OnClick="@(() => ViewEventDetails(Event.Id))">
-            View Details
-            show no. sign in/limit, view details button -> navigate to event details page (BUTTON SAME STYLE)
-show only name, price, location, start time        </MudButton>-->
         <button class="btn btn-primary" @onclick="(() => ViewEventDetails(Event.Id))">
             View Details
             </button>
@@ -49,7 +38,7 @@ show only name, price, location, start time        </MudButton>-->
 @code {
     [Parameter]
     [EditorRequired]
-    public required EventDto Event { get; set; }
+    public required EventOverviewDto Event { get; set; }
     private void ViewEventDetails(int eventId)
     {
         _navigationManager.NavigateTo($"/event/{eventId}");

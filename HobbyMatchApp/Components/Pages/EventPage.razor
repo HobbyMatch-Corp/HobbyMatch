@@ -52,7 +52,7 @@ else
 {
     [Parameter] public string? Filter { get; set; }
     
-    List<EventDto>? FilteredEvents { get; set; }
+    List<EventOverviewDto>? FilteredEvents { get; set; }
     bool IsLoading { get; set; } = true;
 
     protected override async Task OnParametersSetAsync()

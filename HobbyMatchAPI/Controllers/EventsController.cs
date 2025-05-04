@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using HobbyMatch.BL.Extensions;
 
 namespace HobbyMatch.API.Controllers
 {
@@ -91,7 +92,7 @@ namespace HobbyMatch.API.Controllers
         public async Task<IActionResult> GetFilteredEvents([FromQuery] string? filter)
         {
             var filteredResults = await _eventService.GetEventsWithFilterAsync(filter);
-            return Ok(filteredResults.Select(result => result.ToDto()));
+            return Ok(filteredResults.Select(result => result.ToOverviewDto()));
         }
 
         [HttpGet("signedUpEvents")]
