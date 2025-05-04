@@ -2,19 +2,20 @@ using HobbyMatch.App.Auth;
 using HobbyMatch.App.Auth.CustomAuthStateProvider;
 using HobbyMatch.App.Auth.TokenService;
 using HobbyMatch.App.Components;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using MudBlazor.Services;
-using Microsoft.Extensions.Options;
-using HobbyMatch.App.Services.Api;
-using Microsoft.AspNetCore.Components.Authorization;
 using HobbyMatch.App.Services;
+using HobbyMatch.App.Services.Api;
 using HobbyMatch.App.Services.Events;
+using HobbyMatch.App.Services.Venues;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.Extensions.Options;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-.AddInteractiveServerComponents();
+    .AddInteractiveServerComponents();
 
 builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 
@@ -24,23 +25,25 @@ builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddSingleton<TokenStore>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-builder.Services.AddHttpClient("AuthenticatedClient", client => {
-	var baseUrl = builder.Configuration.GetSection("ApiSettings")["BaseUrl"];
-	client.BaseAddress = new Uri(baseUrl!);
+builder.Services.AddHttpClient("AuthenticatedClient", client =>
+{
+    var baseUrl = builder.Configuration.GetSection("ApiSettings")["BaseUrl"];
+    client.BaseAddress = new Uri(baseUrl!);
 }).AddHttpMessageHandler<AuthHttpClientHandler>();
 
 builder.Services.AddHttpClient("AuthClient", client =>
 {
     var baseUrl = builder.Configuration.GetSection("ApiSettings")["BaseUrl"];
-	  client.BaseAddress = new Uri(baseUrl!);
+    client.BaseAddress = new Uri(baseUrl!);
 });
 builder.Services.AddScoped<CustomAuthStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
-	provider.GetRequiredService<CustomAuthStateProvider>());
+    provider.GetRequiredService<CustomAuthStateProvider>());
 builder.Services.AddScoped<EndpointProvider>();
 builder.Services.AddScoped<IOrganizerApiService, OrganizerApiService>();
 builder.Services.AddScoped<IAuthApiService, AuthApiService>();
 builder.Services.AddScoped<IEventApiService, EventApiService>();
+builder.Services.AddScoped<IVenueApiService, VenueApiService>();
 builder.Services.AddMudServices();
 
 var app = builder.Build();
@@ -51,7 +54,7 @@ var settings = scope.ServiceProvider.GetRequiredService<IOptions<ApiSettings>>()
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    app.UseExceptionHandler("/Error", true);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
