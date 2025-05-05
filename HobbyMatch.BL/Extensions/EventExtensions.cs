@@ -18,7 +18,7 @@ namespace HobbyMatch.BL.Extensions
             ev.MaxUsers,
             ev.MinUsers,
             ev.OrganizerId,
-            ev.Organizer.UserName ?? "",
+            ev.Organizer?.UserName ?? "",
             ev.SignUpList?.Select((el) => el.ToDto()).ToArray() ?? []
         );
         public static EventOverviewDto ToOverviewDto(this Event ev) => new(
