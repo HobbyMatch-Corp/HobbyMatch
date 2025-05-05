@@ -1,0 +1,46 @@
+﻿@inject NavigationManager _navigationManager
+@using HobbyMatch.BL.DTOs.Events
+<MudCard Elevation="2" Class="h-100">
+    <MudCardContent>
+        <!--Name-->
+        <MudText Typo="Typo.h5">@Event.Name</MudText>
+        <!--Date-->
+        <MudText Typo="Typo.body2" Class="mt-2">
+            <MudText Typo="Typo.subtitle2" Class="d-inline">When: </MudText>
+            @Event.StartTime.ToString("MMM dd, yyyy - h:mm tt") to
+            @(Event.StartTime.Date == Event.EndTime.Date
+                ? Event.EndTime.ToString("h:mm tt")
+                : Event.EndTime.ToString("MMM dd, yyyy - h:mm tt"))
+        </MudText>
+        <!--Price-->
+        <MudText Typo="Typo.body2" Class="mt-1">
+            <MudText Typo="Typo.subtitle2" Class="d-inline">Price: </MudText>
+            @(Event.Price == 0 ? "Free" : $"${Event.Price:F2}")
+        </MudText>
+        <!--Location-->
+        <MudText Typo="Typo.body2" Class="mt-1">
+            <MudText Typo="Typo.subtitle2" Class="d-inline">Location: </MudText>
+                @(Event.Location.Latitude == null || Event.Location.Longitude == null ? "No data" : $"Lat: {Event.Location.Latitude}, Long: {Event.Location.Longitude}")
+        </MudText>
+        <!--Capacity-->
+        <MudText Typo="Typo.body2" Class="mt-1">
+            <MudText Typo="Typo.subtitle2" Class="d-inline">Capacity: </MudText>
+            @Event.Participants.Length / @Event.MaxUsers
+        </MudText>
+    </MudCardContent>
+    <MudCardActions>
+        <button class="btn btn-primary" @onclick="(() => ViewEventDetails(Event.Id))">
+            View Details
+            </button>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required EventOverviewDto Event { get; set; }
+    private void ViewEventDetails(int eventId)
+    {
+        _navigationManager.NavigateTo($"/event/{eventId}");
+    }
+}

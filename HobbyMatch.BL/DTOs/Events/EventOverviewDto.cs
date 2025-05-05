@@ -1,19 +1,14 @@
-using HobbyMatch.Domain.Entities;
+﻿using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.BL.DTOs.Events;
 
-public record EventDto(
+public record EventOverviewDto(
     int Id,
     string Name,
-    string Description,
     DateTime StartTime,
     DateTime EndTime,
     LocationNullable Location,
-    Venue? Venue,
     float Price,
     int MaxUsers,
-    int MinUsers,
-    int? OrganizerId,
-    string OrganizerName,
     ParticipantDto[]? Participants
 );

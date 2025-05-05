@@ -12,14 +12,14 @@ namespace HobbyMatch.Database.Repositories.Events
         {
             _context = context;
         }
-		public async Task<Event?> AddEvent(Event newEvent)
-		{
-			var createdEvent = await _context.Events.AddAsync(newEvent);
-			await _context.SaveChangesAsync();
-			return createdEvent.Entity;
-		}
+        public async Task<Event?> AddEvent(Event newEvent)
+        {
+            var createdEvent = await _context.Events.AddAsync(newEvent);
+            await _context.SaveChangesAsync();
+            return createdEvent.Entity;
+        }
 
-		public async Task<Event?> GetEventByIdAsync(int eventId)
+        public async Task<Event?> GetEventByIdAsync(int eventId)
         {
             return await _context.Events
                 .Include(e => e.SignUpList)
@@ -57,8 +57,8 @@ namespace HobbyMatch.Database.Repositories.Events
         {
             return await _context.Events
                 .Where(e => string.IsNullOrEmpty(filter) || e.Name.Contains(filter))
-                .Include(e => e.Organizer)
                 .Include(e => e.Venue)
+                .Include(e => e.SignUpList)
                 .ToListAsync();
         }
 
@@ -89,14 +89,14 @@ namespace HobbyMatch.Database.Repositories.Events
                 .ToListAsync();
         }
 
-		public async Task SaveChangesAsync()
-		{
+        public async Task SaveChangesAsync()
+        {
             await _context.SaveChangesAsync();
-		}
-		public async Task UpdateEventAsync(Event eventToEdit)
-		{
-			_context.Events.Update(eventToEdit);
-			await _context.SaveChangesAsync();
-		}
-	}
+        }
+        public async Task UpdateEventAsync(Event eventToEdit)
+        {
+            _context.Events.Update(eventToEdit);
+            await _context.SaveChangesAsync();
+        }
+    }
 }

@@ -78,9 +78,9 @@ namespace HobbyMatch.App.Services.Events
 			return success;
 		}
 
-		public async Task<List<EventDto>?> GetFilteredEvents(string? filter)
+		public async Task<List<EventOverviewDto>?> GetFilteredEvents(string? filter)
         {
-            var response = await _unauthorizedClient.GetFromJsonAsync<List<EventDto>>($"events/events?filter={filter}");
+            var response = await _unauthorizedClient.GetFromJsonAsync<List<EventOverviewDto>>($"events/events?filter={filter}");
             return response;
         }
 

@@ -14,7 +14,7 @@ namespace HobbyMatch.App.Services.Events
         Task<EventDto?> GetEventAsync(int eventId);
         Task<EventDto?> EditEventAsync(CreateEventRequest eventRequest, int eventId);
 
-        Task<List<EventDto>?> GetFilteredEvents(string? filter);
+        Task<List<EventOverviewDto>?> GetFilteredEvents(string? filter);
 
         Task<List<EventDto>?> GetSignedUpEventsAsync();
 
