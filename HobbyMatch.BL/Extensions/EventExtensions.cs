@@ -13,7 +13,7 @@ namespace HobbyMatch.BL.Extensions
             ev.StartTime,
             ev.EndTime,
             ev.Location,
-            ev.Venue,
+            ev.Venue ?? null,
             ev.Price,
             ev.MaxUsers,
             ev.MinUsers,
