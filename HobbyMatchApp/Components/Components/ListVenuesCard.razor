@@ -1,0 +1,71 @@
+﻿@using System.Linq
+@using HobbyMatch.BL.DTOs.Venues
+@using HobbyMatch.Domain.Entities
+@inject NavigationManager NavigationManager
+
+<MudCard Class="ma-2 d-flex flex-column justify-center"
+         Style="width: calc(100% - 16px);"
+         Elevation="3">
+    <MudCardContent>
+        <div style="overflow-y: auto;">
+            @if (VenuesList != null && VenuesList.Any())
+            {
+                <MudList T="Venue" Clickable="false">
+                    @foreach (var ven in VenuesList.OrderBy(v => v.Name))
+                    {
+                        <MudListItem Expanded="false">
+                            <ChildContent>
+                                <div class="d-flex">
+                                    <div style="flex: 1">
+                                        <!-- Venue Name - Clickable -->
+                                        <MudText Typo="Typo.h6" Class="mb-1"
+                                                 Style="cursor: pointer;"
+                                                 @onclick="() => NavigateToVenueDetails(ven.Id)">
+                                            @ven.Name
+                                        </MudText>
+
+                                        <!-- Venue Details -->
+                                        <MudText Typo="Typo.body2" Class="mb-1">
+                                            Price: @(ven.Price > 0 ? $"${ven.Price:F2}" : "Free") |
+                                            Address: @(ven.Address) |
+                                            Location: @(ven.Location.ToString()) |
+                                            Max Users: @($"{ven.MaxUsers}")
+                                        </MudText>
+
+                                    </div>
+                                </div>
+                            </ChildContent>
+                        </MudListItem>
+                        <MudDivider Class="my-2" Color="Color.Primary"/>
+                    }
+                </MudList>
+            }
+            else if (VenuesList is null)
+            {
+                <MudContainer Class="align-content-center">
+                    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+                    <MudText Typo="Typo.body1" Class="text-center my-4">
+                        Loading...
+                    </MudText>
+                </MudContainer>
+
+            }
+            else if (!VenuesList.Any())
+            {
+                <MudText Typo="Typo.body1" Class="text-center my-4">
+                    No venues to show.
+                </MudText>
+            }
+        </div>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter]
+    public List<ClientsVenueDto> VenuesList { get; set; } = new List<ClientsVenueDto>();
+
+    private void NavigateToVenueDetails(int eventId)
+    {
+        //NavigationManager.NavigateTo($"/venues/{venueId}"); //TODO update uri
+    }
+}
