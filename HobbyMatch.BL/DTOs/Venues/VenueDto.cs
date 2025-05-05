@@ -1,4 +1,4 @@
-﻿using HobbyMatch.Domain.Entities;
+using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.BL.DTOs.Venues
 {
