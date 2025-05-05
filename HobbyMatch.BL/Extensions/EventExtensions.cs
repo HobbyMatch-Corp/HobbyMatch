@@ -1,11 +1,12 @@
 ﻿using HobbyMatch.BL.DTOs.Events;
 using HobbyMatch.BL.DTOs;
+using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.BL.Extensions
 {
     public static class EventExtensions
     {
-        public static EventDto ToDto(this Domain.Entities.Event ev) => new(
+        public static EventDto ToDto(this Event ev) => new(
             ev.Id,
             ev.Name,
             ev.Description,
@@ -17,10 +18,10 @@ namespace HobbyMatch.BL.Extensions
             ev.MaxUsers,
             ev.MinUsers,
             ev.OrganizerId,
-            ev.Organizer != null ? ev.Organizer.UserName : "",
+            ev.Organizer.UserName ?? "",
             ev.SignUpList?.Select((el) => el.ToDto()).ToArray() ?? []
         );
-        public static EventOverviewDto ToOverviewDto(this Domain.Entities.Event ev) => new(
+        public static EventOverviewDto ToOverviewDto(this Event ev) => new(
             ev.Id,
             ev.Name,
             ev.StartTime,
