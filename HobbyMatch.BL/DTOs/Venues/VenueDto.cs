@@ -1,4 +1,4 @@
-﻿namespace HobbyMatch.BL.DTOs.Venues;
+namespace HobbyMatch.BL.DTOs.Venues;
 
 public record VenueDto(
     int Id,
