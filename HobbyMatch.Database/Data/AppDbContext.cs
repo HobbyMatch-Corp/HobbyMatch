@@ -59,6 +59,23 @@ namespace HobbyMatch.Database.Data
 					.IsRequired();
 			});
 
-		}
+            modelBuilder.Entity("UserFriendship", b =>
+            {
+                b.HasKey("UserId", "FriendId");
+				
+                b.HasOne("HobbyMatch.Domain.Entities.User", null)
+                    .WithMany("Friends")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+
+                b.HasOne("HobbyMatch.Domain.Entities.User", null)
+                    .WithMany("FriendOf")
+                    .HasForeignKey("FriendId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+            });
+
+        }
 	}
 }
