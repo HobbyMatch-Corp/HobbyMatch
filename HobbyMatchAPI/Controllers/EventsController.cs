@@ -99,7 +99,7 @@ namespace HobbyMatch.API.Controllers
         [Authorize]
         public async Task<IActionResult> GetSignedUpEvents()
         {
-            var emailJwt = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var emailJwt = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value;
             if (emailJwt is null) return BadRequest("No email found in claims.");
 
             var signedUpEvents = await _eventService.GetSignedUpEventsAsync(emailJwt);
@@ -112,7 +112,7 @@ namespace HobbyMatch.API.Controllers
         [Authorize]
         public async Task<IActionResult> GetOrganizedEvents()
         {
-            var emailJwt = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var emailJwt = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value;
             if (emailJwt is null) return BadRequest("No email found in claims.");
 
             var organizedEvents = await _eventService.GetOrganizedEventsAsync(emailJwt);
@@ -125,7 +125,7 @@ namespace HobbyMatch.API.Controllers
         [Authorize]
         public async Task<IActionResult> GetSponsoredEvents()
         {
-            var emailJwt = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var emailJwt = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value;
             if (emailJwt is null) return BadRequest("No email found in claims.");
 
             var sponsoredEvents = await _eventService.GetSponsoredEventsAsync(emailJwt);

@@ -2,6 +2,7 @@
 using HobbyMatch.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace HobbyMatch.API.Controllers
@@ -29,7 +30,7 @@ namespace HobbyMatch.API.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserAsync(int businessClientId)
         {
-            var emailJwt = User.FindFirst(ClaimTypes.Email)?.Value;
+            var emailJwt = User.FindFirst(JwtRegisteredClaimNames.Email)?.Value;
 
             var businessClient = await _businessClientService.GetBusinessClientByIdAsync(businessClientId);
             if (businessClient == null || string.IsNullOrEmpty(emailJwt) || businessClient.Email != emailJwt) return BadRequest();
@@ -41,7 +42,7 @@ namespace HobbyMatch.API.Controllers
         [HttpPost("{businessClientId}")]
         public async Task<IActionResult> UpdateUserAsync(int businessClientId, [FromBody] BusinessClient businessClient)
         {
-            var emailJwt = User.FindFirst(ClaimTypes.Email)?.Value;
+            var emailJwt = User.FindFirst(JwtRegisteredClaimNames.Email)?.Value;
 
             var businessClientDb = await _businessClientService.GetBusinessClientByIdAsync(businessClientId);
             if (businessClientDb == null || string.IsNullOrEmpty(emailJwt) || businessClientDb.Email != emailJwt) return BadRequest();
