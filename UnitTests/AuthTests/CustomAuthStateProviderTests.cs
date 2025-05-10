@@ -3,6 +3,7 @@ using HobbyMatch.App.Auth.TokenService;
 using HobbyMatch.App.Services.Api;
 using Microsoft.AspNetCore.Components.Authorization;
 using Moq;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 

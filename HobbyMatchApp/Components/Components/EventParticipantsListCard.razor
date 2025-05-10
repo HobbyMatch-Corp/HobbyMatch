@@ -31,7 +31,7 @@
 				}
 			</MudList>
 		</div>
-		@if (Event.OrganizerId.ToString() == (_user?.FindFirst(JwtRegisteredClaimNames.Sub)?.Value ?? ""))
+		@if (Event.OrganizerId.ToString() == (_user?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? ""))
 		{
 			<div class="d-flex align-center justify-center mt-4">
 				<button class="btn btn-primary" @onclick="goToEdit">Edit Event</button>

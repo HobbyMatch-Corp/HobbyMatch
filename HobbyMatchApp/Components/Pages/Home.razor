@@ -56,8 +56,8 @@
         MyCustomTheme.PaletteLight.Background = new MudBlazor.Utilities.MudColor("#F5F5F5");
 
         var claims = TokenService.GetClaimsFromToken();
-        int.TryParse(claims.First(c => c.Type == JwtRegisteredClaimNames.Sub).Value, out int orgId);
-        var userType = claims.First(c => c.Type == "userType").Value;
+        int.TryParse(claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value, out int orgId);
+        var userType = claims.First(c => c.Type == ClaimTypes.Role).Value;
 
         if (userType == UserType.User.ToString())
         {
