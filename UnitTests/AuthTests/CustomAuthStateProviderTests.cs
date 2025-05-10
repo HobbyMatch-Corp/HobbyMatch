@@ -3,6 +3,7 @@ using HobbyMatch.App.Auth.TokenService;
 using HobbyMatch.App.Services.Api;
 using Microsoft.AspNetCore.Components.Authorization;
 using Moq;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 
@@ -26,9 +27,9 @@ namespace UnitTests.AuthTests
 			// Arrange
 			var responseClaims = new List<Claim>
 			{
-				new Claim(ClaimTypes.Name, "testuser"),
-				new Claim(ClaimTypes.Email, "test@example.com"),
-				new Claim(ClaimTypes.Role, "Admin")
+				new Claim(JwtRegisteredClaimNames.Name, "testuser"),
+				new Claim(JwtRegisteredClaimNames.Email, "test@example.com"),
+				new Claim("userType", "Admin")
 			};
 
 			var expectedAuthState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(responseClaims, "Bearer") ));
@@ -43,8 +44,8 @@ namespace UnitTests.AuthTests
 			Assert.NotNull(result);
 			Assert.True(result.User.Identity.IsAuthenticated);
 			Assert.Equal("testuser", result.User.Identity.Name);
-			Assert.Contains(result.User.Claims, c => c.Type == ClaimTypes.Email && c.Value == "test@example.com");
-			Assert.Contains(result.User.Claims, c => c.Type == ClaimTypes.Role && c.Value == "Admin");
+			Assert.Contains(result.User.Claims, c => c.Type == JwtRegisteredClaimNames.Email && c.Value == "test@example.com");
+			Assert.Contains(result.User.Claims, c => c.Type == "userType" && c.Value == "Admin");
 		}
 	}
 }
