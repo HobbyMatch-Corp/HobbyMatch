@@ -85,7 +85,7 @@
         currentUser = authState.User;
         if (currentUser.Identity is { IsAuthenticated: true })
         {
-            var uId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value; // JwtRegisteredClaimNames.Sub use for user Id, but need testing
+            var uId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (uId is not null)
             {
                 userId = int.Parse(uId);

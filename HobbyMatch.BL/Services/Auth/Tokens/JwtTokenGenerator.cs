@@ -28,11 +28,11 @@ public class JwtTokenGenerator : ITokenGenerator
         var userType = user is User ? UserType.User : UserType.BussinessClient;
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Name, user.UserName),
-            new Claim("userType",userType.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Sid, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.Role,userType.ToString()),
         };
 
         var expiration = DateTime.UtcNow.AddMinutes(_options.ExpirationMinutes);

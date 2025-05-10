@@ -27,9 +27,9 @@ namespace UnitTests.AuthTests
 			// Arrange
 			var responseClaims = new List<Claim>
 			{
-				new Claim(JwtRegisteredClaimNames.Name, "testuser"),
-				new Claim(JwtRegisteredClaimNames.Email, "test@example.com"),
-				new Claim("userType", "Admin")
+				new Claim(ClaimTypes.Name, "testuser"),
+				new Claim(ClaimTypes.Email, "test@example.com"),
+				new Claim(ClaimTypes.Role, "Admin")
 			};
 
 			var expectedAuthState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(responseClaims, "Bearer") ));
@@ -44,8 +44,8 @@ namespace UnitTests.AuthTests
 			Assert.NotNull(result);
 			Assert.True(result.User.Identity.IsAuthenticated);
 			Assert.Equal("testuser", result.User.Identity.Name);
-			Assert.Contains(result.User.Claims, c => c.Type == JwtRegisteredClaimNames.Email && c.Value == "test@example.com");
-			Assert.Contains(result.User.Claims, c => c.Type == "userType" && c.Value == "Admin");
+			Assert.Contains(result.User.Claims, c => c.Type == ClaimTypes.Email && c.Value == "test@example.com");
+			Assert.Contains(result.User.Claims, c => c.Type == ClaimTypes.Role && c.Value == "Admin");
 		}
 	}
 }
