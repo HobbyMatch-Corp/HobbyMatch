@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using HobbyMatch.BL.Extensions;
 
 namespace HobbyMatch.API.Controllers
 {

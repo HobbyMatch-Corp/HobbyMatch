@@ -17,3 +17,22 @@ public record EventDto(
     string OrganizerName,
     ParticipantDto[]? Participants
 );
+
+public static partial class EventExtensions
+{
+    public static EventDto ToDto(this Event ev) => new(
+            ev.Id,
+            ev.Name,
+            ev.Description,
+            ev.StartTime,
+            ev.EndTime,
+            ev.Location,
+            ev.Venue ?? null,
+            ev.Price,
+            ev.MaxUsers,
+            ev.MinUsers,
+            ev.OrganizerId,
+            ev.Organizer?.UserName ?? "",
+            ev.SignUpList?.Select((el) => el.ToDto()).ToArray() ?? []
+        );
+}
