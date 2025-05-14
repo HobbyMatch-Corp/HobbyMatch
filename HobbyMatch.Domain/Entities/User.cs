@@ -9,7 +9,5 @@ namespace HobbyMatch.Domain.Entities
         public ICollection<Event> SignedUpEvents { get; set; }
         [JsonIgnore]
         public ICollection<User> Friends { get; } = new List<User>();
-        [JsonIgnore]
-        public ICollection<User>? FriendOf { get; } = new List<User>();
     }
 }
