@@ -1,5 +1,6 @@
 ﻿@page "/home"
 
+@using HobbyMatch.App.Auth.CustomAuthStateProvider
 @using HobbyMatch.App.Auth.TokenService
 @using HobbyMatch.App.Components.Components
 @using HobbyMatch.App.Services.Api
@@ -14,6 +15,8 @@
 @inject IEventApiService EventApiService
 @inject IOrganizerApiService OrganizerApiService
 @inject ITokenService TokenService
+@inject NavigationManager navigationManager
+@inject CustomAuthStateProvider customAuthStateProvider
 
 <PageTitle>Home</PageTitle>
 
@@ -51,36 +54,41 @@
     public int? EventsOrganized { get; set; }
     public List<EventDto>? UpcomingEventsList { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstrender)
     {
-        MyCustomTheme.PaletteLight.Background = new MudBlazor.Utilities.MudColor("#F5F5F5");
-
-        var claims = TokenService.GetClaimsFromToken();
-        int.TryParse(claims.First(c => c.Type == JwtRegisteredClaimNames.Sub).Value, out int orgId);
-        var userType = claims.First(c => c.Type == "userType").Value;
-
-        if (userType == UserType.User.ToString())
+        if (firstrender)
         {
-            User? user = await OrganizerApiService.GetUserAsync<User>(orgId);
-            UserName = user?.UserName;
-            Email = user?.Email;
+            MyCustomTheme.PaletteLight.Background = new MudBlazor.Utilities.MudColor("#F5F5F5");
+            var claims = TokenService.GetClaimsFromToken();
+            if (!claims.Any())
+                return;
+            int.TryParse(claims.First(c => c.Type == JwtRegisteredClaimNames.Sub).Value, out int orgId);
+            var userType = claims.First(c => c.Type == "userType").Value;
+
+            if (userType == UserType.User.ToString())
+            {
+                User? user = await OrganizerApiService.GetUserAsync<User>(orgId);
+                UserName = user?.UserName;
+                Email = user?.Email;
 
 
-            UpcomingEventsList = await EventApiService.GetSignedUpEventsAsync() ?? new List<EventDto>();
-            EventsSignedUp = UpcomingEventsList.Count;
+                UpcomingEventsList = await EventApiService.GetSignedUpEventsAsync() ?? new List<EventDto>();
+                EventsSignedUp = UpcomingEventsList.Count;
+            }
+            else
+            {
+                BusinessClient? bc = await OrganizerApiService.GetUserAsync<BusinessClient>(orgId);
+                UserName = bc?.UserName;
+                Email = bc?.Email;
+                TaxId = bc?.TaxID;
+
+                UpcomingEventsList = await EventApiService.GetSponsoredEventsAsync() ?? new List<EventDto>();
+                EventsSponsored = UpcomingEventsList.Count;
+            }
+
+            EventsOrganized = (await EventApiService.GetOrganizedEventsAsync() ?? new List<EventDto>()).Count;
+            StateHasChanged();
         }
-        else
-        {
-            BusinessClient? bc = await OrganizerApiService.GetUserAsync<BusinessClient>(orgId);
-            UserName = bc?.UserName;
-            Email = bc?.Email;
-            TaxId = bc?.TaxID;
-
-            UpcomingEventsList = await EventApiService.GetSponsoredEventsAsync() ?? new List<EventDto>();
-            EventsSponsored = UpcomingEventsList.Count;
-        }
-
-        EventsOrganized = (await EventApiService.GetOrganizedEventsAsync() ?? new List<EventDto>()).Count;
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using HobbyMatch.Domain.Entities;
+﻿using HobbyMatch.BL.DTOs.Organizers;
+using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.App.Services.Api
 {
@@ -11,6 +12,28 @@ namespace HobbyMatch.App.Services.Api
         {
             _httpClient = httpClientFactory.CreateClient("AuthenticatedClient");
             _endpointProvider = endpointProvider;	
+		}
+
+		public async Task<T?> GetMe<T>() where T: Organizer
+		{
+			string endpoint = "";
+			try
+			{
+				endpoint = _endpointProvider.GetEndpoint<T>();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				return null;
+			}
+			T? user = null;
+			var response = await _httpClient.GetAsync($"{endpoint}/me");
+			if (response.IsSuccessStatusCode)
+			{
+				user = await response.Content.ReadFromJsonAsync<T>();
+			}
+
+			return user;
 		}
 
 		public async Task<T[]?> GetUsersAsync<T>() where T : Organizer
@@ -58,7 +81,7 @@ namespace HobbyMatch.App.Services.Api
 			return user;
 		}
 
-		public async Task<T?> EditUserAsync<T>(int id, T editedUser) where T : Organizer
+		public async Task<bool> UpdateUserAsync<T, TDto>(int id, TDto editedUser) where T : Organizer
 		{
 			string endpoint = "";
 			try
@@ -68,17 +91,12 @@ namespace HobbyMatch.App.Services.Api
 			catch (Exception e)
 			{
 				Console.WriteLine(e);
-				return null;
+				return false;
 			}
 
 			T? user = null;
-			var response = await _httpClient.PostAsJsonAsync($"{endpoint}/{id}", editedUser);
-			if (response.IsSuccessStatusCode)
-			{
-				user = await response.Content.ReadFromJsonAsync<T>();
-			}
-			return user;
+			var response = await _httpClient.PutAsJsonAsync($"{endpoint}/{id}", editedUser);
+			return response.IsSuccessStatusCode ? true : false;
 		}
-
     }
 }

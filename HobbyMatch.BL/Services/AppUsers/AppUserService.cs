@@ -1,4 +1,5 @@
-﻿using HobbyMatch.Database.Repositories.AppUsers;
+﻿using HobbyMatch.BL.DTOs.Organizers;
+using HobbyMatch.Database.Repositories.AppUsers;
 using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.BL.Services.AppUsers
@@ -28,9 +29,14 @@ namespace HobbyMatch.BL.Services.AppUsers
             return await _appUserRepository.GetUsersAsync();
         }
 
-        public async Task UpdateUserAsync(int userId, User user)
+        public async Task UpdateUserAsync(int userId, UpdateUserDto userDto)
         {
-            await _appUserRepository.UpdateUserAsync(userId, user);
+			var user = new User
+			{
+				Email = userDto.Email,
+				UserName = userDto.UserName
+			};
+			await _appUserRepository.UpdateUserAsync(userId, user);
         }
     }
 }

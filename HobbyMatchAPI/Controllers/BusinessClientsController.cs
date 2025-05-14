@@ -1,4 +1,5 @@
-﻿using HobbyMatch.BL.Services.BusinessClients;
+﻿using HobbyMatch.BL.DTOs.Organizers;
+using HobbyMatch.BL.Services.BusinessClients;
 using HobbyMatch.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,17 +37,28 @@ namespace HobbyMatch.API.Controllers
 
             return Ok(businessClient);
         }
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> GetUserAsync()
+        {
+            var emailJwt = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (emailJwt == null) return BadRequest("No Email found in Token");
+            var businessClient = await _businessClientService.GetBusinessClientByEmailAsync(emailJwt);
+            if (businessClient == null) return BadRequest();
+
+            return Ok(businessClient);
+        }
 
         [Authorize]
-        [HttpPost("{businessClientId}")]
-        public async Task<IActionResult> UpdateUserAsync(int businessClientId, [FromBody] BusinessClient businessClient)
+        [HttpPut("{businessClientId}")]
+        public async Task<IActionResult> UpdateUserAsync(int businessClientId, [FromBody] UpdateBusinessClientDto businessClient)
         {
             var emailJwt = User.FindFirst(ClaimTypes.Email)?.Value;
 
             var businessClientDb = await _businessClientService.GetBusinessClientByIdAsync(businessClientId);
             if (businessClientDb == null || string.IsNullOrEmpty(emailJwt) || businessClientDb.Email != emailJwt) return BadRequest();
 
-            await _businessClientService.UpdateBusinessClientAsync(businessClientId, businessClientDb);
+            await _businessClientService.UpdateBusinessClientAsync(businessClientId, businessClient);
 
             return Ok();
         }

@@ -40,18 +40,21 @@ namespace HobbyMatch.App.Auth.TokenService
 				}
 			}
 			// Apparently protected local storage throws an exception, bcs of double render (once on server side), but should work anyways on client
-			// TODO: Find out what exception exactly is being thrown
-			catch (Exception ex)
+			catch (System.InvalidOperationException)
 			{
-				Console.WriteLine($"{ex.Message}");
 			}
 
 		}
 
         public async Task ClearAccessTokenAsync()
         {
-            _tokenStore.SetAccessToken(null);
-            await _localStorage.DeleteAsync(_accessTokenKey);
+            try
+            {
+				await _localStorage.DeleteAsync(_accessTokenKey);
+				_tokenStore.SetAccessToken(null);
+            }
+            catch (System.InvalidOperationException)  // Blazor may throw this error while rendering on server side
+            {            }
         }
 
         public IEnumerable<Claim> GetClaimsFromToken()

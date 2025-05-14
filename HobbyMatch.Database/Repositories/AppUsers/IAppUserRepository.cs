@@ -1,4 +1,6 @@
-﻿namespace HobbyMatch.Database.Repositories.AppUsers
+﻿using HobbyMatch.Domain.Entities;
+
+namespace HobbyMatch.Database.Repositories.AppUsers
 {
     public interface IAppUserRepository
     {
@@ -8,6 +10,6 @@
 
         public Task<Domain.Entities.User?> GetUserByIdAsync(int id);
 
-        public Task UpdateUserAsync(int id, Domain.Entities.User user);
+		public Task UpdateUserAsync(int id, User user);
     }
 }

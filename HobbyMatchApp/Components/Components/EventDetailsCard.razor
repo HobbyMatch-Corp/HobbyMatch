@@ -4,7 +4,7 @@
 @using System.Globalization
 @inject IEventApiService _eventApiService
 @inject NavigationManager _navigationManager
-@inject ISnackbar Snackbar
+@inject ISnackbar _snackbar
 
 <MudContainer Style="max-width: 50vw; justify-content: center;" Class="pt-4">
 	<MudPaper Class="pa-4">
@@ -51,23 +51,23 @@
 		if (await _eventApiService.EventSignoutAsync(Event.Id))
 		{
 			_signedIn = false;
-			Snackbar.Add("Signed out succesfully", Severity.Success);
+			_snackbar.Add("Signed out succesfully", Severity.Success);
 			await OnStateChangedCallback.InvokeAsync();
 			StateHasChanged();
 		}
 		else
-			Snackbar.Add("ERROR: Couldn't sign out of event", Severity.Error);
+			_snackbar.Add("ERROR: Couldn't sign out of event", Severity.Error);
 	}
 	private async void handleSignIn()
 	{
 		if (await _eventApiService.EventSigninAsync(Event.Id))
 		{
 			_signedIn = true;
-			Snackbar.Add("Signed in succesfully", Severity.Success);
+			_snackbar.Add("Signed in succesfully", Severity.Success);
 			await OnStateChangedCallback.InvokeAsync();
 			StateHasChanged();
 		}
 		else
-			Snackbar.Add("ERROR: Couldn't sign in to event", Severity.Error);
+			_snackbar.Add("ERROR: Couldn't sign in to event", Severity.Error);
 	}
 }

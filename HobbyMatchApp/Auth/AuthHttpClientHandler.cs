@@ -1,4 +1,5 @@
-﻿using HobbyMatch.App.Auth.TokenService;
+﻿using HobbyMatch.App.Auth.CustomAuthStateProvider;
+using HobbyMatch.App.Auth.TokenService;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Http.Headers;
@@ -12,9 +13,11 @@ namespace HobbyMatch.App.Auth
     public class AuthHttpClientHandler : DelegatingHandler
     {
         private readonly TokenStore _tokenStore;
-        public AuthHttpClientHandler(TokenStore tokenStore)
+        private readonly CustomAuthStateProvider.CustomAuthStateProvider _authStateProvider;
+        public AuthHttpClientHandler(TokenStore tokenStore, CustomAuthStateProvider.CustomAuthStateProvider authStateProvider)
         {
 			_tokenStore = tokenStore;
+			_authStateProvider = authStateProvider;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -25,6 +28,9 @@ namespace HobbyMatch.App.Auth
 				request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var response = await base.SendAsync(request, cancellationToken);
+                if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden) {
+					await _authStateProvider.Logout();
+                }
                 return response;
             }
             else

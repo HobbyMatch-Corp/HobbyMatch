@@ -16,6 +16,10 @@ namespace HobbyMatch.Database.Repositories.BusinessClients
         {
             return await _dbContext.BusinessClients.FindAsync(id);
         }
+        public async Task<Domain.Entities.BusinessClient?> GetBusinessClientByEmailAsync(string email)
+        {
+            return await _dbContext.BusinessClients.FirstOrDefaultAsync(b => b.Email == email);
+        }
 
         public async Task<List<Domain.Entities.BusinessClient>> GetBusinessClientsAsync()
         {
@@ -32,6 +36,7 @@ namespace HobbyMatch.Database.Repositories.BusinessClients
                 dbBusinessClient.UserName = businessClient.UserName;
                 dbBusinessClient.TaxID = businessClient.TaxID;
             }
-        }
-    }
+			await _dbContext.SaveChangesAsync();
+		}
+	}
 }

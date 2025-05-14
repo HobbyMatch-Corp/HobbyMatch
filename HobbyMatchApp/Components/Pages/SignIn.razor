@@ -5,11 +5,11 @@
 @using System.ComponentModel.DataAnnotations
 @using HobbyMatch.App.Auth.CustomAuthStateProvider
 @using HobbyMatch.App.Services
-@inject CustomAuthStateProvider AuthStateProvider
+@inject CustomAuthStateProvider CustomAuthStateProvider
 @inject NavigationManager navigationManager
 @using Microsoft.AspNetCore.Components.Authorization
 
-<CascadingAuthenticationState>
+@* TODO: figure out why this doesnt work <CascadingAuthenticationState> *@
     <AuthorizeView>
         <Authorized>
             @{
@@ -17,7 +17,7 @@
             }
         </Authorized>
     </AuthorizeView>
-</CascadingAuthenticationState>
+@* </CascadingAuthenticationState> *@
 
 <MudContainer Style="justify-content: center" MaxWidth="MaxWidth.Small">
 
@@ -68,7 +68,7 @@
 
         var email = emailField.Value ?? "";
         var password = passwordField.Value ?? "";
-        var result = await AuthStateProvider.LoginAsync(email, password);
+        var result = await CustomAuthStateProvider.LoginAsync(email, password);
         if (!result)
         {
             await ShowAlert("Login failed!", 5000);
