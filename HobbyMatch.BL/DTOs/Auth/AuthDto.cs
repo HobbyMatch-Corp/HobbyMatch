@@ -7,15 +7,15 @@ public record AuthResultDto(
     DateTime JwtTokenExpirationDate,
     string RefreshToken,
     DateTime RefreshTokenExpirationDate
-)
+);
+
+public static partial class AuthResultExtensions
 {
-    public static AuthResultDto FromAuthResult(AuthResult authResult)
-    {
-        return new(
+    public static AuthResultDto ToDto(this AuthResult authResult) =>
+        new(
             authResult.JwtToken,
             authResult.JwtTokenExpirationDate,
             authResult.RefreshToken,
              authResult.RefreshTokenExpirationDate
         );
-    }
 }

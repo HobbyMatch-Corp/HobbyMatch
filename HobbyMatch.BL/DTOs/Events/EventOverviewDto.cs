@@ -12,3 +12,17 @@ public record EventOverviewDto(
     int MaxUsers,
     ParticipantDto[]? Participants
 );
+
+public static partial class EventExtensions
+{
+    public static EventOverviewDto ToOverviewDto(this Event ev) => new(
+            ev.Id,
+            ev.Name,
+            ev.StartTime,
+            ev.EndTime,
+            ev.Location,
+            ev.Price,
+            ev.MaxUsers,
+            ev.SignUpList?.Select((el) => el.ToDto()).ToArray() ?? []
+        );
+}

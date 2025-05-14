@@ -20,7 +20,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var result = await _accountService.LoginUserAsync(request);
-        return Ok(AuthResultDto.FromAuthResult(result));
+        return Ok(result.ToDto());
     }
 
     [HttpPost("register/business")]
@@ -43,6 +43,6 @@ public class AuthController : ControllerBase
         var refreshToken = Request.GetRefreshToken();
         var result = await _accountService.RefreshTokenAsync(refreshToken);
 
-        return Ok(AuthResultDto.FromAuthResult(result));
+        return Ok(result.ToDto());
     }
 }

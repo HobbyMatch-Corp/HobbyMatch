@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using HobbyMatch.BL.DTOs.Venues;
 using HobbyMatch.BL.Services.Venues;
 using HobbyMatch.Database.Common.Pagination;
@@ -37,7 +38,7 @@ public class VenueController : ControllerBase
         [FromQuery] PaginationParameters paginationParams)
     {
         var user = await _userManager.GetUserAsync(User);
-        var userType = User.FindFirst("userType")?.Value;
+        var userType = User.FindFirst(ClaimTypes.Role)?.Value;
         if (user == null ||
             userType != UserType.BussinessClient
                 .ToString())
@@ -63,7 +64,7 @@ public class VenueController : ControllerBase
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
         var user = await _userManager.GetUserAsync(User);
-        var userType = User.FindFirst("userType")?.Value;
+        var userType = User.FindFirst(ClaimTypes.Role)?.Value;
         if (user == null ||
             userType != UserType.BussinessClient
                 .ToString())

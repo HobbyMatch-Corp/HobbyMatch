@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using HobbyMatch.BL.DTOs.Events;
+﻿using HobbyMatch.BL.DTOs.Events;
 using HobbyMatch.BL.Services.Events;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
@@ -8,9 +7,7 @@ using HobbyMatch.Domain.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using HobbyMatch.BL.Extensions;
 
 namespace HobbyMatch.API.Controllers
 {
@@ -55,7 +52,7 @@ namespace HobbyMatch.API.Controllers
         public async Task<ActionResult> EventSigninStateCheck([FromBody] EventSignDto dto)
         {
             var user = await _userManager.GetUserAsync(User);
-			var userType = User.FindFirst("userType")?.Value;
+			var userType = User.FindFirst(ClaimTypes.Role)?.Value;
 			if (user == null || userType != UserType.User.ToString()) // Check if user is actually "User" and not "Business Client"
 				return Unauthorized();
 
@@ -67,7 +64,7 @@ namespace HobbyMatch.API.Controllers
 		public async Task<ActionResult> EventSignin([FromBody] EventSignDto dto)
 		{
 			var user = await _userManager.GetUserAsync(User);
-			var userType = User.FindFirst("userType")?.Value;
+			var userType = User.FindFirst(ClaimTypes.Role)?.Value;
 			if (user == null || userType != UserType.User.ToString()) // Check if user is actually "User" and not "Business Client"
 				return Unauthorized();
 
@@ -80,7 +77,7 @@ namespace HobbyMatch.API.Controllers
         public async Task<ActionResult> EventSignout([FromBody] EventSignDto dto)
         {
             var user = await _userManager.GetUserAsync(User);
-			var userType = User.FindFirst("userType")?.Value;
+			var userType = User.FindFirst(ClaimTypes.Role)?.Value;
 			if (user == null || userType != UserType.User.ToString()) // Check if user is actually "User" and not "Business Client"
 				return Unauthorized();
 
