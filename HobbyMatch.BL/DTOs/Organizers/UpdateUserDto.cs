@@ -12,7 +12,7 @@ namespace HobbyMatch.BL.DTOs.Organizers
 
 	public static class UserDtoExtensions
 	{
-		public static UpdateUserDto ToDto(this User user) => new(
+		public static UpdateUserDto ToUpdateDto(this User user) => new(
 			user.UserName ?? "",
 			user.Email ?? ""
 		);
