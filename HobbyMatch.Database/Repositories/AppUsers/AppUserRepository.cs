@@ -1,4 +1,5 @@
 ﻿using HobbyMatch.Database.Data;
+using HobbyMatch.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace HobbyMatch.Database.Repositories.AppUsers
@@ -19,15 +20,16 @@ namespace HobbyMatch.Database.Repositories.AppUsers
 
         public async Task<Domain.Entities.User?> GetUserByIdAsync(int id)
         {
-            return await _dbContext.AppUsers.FindAsync(id);
+            var x = await _dbContext.AppUsers.ToListAsync();
+			return await _dbContext.AppUsers.FindAsync(id);
         }
 
-        public Task<List<Domain.Entities.User>> GetUsersAsync()
+        public async Task<List<Domain.Entities.User>> GetUsersAsync()
         {
-            return _dbContext.AppUsers.ToListAsync();
-        }
+            return await _dbContext.AppUsers.ToListAsync();
+		}
 
-        public async Task UpdateUserAsync(int userId, Domain.Entities.User user)
+        public async Task UpdateUserAsync(int userId, User user)
         {
             var dbUser = await GetUserByIdAsync(userId);
 
@@ -36,6 +38,7 @@ namespace HobbyMatch.Database.Repositories.AppUsers
                 dbUser.Email = user.Email;
                 dbUser.UserName = user.UserName;
             }
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

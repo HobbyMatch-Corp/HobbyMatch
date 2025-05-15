@@ -1,4 +1,5 @@
-﻿using HobbyMatch.BL.Services.AppUsers;
+﻿using HobbyMatch.BL.DTOs.Organizers;
+using HobbyMatch.BL.Services.AppUsers;
 using HobbyMatch.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,10 +37,21 @@ namespace HobbyMatch.API.Controllers
 
             return Ok(user);
         }
+		[Authorize]
+		[HttpGet("me")]
+		public async Task<IActionResult> GetMeAsync()
+		{
+			var emailJWT = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (emailJWT == null) return BadRequest();
+			var user = await _appUserService.GetUserByEmailAsync(emailJWT);
+			if (user == null ) return BadRequest();
 
-        [Authorize]
-        [HttpPost("{userId}")]
-        public async Task<IActionResult> UpdateUserAsync(int userId, [FromBody] User user)
+			return Ok(user);
+		}
+
+		[Authorize]
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> UpdateUserAsync(int userId, [FromBody] UpdateUserDto user)
         {
             var emailJWT = User.FindFirst(ClaimTypes.Email)?.Value;
 

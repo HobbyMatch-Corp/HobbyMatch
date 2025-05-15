@@ -1,4 +1,6 @@
-﻿namespace HobbyMatch.Database.Repositories.BusinessClients
+﻿using HobbyMatch.Domain.Entities;
+
+namespace HobbyMatch.Database.Repositories.BusinessClients
 {
     public interface IBusinessClientRepository
     {
@@ -7,5 +9,6 @@
         public Task<Domain.Entities.BusinessClient?> GetBusinessClientByIdAsync(int id);
 
         public Task UpdateUserAsync(int businessClientId, Domain.Entities.BusinessClient businessClient);
-    }
+		public Task<BusinessClient?> GetBusinessClientByEmailAsync(string email);
+	}
 }

@@ -2,181 +2,169 @@
 @rendermode InteractiveServer
 @inject IOrganizerApiService organizerApiService
 @inject AuthenticationStateProvider authenticationStateProvider
+@inject IOrganizerApiService organizerApiService
+@inject NavigationManager navigationManager
+@inject ISnackbar _snackbar
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
 @using HobbyMatch.App.Services.Api
+@using HobbyMatch.BL.DTOs.Organizers
 @using HobbyMatch.BL.Services.AppUsers
 @using HobbyMatch.Domain.Entities
 @using HobbyMatch.App.Auth.CustomAuthStateProvider
+@using HobbyMatch.Domain.Enums
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
 
-<MudContainer Class="d-flex" Style="justify-content: flex-start" MaxWidth="MaxWidth.Medium">
+<MudContainer Class="d-flex" Style="justify-content: center" MaxWidth="MaxWidth.Medium">
 
-    <MudPaper Class="pa-4" MinWidth="400px">
-        <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">My Profile</MudText>
-        <MudForm @bind-IsValid="@success" @bind-Errors="@errors" ReadOnly="@(!editable)">
-            <MudTextField @ref="usernameField" T="string" Label="Username" Required="true" 
-            RequiredError="User name is required!" Style="margin-bottom:8px" @bind-Value="formModel.UserName" />
-            <MudTextField @ref="emailField" T="string" Label="Email" Required="true" RequiredError="Email is required!" @bind-Value="formModel.Email"
-            Immediate="true" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" Style="margin-bottom:8px" />
-            <MudTextField @ref="passwordField" T="string" Label="Password" HelperText="Choose a strong password" InputType="InputType.Password"
-            Immediate="true" ValueChanged="OnPasswordChanged" @bind-Value:event="oninput"
-            Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true" @bind-Value="formModel.Password"
-            Style="margin-bottom:8px" RequiredError="Password is required!" />
-            @if (editable)
-            {
-                <MudTextField @ref="repeatPasswordField" T="string"
-                Label="Password" HelperText="Repeat the password" InputType="InputType.Password" @bind-Value="formModel.RepeatPassword"
-                Immediate="true"
-                Validation="@(new Func<string, string?>(PasswordMatch))" Style="margin-bottom:8px" />
-            }
-            @if (accountType != null && accountType.Value == "BusinessClient")
-            {
-                <MudTextField @ref="taxIdField" T="string" Label="TaxId" Required="true" RequiredError="Tax ID is required!" style="margin-bottom:8px" />
-            }
-            <div class="d-flex">
-                <MudRadioGroup @ref="accountType" T="string" Required="true" RequiredError="Account type is required!" Style="margin-bottom:8px" Disabled=true>
-                    <MudRadio Color="Color.Primary" Value="@("User")">User</MudRadio>
-                    <MudRadio Color="Color.Primary" Value="@("BusinessClient")">Business Client</MudRadio>
-                </MudRadioGroup>
-            </div>
-            <div class="d-flex align-center justify-space-between">
-                @if (!editable)
-                {
-                    <button Type="button" Class="btn btn-primary" @onclick="EditAction">Edit</button>
+	<MudPaper Class="px-4" MinWidth="400px">
+		<MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">My Profile</MudText>
+		<MudForm @bind-IsValid="@success" @bind-Errors="@errors" ReadOnly="@(!editable)">
+			<MudTextField @ref="usernameField" T="string" Label="Username" Required="editable"
+						  RequiredError="User name is required!" Style="margin-bottom:8px" @bind-Value="formModel.UserName" />
+			<MudTextField @ref="emailField" T="string" Label="Email" Required="editable" RequiredError="Email is required!" @bind-Value="formModel.Email"
+						  Immediate="true" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" Style="margin-bottom:8px" />
+			@if (userType != null && userType.Value == UserType.BussinessClient)
+			{
+				<MudTextField @ref="taxIdField" T="string" Label="TaxId" Required="true" RequiredError="Tax ID is required!" style="margin-bottom:8px" @bind-Value="formModel.TaxId" />
+			}
+			@* <div class="d-flex"> *@
+			@* 	<MudRadioGroup @ref="accountType" T="string" Required="true" RequiredError="Account type is required!" Style="margin-bottom:8px" Disabled=true> *@
+			@* 		<MudRadio Color="Color.Primary" Value="@("User")">User</MudRadio> *@
+			@* 		<MudRadio Color="Color.Primary" Value="@("BusinessClient")">Business Client</MudRadio> *@
+			@* 	</MudRadioGroup> *@
+			@* </div> *@
+			<div class="d-flex align-center justify-center mb-2">
+				@if (!editable)
+				{
+					<button Type="button" Class="btn btn-primary" @onclick="ToggleEdit">Edit</button>
 
-                }
-                else
-                {
-                    <button Type="button" Class="btn btn-primary" @onclick="SaveAction">Save changes</button>
-                }
-            </div>
-        </MudForm>
-    </MudPaper>
+				}
+				else
+				{
+					<button Type="button" Class="btn btn-primary" @onclick="SaveAction">Save changes</button>
+				}
+			</div>
+		</MudForm>
+	</MudPaper>
 </MudContainer>
 
 @code {
-    bool success;
-    bool editable = false;
-    string[] errors = { };
-    int userId = 0;
-    private UserFormModel formModel = new();
-    Organizer? user;
-#if DEBUG
-    IAppUserService? localAppUserService = new MockAppUserService();
-#else
-    IAppUserService? localAppUserService = null;
-#endif
-    MudTextField<string>? usernameField;
-    MudTextField<string>? emailField;
-    MudTextField<string>? passwordField;
-    MudTextField<string>? repeatPasswordField;
-    MudTextField<string>? taxIdField;
-    MudRadioGroup<string>? accountType;
+	bool success;
+	bool editable = false;
+	string[] errors = { };
+	int _userId = 0;
+	private UserFormModel formModel = new();
+	Organizer? user;
+	UserType? userType = null;
 
-    private ClaimsPrincipal? currentUser;
+	MudTextField<string>? usernameField;
+	MudTextField<string>? emailField;
+	MudTextField<string>? taxIdField;
 
-    protected override async Task OnInitializedAsync()
-    {
-        await Task.Delay(1);
-#if !DEBUG
-        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
-        currentUser = authState.User;
-        if (currentUser.Identity is { IsAuthenticated: true })
-        {
-            var uId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (uId is not null)
-            {
-                userId = int.Parse(uId);
-            }
-        }
-#endif
-        await LoadData();
-    }
-    private async Task LoadData()
-    {
-        if (localAppUserService is not null)
-        {
-            user = await localAppUserService.GetUserByIdAsync(userId);
-            if (user is not null)
-            {
-                formModel = new UserFormModel
-                    {
-                        UserName = user.UserName,
-                        Email = user.Email,
-                        Password = user.PasswordHash,
-                        RepeatPassword = user.PasswordHash
-                    };
-                if (accountType is not null && accountType.Value == "BusinessClient")
-                {
-                    formModel.AccountType = "BusinessClient";
-                    formModel.TaxId = ((BusinessClient)user).TaxID;
-                }
-                else
-                {
-                    formModel.AccountType = "User";
-                }
-            }
-        }
-    }
-    private IEnumerable<string> PasswordStrength(string pw)
-    {
-        if (string.IsNullOrWhiteSpace(pw))
-        {
-            yield return "Password is required!";
-            yield break;
-        }
-        if (pw.Length < 8)
-            yield return "Password must be at least of length 8";
-        if (!Regex.IsMatch(pw, @"[A-Z]"))
-            yield return "Password must contain at least one capital letter";
-        if (!Regex.IsMatch(pw, @"[a-z]"))
-            yield return "Password must contain at least one lowercase letter";
-        if (!Regex.IsMatch(pw, @"[0-9]"))
-            yield return "Password must contain at least one digit";
-    }
+	private ClaimsPrincipal? currentUser;
 
-    private string? PasswordMatch(string arg)
-    {
-        if (passwordField?.Value is not null && passwordField.Value != arg)
-            return "Passwords don't match";
-        return null;
-    }
-    private async Task OnPasswordChanged(string newPassword)
-    {
-        formModel.Password = newPassword;
-        if (repeatPasswordField is not null)
-        {
-            await repeatPasswordField.Validate();
-        }
-    }
-    private void EditAction()
-    {
-        editable = !editable;
-    }
-    private async Task SaveAction()
-    {
-        var updatedUser = new User
-            {
-                UserName = formModel.UserName,
-                Email = formModel.Email,
-                PasswordHash = formModel.Password
-            };
-        if (localAppUserService is not null)
-        {
-            await localAppUserService.UpdateUserAsync(userId, updatedUser);
-        }
-        await LoadData();
-        EditAction();
-    }
-    public class UserFormModel
-    {
-        public string? UserName { get; set; }
-        public string? Email { get; set; }
-        public string? Password { get; set; }
-        public string? RepeatPassword { get; set; }
-        public string? TaxId { get; set; }
-        public string? AccountType { get; set; }
-    }
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await Task.Delay(1);
+			var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+			currentUser = authState.User;
+			if (currentUser.Identity is { IsAuthenticated: true })
+			{
+				if (Enum.TryParse(currentUser.FindFirst("userType")?.Value, out UserType userType))
+				{
+					this.userType = userType;
+					await LoadData();
+				}
+				else
+				{
+					navigationManager.NavigateTo("/error");
+				}
+			}
+			else
+			{
+				navigationManager.NavigateTo("/error");
+			}
+			StateHasChanged();
+			base.OnAfterRender(firstRender);
+		}
+	}
+	private async Task LoadData()
+	{
+		if (userType != null)
+		{
+			if (userType == UserType.User)
+				user = await organizerApiService.GetMe<User>();
+			else if (userType == UserType.BussinessClient)
+				user = await organizerApiService.GetMe<BusinessClient>();
+
+			if (user is not null)
+			{
+				_userId = user.Id;
+				formModel = new UserFormModel
+					{
+						UserName = user.UserName,
+						Email = user.Email,
+					};
+				if (userType is not null && userType == UserType.BussinessClient)
+				{
+					formModel.AccountType = "BusinessClient";
+					formModel.TaxId = ((BusinessClient)user).TaxID;
+				}
+				else
+				{
+					formModel.AccountType = "User";
+				}
+			}
+
+		}
+	}
+
+	private void ToggleEdit()
+	{
+		editable = !editable;
+	}
+	private async Task SaveAction()
+	{
+		if (userType == UserType.User)
+		{
+			var updatedUser = new UpdateUserDto(formModel.UserName, formModel.Email);
+
+			if (await organizerApiService.UpdateUserAsync<User, UpdateUserDto>(_userId, updatedUser))
+			{
+				_snackbar.Add("Saved changes", Severity.Success);
+				await LoadData();
+			}
+			else
+			{
+				_snackbar.Add("ERROR: Couldn't save changes", Severity.Error);
+			}
+		}
+		else if (userType == UserType.BussinessClient && formModel.TaxId != null)
+		{
+			var updatedBusinessClient = new UpdateBusinessClientDto(formModel.UserName, formModel.Email, formModel.TaxId);
+			if (await organizerApiService.UpdateUserAsync<BusinessClient, UpdateBusinessClientDto>(_userId, updatedBusinessClient))
+			{
+				_snackbar.Add("Saved changes", Severity.Success);
+				await LoadData();
+			}
+			else
+			{
+				_snackbar.Add("ERROR: Couldn't save changes", Severity.Error);
+			}
+		}
+		await LoadData();
+		ToggleEdit();
+	}
+	public class UserFormModel
+	{
+		public string? Id { get; set; }
+		public string? UserName { get; set; }
+		public string? Email { get; set; }
+		public string? TaxId { get; set; }
+		public string? AccountType { get; set; }
+	}
 }

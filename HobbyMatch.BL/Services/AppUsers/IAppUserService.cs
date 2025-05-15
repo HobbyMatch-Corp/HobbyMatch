@@ -1,4 +1,5 @@
-﻿using HobbyMatch.Domain.Entities;
+﻿using HobbyMatch.BL.DTOs.Organizers;
+using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.BL.Services.AppUsers
 {
@@ -10,6 +11,6 @@ namespace HobbyMatch.BL.Services.AppUsers
 
         public Task<User?> GetUserByIdAsync(int id);
 
-        public Task UpdateUserAsync(int userId, User user);
+        public Task UpdateUserAsync(int userId, UpdateUserDto userDto);
     }
 }
