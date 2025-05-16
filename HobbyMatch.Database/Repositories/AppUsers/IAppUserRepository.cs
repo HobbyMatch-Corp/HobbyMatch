@@ -11,5 +11,7 @@ namespace HobbyMatch.Database.Repositories.AppUsers
         public Task<Domain.Entities.User?> GetUserByIdAsync(int id);
 
 		public Task UpdateUserAsync(int id, User user);
-    }
+		public Task<bool> AddFriendToUserAsync(User user, User friend);
+		public Task<bool> RemoveFriendFromUserAsync(User user, User friend);
+	}
 }
