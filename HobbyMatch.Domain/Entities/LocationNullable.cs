@@ -17,5 +17,11 @@ namespace HobbyMatch.Domain.Entities
 		{
 			return $"Longitude {Longitude}, Latitude {Latitude}";
 		}
+		public LocationNullable() { }
+		public LocationNullable(Location location)
+		{
+			Longitude = location.Longitude;
+			Latitude = location.Latitude;
+		}
 	}
 }

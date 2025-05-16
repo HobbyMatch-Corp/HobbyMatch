@@ -1,11 +1,13 @@
 ﻿@inject IOrganizerApiService organizerApiService
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject IOrganizerApiService organizerApiService
+@inject IVenueApiService venueApiService
 @inject NavigationManager navigationManager
 @inject ISnackbar _snackbar
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
 @using HobbyMatch.App.Services.Api
+@using HobbyMatch.App.Services.Venues
 @using HobbyMatch.BL.DTOs.Organizers
 @using HobbyMatch.BL.DTOs.Venues
 @using HobbyMatch.BL.Services.AppUsers
@@ -19,31 +21,44 @@
 
 	<MudPaper Class="px-4" MinWidth="400px">
 		<MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">My Profile</MudText>
+
 		<MudForm @bind-IsValid="@success" @bind-Errors="@errors" ReadOnly="@(!editable)">
+			<MudTextField @bind-Value="formModel.Name" T="string" Label="Name" />
+			<MudTextField @bind-Value="formModel.ClientName" T="string" Label="ClientName" />
+			<MudTextField @bind-Value="formModel.Address" T="string" Label="Address" />
+			<MudTextField @bind-Value="formModel.Description" T="string" Label="Description" />
+			<MudNumericField @bind-Value="formModel.MaxUsers" T="int" Label="MaxUsers" />
+			<MudNumericField @bind-Value="formModel.Price" T="decimal" Label="Price" />
+			<LocationDisplay Location="new (formModel.Location)" />
+
 			@if (userType != null && userType.Value == UserType.BussinessClient)
 			{
-			<div class="d-flex align-center justify-center mb-2">
-				@if (!editable)
-				{
-					<button Type="button" Class="btn btn-primary" @onclick="ToggleEdit">Edit</button>
+				<div class="d-flex align-center justify-center mb-2">
+					@if (!editable)
+					{
+						<button Type="button" Class="btn btn-primary" @onclick="ToggleEdit">Edit</button>
 
-				}
-				else
-				{
-					<button Type="button" Class="btn btn-primary" @onclick="SaveAction">Save changes</button>
-				}
-			</div>
+					}
+					else
+					{
+						<button Type="button" Class="btn btn-primary" @onclick="SaveAction">Save changes</button>
+					}
+				</div>
 			}
 		</MudForm>
 	</MudPaper>
 </MudContainer>
 
 @code {
+	[Parameter]
+	public int VenueId { get; set; }
+
+	VenueDetailsDto? venueDetails { get; set; }
 	bool success;
 	bool editable = false;
 	string[] errors = { };
 	int _userId = 0;
-	private VenueFormModel formModel = new();
+	 VenueFormModel formModel = new();
 	Organizer? user;
 	UserType? userType = null;
 
@@ -55,48 +70,59 @@
 		if (firstRender)
 		{
 			await Task.Delay(1);
-			var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
-			currentUser = authState.User;
-			if (currentUser.Identity is { IsAuthenticated: true })
+			await LoadUser();
+			venueDetails = await venueApiService.GetVenueByIdAsync(VenueId);
+			StateHasChanged();
+			base.OnAfterRender(firstRender);
+		}
+	}
+	private void ToggleEdit()
+	{
+		editable = !editable;
+	}
+	private async Task LoadUser()
+	{
+		var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+		currentUser = authState.User;
+		if (currentUser.Identity is { IsAuthenticated: true })
+		{
+			if (Enum.TryParse(currentUser.FindFirst("userType")?.Value, out UserType userType))
 			{
-				if (Enum.TryParse(currentUser.FindFirst("userType")?.Value, out UserType userType))
-				{
-					this.userType = userType;
-				}
-				else
-				{
-					navigationManager.NavigateTo("/error");
-				}
+				this.userType = userType;
 			}
 			else
 			{
 				navigationManager.NavigateTo("/error");
 			}
-			StateHasChanged();
-			base.OnAfterRender(firstRender);
 		}
-	}
-
-	private void ToggleEdit()
-	{
-		editable = !editable;
+		else
+		{
+			navigationManager.NavigateTo("/error");
+		}
 	}
 	private async Task SaveAction()
 	{
 
-			//var updateVenueDto = new UpdateVenueDto();
+		var updateVenueDto = new UpdateVenueDto(formModel.Name, formModel.Address, formModel.MaxUsers, formModel.Price, formModel.Location, formModel.Description);
 
-			// if ()
-			// {
-			// 	_snackbar.Add("Saved changes", Severity.Success);
-			// }
-			// else
-			// {
-			// 	_snackbar.Add("ERROR: Couldn't save changes", Severity.Error);
-			// }
+		if (venueDetails.Id !=null && await venueApiService.UpdateVenueAsync(updateVenueDto, venueDetails.Id))
+		{
+			_snackbar.Add("Saved changes", Severity.Success);
+		}
+		else
+		{
+			_snackbar.Add("ERROR: Couldn't save changes", Severity.Error);
+		}
 		ToggleEdit();
 	}
 	public class VenueFormModel
 	{
+		public string Name = "";
+		public string Address = "";
+		public int MaxUsers = 0;
+		public decimal Price = 0;
+		public Location Location = new();
+		public string Description = "";
+		public string ClientName = "";
 	}
 }

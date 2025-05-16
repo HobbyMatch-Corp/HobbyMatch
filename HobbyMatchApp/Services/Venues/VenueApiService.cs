@@ -42,6 +42,11 @@ public class VenueApiService : IVenueApiService
 
         return null;
     }
+    public async Task<bool> UpdateVenueAsync(UpdateVenueDto request, int venueId)
+    {
+        var response = await _httpClient.PutAsJsonAsync($"/venues/edit/{venueId}", request);
+        return response.IsSuccessStatusCode;
+    }
 
     public async Task<PaginatedData<VenueDto>> GetFilteredVenues(string? filter,
         PaginationParameters paginationParameters)

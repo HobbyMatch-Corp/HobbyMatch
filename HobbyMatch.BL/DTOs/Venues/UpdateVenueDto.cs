@@ -13,9 +13,7 @@ namespace HobbyMatch.BL.DTOs.Venues
 		int? MaxUsers,
 		decimal? Price,
 		Location? Location,
-		string? Description,
-		int? BusinessClientId,
-		string? ClientName
+		string? Description
 	);
 
 	public static partial class VenueExtensions
@@ -23,7 +21,7 @@ namespace HobbyMatch.BL.DTOs.Venues
 		public static UpdateVenueDto ToUpdateDto(this Venue venue)
 		{
 			return new UpdateVenueDto(venue.Name, venue.Address, venue.MaxUsers, venue.Price, venue.Location,
-				venue.Description, venue.BusinessClientId, venue.BusinessClient.UserName!);
+				venue.Description);
 		}
 	}
 }
