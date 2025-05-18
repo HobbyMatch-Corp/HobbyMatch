@@ -3,9 +3,9 @@ using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.BL.Services.Hobbies
 {
-    public class HobbyService(HobbyRepository hobbyRepository) : IHobbyService
+    public class HobbyService(IHobbyRepository hobbyRepository) : IHobbyService
     {
-        private readonly HobbyRepository _hobbyRepository = hobbyRepository;
+        private readonly IHobbyRepository _hobbyRepository = hobbyRepository;
 
         public Task<ICollection<Hobby>> GetHobbiesAsync()
         {
