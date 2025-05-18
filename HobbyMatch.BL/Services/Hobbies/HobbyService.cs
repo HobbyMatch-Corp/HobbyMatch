@@ -9,17 +9,17 @@ namespace HobbyMatch.BL.Services.Hobbies
 
         public Task<ICollection<Hobby>> GetHobbiesAsync()
         {
-            throw new NotImplementedException();
+            return _hobbyRepository.GetHobbiesAsync();
         }
 
         public Task<Hobby?> GetHobbyAsync(int id)
         {
-            throw new NotImplementedException();
+            return _hobbyRepository.GetHobbyAsync(id);
         }
 
         public Task<Hobby?> GetHobbyAsync(string name)
         {
-            throw new NotImplementedException();
+            return _hobbyRepository.GetHobbyAsync(name);
         }
     }
 }
