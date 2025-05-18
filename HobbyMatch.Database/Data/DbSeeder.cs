@@ -154,7 +154,6 @@ public class DbSeeder
         new Hobby { Name = "Dancing" }
     };
 
-
     public DbSeeder()
     {
         _users = generateUsers(20);
