@@ -235,6 +235,12 @@ public class DbSeeder
                     }
                 }
 
+                foreach (var newHobby in _hobbies)
+                {
+                    var hobby = context.Set<Hobby>().FirstOrDefault(h => h.Name == newHobby.Name);
+                    if (hobby == null)  await context.Set<Hobby>().AddAsync(newHobby);
+                }
+
                 await context.SaveChangesAsync();
             });
     }
