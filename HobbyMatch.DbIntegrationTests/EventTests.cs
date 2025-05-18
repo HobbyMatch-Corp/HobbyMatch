@@ -16,7 +16,7 @@ namespace HobbyMatch.DbIntegrationTests
         public EventTests(IntegrationTestWebAppFactory factory) : base(factory)
         {
             _eventRepository = new EventRepository(DbContext);
-            _eventService = new EventService(_eventRepository);
+            _eventService = new EventService(_eventRepository, null);
         }
 
         [Fact]

@@ -14,7 +14,7 @@ namespace UnitTests
         public EventServiceTests()
         {
             _eventRepository = new Mock<IEventRepository>();
-            _eventService = new EventService(_eventRepository.Object);
+            _eventService = new EventService(_eventRepository.Object, null);
         }
 
         [Fact]

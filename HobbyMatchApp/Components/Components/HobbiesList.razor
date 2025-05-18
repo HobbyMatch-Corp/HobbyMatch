@@ -1,5 +1,6 @@
 ﻿@page "/hobbies" 
 
+@using HobbyMatch.BL.DTOs.Hobbies
 @using HobbyMatch.Domain.Entities
 @using MudBlazor
 @inject ISnackbar Snackbar
@@ -10,17 +11,16 @@
     </MudText>
 
     <MudList T="string"
-            ReadOnly="false"
-            SelectionMode="SelectionMode.MultiSelection"
-            @bind-SelectedValues="SelectedHobbyNames"
-            Class="hobby-list"
-            CheckBoxColor="Color.Secondary">
+    ReadOnly="@ReadOnly"
+    SelectionMode="SelectionMode.MultiSelection"
+    @bind-SelectedValues="SelectedHobbyNames"
+    Class="hobby-list"
+    CheckBoxColor="Color.Secondary">
         @if (Hobbies != null && Hobbies.Any())
         {
             @foreach (var hobby in Hobbies)
             {
-                <MudListItem Text="@hobby.Name" Value="@hobby.Name" Icon="@GetHobbyIcon(hobby.Name)" IconColor="Color.Primary">
-                </MudListItem>
+                <MudListItem Text="@hobby.Name" Value="@hobby.Name" Icon="@GetHobbyIcon(hobby.Name)" IconColor="Color.Primary" />
             }
         }
         else
@@ -35,7 +35,7 @@
         }
     </MudList>
 
-    @if (SelectedHobbies.Any())
+    @* @if (SelectedHobbies.Any())
     {
         <MudDivider Class="my-4" />
 
@@ -53,7 +53,7 @@
                 </MudChip>
             }
         </div>
-    }
+    } *@
 </MudContainer>
 
 <style>
@@ -65,35 +65,19 @@
 
 @code {
     [Parameter]
-    public List<Hobby> Hobbies { get; set; } = new() {
-        new Hobby { Name = "Reading" },
-        new Hobby { Name = "Gardening" },
-        new Hobby { Name = "Painting" },
-        new Hobby { Name = "Cycling" },
-        new Hobby { Name = "Photography" },
-        new Hobby { Name = "Cooking" },
-        new Hobby { Name = "Hiking" },
-        new Hobby { Name = "Swimming" },
-        new Hobby { Name = "Writing" },
-        new Hobby { Name = "Drawing" },
-        new Hobby { Name = "Fishing" },
-        new Hobby { Name = "Knitting" },
-        new Hobby { Name = "Woodworking" },
-        new Hobby { Name = "Yoga" },
-        new Hobby { Name = "Playing Guitar" },
-        new Hobby { Name = "Bird Watching" },
-        new Hobby { Name = "Dancing" }
-    };
+    public List<HobbyDto> Hobbies { get; set; } = new();
 
     [Parameter]
-    public EventCallback<List<Hobby>> OnSelectionChanged { get; set; }
+    public EventCallback<List<HobbyDto>> OnSelectionChanged { get; set; }
 
     [Parameter]
-    public List<Hobby> InitialSelectedHobbies { get; set; } = new();
+    public List<HobbyDto> InitialSelectedHobbies { get; set; } = new();
+
+    public bool ReadOnly = true;
 
     private IReadOnlyCollection<string> SelectedHobbyNames { get; set; } = new HashSet<string>();
 
-    public List<Hobby> SelectedHobbies =>
+    public List<HobbyDto> SelectedHobbies =>
         Hobbies.Where(h => SelectedHobbyNames.Contains(h.Name)).ToList();
 
     protected override void OnInitialized()
