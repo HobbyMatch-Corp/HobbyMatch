@@ -22,5 +22,10 @@ namespace HobbyMatch.Database.Repositories.Hobbies
         {
             return await _context.Hobbies.FirstOrDefaultAsync(h => h.Id == id);
         }
+
+        public async Task<Hobby?> GetHobbyAsync(string name)
+        {
+            return await _context.Hobbies.FirstOrDefaultAsync(h => h.Name == name);
+        }
     }
 }
