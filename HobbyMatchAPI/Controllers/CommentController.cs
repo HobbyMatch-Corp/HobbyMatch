@@ -19,7 +19,7 @@ public class CommentController : ControllerBase
     }
 
     [HttpGet("event/{eventId}")]
-    public async Task<IActionResult> GetEventComments(int eventId)
+    public async Task<IActionResult> GetEventComments([FromRoute] int eventId)
     {
         var comments = await _commentService.GetEventCommentsAsync(eventId);
         return Ok(comments);
@@ -27,7 +27,7 @@ public class CommentController : ControllerBase
 
     [Authorize]
     [HttpDelete("{commentId}")]
-    public async Task<IActionResult> DeleteComment(int commentId)
+    public async Task<IActionResult> DeleteComment([FromRoute] int commentId)
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         await _commentService.DeleteCommentAsync(commentId, userId);
