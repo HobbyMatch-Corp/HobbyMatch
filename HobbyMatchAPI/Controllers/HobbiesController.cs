@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HobbyMatch.API.Controllers
 {
     [ApiController]
-    [Route("/api/v1/[controller]")]
+    [Route("/api/v1/hobbies")]
     public class HobbiesController : Controller
     {
         private readonly IHobbyService _hobbyService;
