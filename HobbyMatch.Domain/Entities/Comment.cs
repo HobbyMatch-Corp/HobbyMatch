@@ -8,5 +8,5 @@ public class Comment
     public int EventId { get; set; }
     public Event Event { get; set; }
     public int UserId { get; set; }
-    public Organizer OrganizerId { get; set; }
+    public Organizer Organizer { get; set; }
 }
