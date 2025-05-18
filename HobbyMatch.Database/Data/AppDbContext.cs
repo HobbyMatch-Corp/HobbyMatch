@@ -17,6 +17,7 @@ namespace HobbyMatch.Database.Data
         public DbSet<BusinessClient> BusinessClients { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Venue> Venues { get; set; }
+        public DbSet<Hobby> Hobbies { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
