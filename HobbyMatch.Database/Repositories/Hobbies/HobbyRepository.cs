@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HobbyMatch.Database.Repositories.Hobbies
 {
-    public class HobbyRepository : IHobbyRepository
+    public class HobbyRepository(AppDbContext context) : IHobbyRepository
     {
-        private readonly AppDbContext _context;
-
-        public HobbyRepository(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         public async Task<ICollection<Hobby>> GetHobbiesAsync()
         {
