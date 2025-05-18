@@ -6,5 +6,6 @@ namespace HobbyMatch.BL.Services.Hobbies
     {
         public Task<ICollection<Hobby>> GetHobbiesAsync();
         public Task<Hobby?> GetHobbyAsync(int id);
+        public Task<Hobby?> GetHobbyAsync(string name);
     }
 }
