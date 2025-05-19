@@ -38,5 +38,8 @@ namespace HobbyMatch.Domain.Entities
 
         [JsonIgnore]
         public ICollection<BusinessClient> SponsorsPartners { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Hobby> RelatedHobbies { get; set; } = new List<Hobby>();
     }
 }

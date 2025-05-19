@@ -17,6 +17,7 @@ namespace HobbyMatch.Database.Data
         public DbSet<BusinessClient> BusinessClients { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Venue> Venues { get; set; }
+        public DbSet<Hobby> Hobbies { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -71,6 +72,35 @@ namespace HobbyMatch.Database.Data
                     .WithMany()
                     .HasForeignKey(uf => uf.FriendId)
                     .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder.Entity("EventHobby", b =>
+            {
+                b.HasOne("HobbyMatch.Domain.Entities.Hobby", null)
+                    .WithMany()
+                    .HasForeignKey("RelatedHobbiesId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+
+                b.HasOne("HobbyMatch.Domain.Entities.Event", null)
+                    .WithMany()
+                    .HasForeignKey("HobbiesId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity("HobbyUser", b =>
+            {
+                b.HasOne("HobbyMatch.Domain.Entities.Hobby", null)
+                   .WithMany()
+                   .HasForeignKey("HobbiesId")
+                   .OnDelete(DeleteBehavior.NoAction)
+                   .IsRequired();
+                b.HasOne("HobbyMatch.Domain.Entities.User", null)
+                    .WithMany()
+                    .HasForeignKey("HobbiesId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
             });
 
         }

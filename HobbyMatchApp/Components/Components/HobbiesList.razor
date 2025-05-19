@@ -1,0 +1,169 @@
+﻿@page "/hobbies" 
+
+@using HobbyMatch.BL.DTOs.Hobbies
+@using HobbyMatch.Domain.Entities
+@using MudBlazor
+@inject ISnackbar Snackbar
+
+<MudContainer Style="max-width: 50vw" Class="pt-4">
+    <MudText Typo="Typo.h6" Align="Align.Center" Class="mb-4">
+        Select Your Hobbies
+    </MudText>
+
+    <MudList T="string"
+    ReadOnly="@ReadOnly"
+    SelectionMode="SelectionMode.MultiSelection"
+    @bind-SelectedValues="SelectedHobbyNames"
+    Class="hobby-list"
+    CheckBoxColor="Color.Secondary">
+        @if (Hobbies != null && Hobbies.Any())
+        {
+            @foreach (var hobby in Hobbies)
+            {
+                <MudListItem Text="@hobby.Name" Value="@hobby.Name" Icon="@GetHobbyIcon(hobby.Name)" IconColor="Color.Primary" />
+            }
+        }
+        else
+        {
+            <MudListItem>
+                <ChildContent>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">
+                        No hobbies available
+                    </MudText>
+                </ChildContent>
+            </MudListItem>
+        }
+    </MudList>
+
+    @* @if (SelectedHobbies.Any())
+    {
+        <MudDivider Class="my-4" />
+
+        <MudText Typo="Typo.subtitle1" Class="mb-2">
+            Selected Hobbies (@SelectedHobbies.Count()):
+        </MudText>
+
+        <div class="d-flex flex-wrap gap-2">
+            @foreach (var hobby in SelectedHobbies)
+            {
+                <MudChip T="string" 
+                Color="Color.Primary"
+                Size="Size.Small">
+                    @hobby.Name
+                </MudChip>
+            }
+        </div>
+    } *@
+</MudContainer>
+
+<style>
+    .hobby-list {
+    max-height: 40vh;
+    overflow-y: auto;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public List<HobbyDto> Hobbies { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<List<HobbyDto>> OnSelectionChanged { get; set; }
+
+    [Parameter]
+    public List<HobbyDto> InitialSelectedHobbies { get; set; } = new();
+
+    public bool ReadOnly = true;
+
+    private IReadOnlyCollection<string> SelectedHobbyNames { get; set; } = new HashSet<string>();
+
+    public List<HobbyDto> SelectedHobbies =>
+        Hobbies.Where(h => SelectedHobbyNames.Contains(h.Name)).ToList();
+
+    protected override void OnInitialized()
+    {
+        if (InitialSelectedHobbies?.Any() == true)
+        {
+            SelectedHobbyNames = InitialSelectedHobbies.Select(h => h.Name).ToHashSet();
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        // Ensure selected hobbies are still valid when hobbies list changes
+        var validHobbyNames = Hobbies.Select(h => h.Name).ToHashSet();
+        SelectedHobbyNames = SelectedHobbyNames.Where(validHobbyNames.Contains).ToHashSet();
+    }
+
+    private async Task OnSelectHobby()
+    {
+        if (OnSelectionChanged.HasDelegate)
+        {
+            await OnSelectionChanged.InvokeAsync(SelectedHobbies);
+        }
+    }
+
+    private string GetHobbyIcon(string hobbyName)
+    {
+        return hobbyName.ToLower() switch
+        {
+            var name when name.Contains("sport") ||
+                         name.Contains("football") ||
+                         name.Contains("basketball") => Icons.Material.Filled.SportsBasketball,
+
+            var name when name.Contains("music") ||
+                         name.Contains("guitar") ||
+                         name.Contains("piano") ||
+                         name.Contains("playing") => Icons.Material.Filled.MusicNote,
+
+            var name when name.Contains("read") ||
+                         name.Contains("book") => Icons.Material.Filled.Book,
+
+            var name when name.Contains("cook") ||
+                         name.Contains("baking") => Icons.Material.Filled.Restaurant,
+
+            var name when name.Contains("travel") => Icons.Material.Filled.Flight,
+
+            var name when name.Contains("photo") ||
+                         name.Contains("photograph") => Icons.Material.Filled.PhotoCamera,
+
+            var name when name.Contains("garden") => Icons.Material.Filled.LocalFlorist,
+
+            var name when name.Contains("gaming") ||
+                         name.Contains("game") => Icons.Material.Filled.SportsEsports,
+
+            var name when name.Contains("art") ||
+                         name.Contains("draw") ||
+                         name.Contains("paint") ||
+                         name.Contains("painting") => Icons.Material.Filled.Brush,
+
+            var name when name.Contains("movie") ||
+                         name.Contains("film") => Icons.Material.Filled.Movie,
+
+            var name when name.Contains("cycling") => Icons.Material.Filled.DirectionsBike,
+
+            var name when name.Contains("hiking") => Icons.Material.Filled.Terrain,
+
+            var name when name.Contains("swimming") => Icons.Material.Filled.Pool,
+
+            var name when name.Contains("writing") => Icons.Material.Filled.Create, // or EditNote
+
+            var name when name.Contains("fishing") => Icons.Material.Filled.SetMeal, // closest match
+
+            var name when name.Contains("knitting") => Icons.Material.Filled.Handyman, // generic tool icon
+
+            var name when name.Contains("woodworking") => Icons.Material.Filled.Construction, // or Handyman
+
+            var name when name.Contains("yoga") => Icons.Material.Filled.SelfImprovement,
+
+            var name when name.Contains("bird") => Icons.Material.Filled.Nature, // alternative: Nature, Pets
+
+            var name when name.Contains("dancing") ||
+                         name.Contains("dance") => Icons.Material.Filled.DirectionsRun, // no direct "dance" icon
+
+            _ => Icons.Material.Filled.FavoriteBorder
+        };
+    }
+
+}
+

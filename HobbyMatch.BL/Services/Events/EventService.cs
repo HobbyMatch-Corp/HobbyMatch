@@ -1,12 +1,14 @@
-﻿using HobbyMatch.Database.Repositories.Events;
+﻿using HobbyMatch.BL.Services.Hobbies;
+using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Requests;
 
 namespace HobbyMatch.BL.Services.Events;
 
-public class EventService(IEventRepository eventRepository) : IEventService
+public class EventService(IEventRepository eventRepository, IHobbyService hobbyService) : IEventService
 {
     private readonly IEventRepository _eventRepository = eventRepository;
+    private readonly IHobbyService _hobbyService = hobbyService;
 
     public async Task<bool> AddUserToEventAsync(int eventId, User user)
     {
@@ -34,6 +36,7 @@ public class EventService(IEventRepository eventRepository) : IEventService
 
     public async Task<Event?> CreateEventAsync(CreateEventRequest dto, int organizerId)
     {
+        //var hobbies = await _hobbyService.GetHobbiesAsync(dto.RelatedHobbies);
         var entity = new Event
         {
             Name = dto.Name,
@@ -53,6 +56,7 @@ public class EventService(IEventRepository eventRepository) : IEventService
 
     public async Task<Event?> EditEventAsync(CreateEventRequest dto, int eventId, int userId)
     {
+        //var hobbies = await _hobbyService.GetHobbiesAsync(dto.RelatedHobbies);
         var eventToEdit = await _eventRepository.GetEventByIdAsync(eventId);
 
         if (eventToEdit == null || eventToEdit.OrganizerId != userId) return null;

@@ -18,6 +18,8 @@ using Scalar.AspNetCore;
 using System.Text;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.BL.Services.Events;
+using HobbyMatch.Database.Repositories.Hobbies;
+using HobbyMatch.BL.Services.Hobbies;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,15 +44,26 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+// Auth
 builder.Services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
-builder.Services.AddScoped<IBusinessClientRepository, BusinessClientRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+
+// App users
+builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 builder.Services.AddScoped<IAppUserService, AppUserService>();
-builder.Services.AddScoped<IEventService, EventService>();
+
+// Buisness clietns
+builder.Services.AddScoped<IBusinessClientRepository, BusinessClientRepository>();
 builder.Services.AddScoped<IBusinessClientService, BusinessClientService>();
+
+// Events
+builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
+
+// Hobbies
+builder.Services.AddScoped<IHobbyRepository, HobbyRepository>();
+builder.Services.AddScoped<IHobbyService, HobbyService>();
 
 builder.Services.AddAuthentication(opt =>
 {

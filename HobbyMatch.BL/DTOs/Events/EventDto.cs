@@ -1,3 +1,4 @@
+using HobbyMatch.BL.DTOs.Hobbies;
 using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.BL.DTOs.Events;
@@ -15,7 +16,8 @@ public record EventDto(
     int MinUsers,
     int? OrganizerId,
     string OrganizerName,
-    ParticipantDto[]? Participants
+    ParticipantDto[]? Participants,
+    HobbyDto[] Hobbies
 );
 
 public static partial class EventExtensions
@@ -33,6 +35,7 @@ public static partial class EventExtensions
             ev.MinUsers,
             ev.OrganizerId,
             ev.Organizer?.UserName ?? "",
-            ev.SignUpList?.Select((el) => el.ToDto()).ToArray() ?? []
+            ev.SignUpList?.Select((el) => el.ToDto()).ToArray() ?? [],
+            ev.RelatedHobbies.Select(h => h.ToDto()).ToArray()
         );
 }

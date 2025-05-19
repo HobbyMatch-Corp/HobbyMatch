@@ -5,6 +5,7 @@ using HobbyMatch.App.Components;
 using HobbyMatch.App.Services;
 using HobbyMatch.App.Services.Api;
 using HobbyMatch.App.Services.Events;
+using HobbyMatch.App.Services.Hobbies;
 using HobbyMatch.App.Services.Venues;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
@@ -44,6 +45,7 @@ builder.Services.AddScoped<IOrganizerApiService, OrganizerApiService>();
 builder.Services.AddScoped<IAuthApiService, AuthApiService>();
 builder.Services.AddScoped<IEventApiService, EventApiService>();
 builder.Services.AddScoped<IVenueApiService, VenueApiService>();
+builder.Services.AddScoped<IHobbyApiService, HobbyApiService>();
 builder.Services.AddMudServices();
 
 var app = builder.Build();

@@ -1,4 +1,6 @@
-﻿using HobbyMatch.BL.DTOs.Organizers;
+﻿using HobbyMatch.BL.DTOs.Hobbies;
+using HobbyMatch.BL.DTOs.Organizers;
+using HobbyMatch.BL.Services.Hobbies;
 using HobbyMatch.Database.Repositories.AppUsers;
 using HobbyMatch.Domain.Entities;
 using Microsoft.Extensions.Logging;
@@ -9,10 +11,12 @@ namespace HobbyMatch.BL.Services.AppUsers
     public class AppUserService : IAppUserService
     {
         private readonly IAppUserRepository _appUserRepository;
+        private readonly IHobbyService _hobbyService;
 
-        public AppUserService(IAppUserRepository appUserRepository)
+        public AppUserService(IAppUserRepository appUserRepository, IHobbyService hobbyService)
         {
             _appUserRepository = appUserRepository;
+            _hobbyService = hobbyService;
         }
 
         public async Task<User?> GetUserByEmailAsync(string email)
@@ -32,11 +36,14 @@ namespace HobbyMatch.BL.Services.AppUsers
 
         public async Task UpdateUserAsync(int userId, UpdateUserDto userDto)
         {
+            var hobbies = await _hobbyService.GetHobbiesAsync(userDto.Hobbies.ToList());
+
 			var user = new User
 			{
 				Email = userDto.Email,
-				UserName = userDto.UserName
-			};
+				UserName = userDto.UserName,
+                Hobbies = hobbies
+            };
 			await _appUserRepository.UpdateUserAsync(userId, user);
         }
         public async Task<bool> AddFriendsAsync(int friendId, User user)
