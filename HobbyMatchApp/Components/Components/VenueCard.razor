@@ -20,7 +20,7 @@
 <MudContainer Class="d-flex" Style="justify-content: center" MaxWidth="MaxWidth.Medium">
 
 	<MudPaper Class="px-4" MinWidth="400px">
-		<MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">My Profile</MudText>
+		<MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">Venue</MudText>
 
 		<MudForm @bind-IsValid="@success" @bind-Errors="@errors" ReadOnly="@(!isEditingActive)">
 			<MudTextField @bind-Value="formModel.Name" T="string" Label="Name" />
@@ -72,6 +72,10 @@
 			await Task.Delay(1);
 			await LoadUser();
 			venueDetails = await venueApiService.GetVenueByIdAsync(VenueId);
+			if (venueDetails != null)
+			{
+				formModel = new(venueDetails);
+			}
 			StateHasChanged();
 			base.OnAfterRender(firstRender);
 		}
@@ -83,7 +87,18 @@
 
 	private bool CanEdit()
 	{
-		return userType != null && userType.Value == UserType.BussinessClient && venueDetails != null && user != null && venueDetails.BusinessClientId == user.Id;
+		if (userType != UserType.BussinessClient)
+			return false;
+
+		if (venueDetails == null || currentUser == null)
+			return false;
+
+		var claim = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+		if (!int.TryParse(claim, out int userId))
+			return false;
+
+		return venueDetails.BusinessClientId == userId;
 	}
 
 	private async Task LoadUser()
@@ -92,7 +107,7 @@
 		currentUser = authState.User;
 		if (currentUser.Identity is { IsAuthenticated: true })
 		{
-			if (Enum.TryParse(currentUser.FindFirst("userType")?.Value, out UserType userType))
+			if (Enum.TryParse(currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value, out UserType userType))
 			{
 				this.userType = userType;
 			}
@@ -111,7 +126,7 @@
 
 		var updateVenueDto = new UpdateVenueDto(formModel.Name, formModel.Address, formModel.MaxUsers, formModel.Price, formModel.Location, formModel.Description);
 
-		if (venueDetails.Id !=null && await venueApiService.UpdateVenueAsync(updateVenueDto, venueDetails.Id))
+		if (venueDetails.Id != null && await venueApiService.UpdateVenueAsync(updateVenueDto, venueDetails.Id))
 		{
 			_snackbar.Add("Saved changes", Severity.Success);
 		}
@@ -130,5 +145,20 @@
 		public Location Location = new();
 		public string Description = "";
 		public string ClientName = "";
+		public VenueFormModel(VenueDetailsDto dto)
+		{
+			Name = dto.Name;
+			Address = dto.Address;
+			MaxUsers = dto.MaxUsers;
+			Price = dto.Price;
+			Location = new Location
+				{
+					Latitude = dto.Location.Latitude,
+					Longitude = dto.Location.Longitude
+				};
+			Description = dto.Description;
+			ClientName = dto.ClientName;
+		}
+		public VenueFormModel() { }
 	}
 }

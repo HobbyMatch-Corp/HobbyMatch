@@ -18,6 +18,8 @@ using Scalar.AspNetCore;
 using System.Text;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.BL.Services.Events;
+using HobbyMatch.BL.Services.Venues;
+using HobbyMatch.Database.Repositories.Venues;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,10 +46,12 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 builder.Services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IVenueRepository, VenueRepository>();
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 builder.Services.AddScoped<IBusinessClientRepository, BusinessClientRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAppUserService, AppUserService>();
+builder.Services.AddScoped<IVenueService, VenueService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IBusinessClientService, BusinessClientService>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();

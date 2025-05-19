@@ -62,9 +62,9 @@
 			var claims = TokenService.GetClaimsFromToken();
 			if (!claims.Any())
 				return;
-			if (!int.TryParse(claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value, out int orgId))
+			if (!int.TryParse(claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out int orgId))
 				return;
-			var userType = claims.FirstOrDefault(c => c.Type == "userType")?.Value;
+			var userType = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
 			if (userType == UserType.User.ToString())
 			{
