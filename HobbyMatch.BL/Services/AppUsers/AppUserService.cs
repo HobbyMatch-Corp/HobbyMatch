@@ -39,19 +39,28 @@ namespace HobbyMatch.BL.Services.AppUsers
 			};
 			await _appUserRepository.UpdateUserAsync(userId, user);
         }
-		public async Task<bool> AddFriendToUserAsync(int friendId, User user)
-		{
+        public async Task<bool> AddFriendsAsync(int friendId, User user)
+        {
 			var friend = await _appUserRepository.GetUserByIdAsync(friendId);
-            if(friend == null) return false;
+			if (friend == null) return false;
+            if (!await AddFriendToUserAsync(friend, user)) return false;
+            return await AddFriendToUserAsync(user, friend);
+		}
+		public async Task<bool> AddFriendToUserAsync(User friend, User user)
+		{
 			if (user.Friends.Any(u => u.Id == friend.Id)) return false;
             return await _appUserRepository.AddFriendToUserAsync(user, friend);
 		}
-
-		public async Task<bool> RemoveFriendFromUserAsync(int friendId, User user)
+		public async Task<bool> RemoveFriendsAsync(int friendId, User user)
 		{
 			var friend = user.Friends.FirstOrDefault(u => u.Id == friendId);
 			if (friend == null) return false;
+			if (!await RemoveFriendFromUserAsync(friend, user)) return false;
+			return await RemoveFriendFromUserAsync(user, friend);
+		}
 
+		public async Task<bool> RemoveFriendFromUserAsync(User friend, User user)
+		{
             return await _appUserRepository.RemoveFriendFromUserAsync(user, friend);
 		}
 	}
