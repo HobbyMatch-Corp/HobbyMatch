@@ -17,7 +17,10 @@ public class CommentService : ICommentService
 
     public async Task<List<Comment>> GetEventCommentsAsync(int eventId)
     {
-        return await _dbContext.Comments.Where(c => c.EventId == eventId).ToListAsync();
+        return await _dbContext
+            .Comments.Where(c => c.EventId == eventId)
+            .Include(c => c.Organizer)
+            .ToListAsync();
     }
 
     public async Task<Comment> CreateCommentAsync(CreateCommentRequest request, int userId)
@@ -25,13 +28,16 @@ public class CommentService : ICommentService
         var comment = new Comment
         {
             EventId = request.EventId,
-            UserId = userId,
+            OrganizerId = userId,
             Content = request.Content,
             CreatedAt = DateTime.Now,
         };
         await _dbContext.Comments.AddAsync(comment);
         await _dbContext.SaveChangesAsync();
-        return comment;
+        var savedComment = await _dbContext
+            .Comments.Include(c => c.Organizer)
+            .FirstAsync(c => c.Id == comment.Id);
+        return savedComment;
     }
 
     public async Task DeleteCommentAsync(int commentId, int userId)
@@ -40,7 +46,7 @@ public class CommentService : ICommentService
         if (comment == null)
             throw new NoCommentFound(commentId);
 
-        if (comment.UserId != userId)
+        if (comment.OrganizerId != userId)
             throw new UnauthorizedCommentDelete();
 
         _dbContext.Comments.Remove(comment);

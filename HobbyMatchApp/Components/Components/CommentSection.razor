@@ -1,0 +1,124 @@
+@using System.Security.Claims
+@using HobbyMatch.App.Auth.CustomAuthStateProvider
+@using HobbyMatch.App.Services.Comments
+@using HobbyMatch.BL.DTOs.Comments
+@using HobbyMatch.BL.DTOs.Events
+@inject ICommentApiService _commentApiService
+@inject CustomAuthStateProvider _authStateProvider
+@inject ISnackbar _snackbar
+
+<MudContainer Style="max-width: 50vw; justify-content: center;" Class="pt-4">
+    <MudPaper Class="pa-4">
+        <MudText Typo="Typo.h6" Align="Align.Center">Comments</MudText>
+
+        @if (Comments != null && Comments.Any())
+        {
+            <MudList T="CommentDto" Dense="true" DisableGutters="true" Class="pa-0 overflow-y-auto" Style="max-height: 300px;">
+                @foreach (var comment in Comments.OrderByDescending(c => c.CreatedAt))
+                {
+                    <MudListItem T="CommentDto">
+                        <div class="d-flex flex-column">
+                            <div class="d-flex align-center">
+                                <MudAvatar Size="Size.Small" Color="Color.Secondary">@comment.Username</MudAvatar>
+                                <MudText Typo="Typo.subtitle2" Class="ml-2">User @comment.Username</MudText>
+                                <MudText Typo="Typo.caption" Class="ml-2 text-disabled">@comment.CreatedAt.ToString("HH:mm dd.MM.yyyy")</MudText>
+                            </div>
+                            <MudText Typo="Typo.body2" Class="mt-1 ml-8">@comment.Content</MudText>
+                        </div>
+                    </MudListItem>
+                    <MudDivider Class="my-2"/>
+                }
+            </MudList>
+        }
+        else
+        {
+            <MudText Typo="Typo.body2" Align="Align.Center" Class="my-4">No comments yet. Be the first to comment!</MudText>
+        }
+
+        <MudDivider Class="my-4"/>
+
+        @if (_isUserSignedIn)
+        {
+            <MudTextField T="string"
+                          Label="Add a comment"
+                          Lines="3"
+                          Variant="Variant.Outlined"
+                          @bind-Value="_newCommentText"
+                          Immediate="true"/>
+            <div class="d-flex justify-end mt-2">
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           OnClick="AddCommentAsync"
+                           Disabled="string.IsNullOrWhiteSpace(_newCommentText)">
+                    Post Comment
+                </MudButton>
+            </div>
+        }
+        else
+        {
+            <MudAlert Severity="Severity.Info" Class="my-2">You must be signed in to this event to comment.</MudAlert>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    [Parameter] [EditorRequired] public required EventDto Event { get; set; }
+
+    [Parameter] public EventCallback OnCommentAdded { get; set; }
+
+    private List<CommentDto> Comments { get; set; } = new();
+    private string _newCommentText = "";
+    private bool _isUserSignedIn;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await _authStateProvider.GetAuthenticationStateAsync();
+        var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        _isUserSignedIn = !string.IsNullOrEmpty(userId);
+
+        await LoadCommentsAsync();
+    }
+
+    private async Task LoadCommentsAsync()
+    {
+        try
+        {
+            var comments = await _commentApiService.GetComments(Event.Id);
+            if (comments != null)
+            {
+                Comments = comments;
+            }
+        }
+        catch (Exception ex)
+        {
+            _snackbar.Add($"Error loading comments: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task AddCommentAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_newCommentText))
+            return;
+
+        try
+        {
+            var addedComment = await _commentApiService.CreateComment(Event.Id, _newCommentText);
+            if (addedComment != null)
+            {
+                _snackbar.Add("Comment posted successfully", Severity.Success);
+                _newCommentText = "";
+                await LoadCommentsAsync();
+                await OnCommentAdded.InvokeAsync();
+            }
+            else
+            {
+                _snackbar.Add("Failed to post comment", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            _snackbar.Add($"Error posting comment: {ex.Message}", Severity.Error);
+        }
+    }
+
+}

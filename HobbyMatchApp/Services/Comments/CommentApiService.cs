@@ -6,17 +6,15 @@ namespace HobbyMatch.App.Services.Comments;
 public class CommentApiService : ICommentApiService
 {
     private readonly HttpClient _httpClient;
-    private readonly HttpClient _unauthorizedClient;
 
     public CommentApiService(IHttpClientFactory httpClientFactory)
     {
         _httpClient = httpClientFactory.CreateClient("AuthenticatedClient");
-        _unauthorizedClient = httpClientFactory.CreateClient("AuthClient");
     }
 
     public async Task<CommentDto?> CreateComment(int eventId, string content)
     {
-        var uri = "comments";
+        var uri = "comment";
 
         var commentRequest = new CreateCommentRequest(eventId, content);
 
@@ -30,7 +28,7 @@ public class CommentApiService : ICommentApiService
 
     public async Task<bool> DeleteComment(int commentId)
     {
-        var uri = $"comments/{commentId}";
+        var uri = $"comment/{commentId}";
 
         var response = await _httpClient.DeleteAsync(uri);
 
@@ -39,7 +37,7 @@ public class CommentApiService : ICommentApiService
 
     public async Task<List<CommentDto>?> GetComments(int eventId)
     {
-        var uri = $"comments/event/{eventId}";
+        var uri = $"comment/event/{eventId}";
 
         var response = await _httpClient.GetFromJsonAsync<List<CommentDto>>(uri);
 
