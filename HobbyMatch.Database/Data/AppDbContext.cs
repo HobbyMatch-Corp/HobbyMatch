@@ -74,6 +74,35 @@ namespace HobbyMatch.Database.Data
                     .OnDelete(DeleteBehavior.NoAction);
             });
 
+            modelBuilder.Entity("EventHobby", b =>
+            {
+                b.HasOne("HobbyMatch.Domain.Entities.Hobby", null)
+                    .WithMany()
+                    .HasForeignKey("RelatedHobbiesId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+
+                b.HasOne("HobbyMatch.Domain.Entities.Event", null)
+                    .WithMany()
+                    .HasForeignKey("HobbiesId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity("HobbyUser", b =>
+            {
+                b.HasOne("HobbyMatch.Domain.Entities.Hobby", null)
+                   .WithMany()
+                   .HasForeignKey("HobbiesId")
+                   .OnDelete(DeleteBehavior.NoAction)
+                   .IsRequired();
+                b.HasOne("HobbyMatch.Domain.Entities.User", null)
+                    .WithMany()
+                    .HasForeignKey("HobbiesId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+            });
+
         }
     }
 }
