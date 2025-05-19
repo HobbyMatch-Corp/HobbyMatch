@@ -1,4 +1,4 @@
-﻿@page "/home"
+@page "/home"
 
 @using HobbyMatch.App.Auth.CustomAuthStateProvider
 @using HobbyMatch.App.Auth.TokenService
@@ -25,69 +25,74 @@
 <MudText Typo="Typo.h1" Color="Color.Primary">Welcome, @(UserName)!</MudText>
 
 <MudGrid>
-    <MudItem xs="12" md="8">
-        <UpcomingEventsCard UpcomingEventsList="@UpcomingEventsList" />
-    </MudItem>
+	<MudItem xs="12" md="8">
+		<UpcomingEventsCard UpcomingEventsList="@UpcomingEventsList" />
+	</MudItem>
 
-    <MudItem xs="12" md="4">
-        <MudGrid>
-            <MudItem xs="12">
-                <UserCard Username="@UserName" Email="@Email" TaxId="@TaxId"
-                SignedUpEventCount="@EventsSignedUp" OrganizedEventCount="@EventsOrganized" SponsoredEventCount="@EventsSponsored" />
-            </MudItem>
-            <MudItem xs="12">
-                <CreateEventShortcutCard />
-            </MudItem>
-        </MudGrid>
-    </MudItem>
+	<MudItem xs="12" md="4">
+		<MudGrid>
+			<MudItem xs="12">
+				<UserCard Username="@UserName" Email="@Email" TaxId="@TaxId"
+				SignedUpEventCount="@EventsSignedUp" OrganizedEventCount="@EventsOrganized" SponsoredEventCount="@EventsSponsored" />
+			</MudItem>
+			<MudItem xs="12">
+				<CreateEventShortcutCard />
+			</MudItem>
+		</MudGrid>
+	</MudItem>
 </MudGrid>
 
 
 @code {
-    MudTheme MyCustomTheme = new CustomTheme();
+	MudTheme MyCustomTheme = new CustomTheme();
 
-    public string? UserName { get; set; }
-    public string? Email { get; set; }
-    public string? TaxId { get; set; }
-    public int? EventsSignedUp { get; set; }
-    public int? EventsSponsored { get; set; }
-    public int? EventsOrganized { get; set; }
-    public List<EventDto>? UpcomingEventsList { get; set; }
+	public string? UserName { get; set; }
+	public string? Email { get; set; }
+	public string? TaxId { get; set; }
+	public int? EventsSignedUp { get; set; }
+	public int? EventsSponsored { get; set; }
+	public int? EventsOrganized { get; set; }
+	public List<EventDto>? UpcomingEventsList { get; set; }
 
-    protected override async Task OnAfterRenderAsync(bool firstrender)
-    {
-        if (firstrender)
-        {
-            MyCustomTheme.PaletteLight.Background = new MudBlazor.Utilities.MudColor("#F5F5F5");
-            var claims = TokenService.GetClaimsFromToken();
-            if (!claims.Any())
-                return;
-            int.TryParse(claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value, out int orgId);
-            var userType = claims.First(c => c.Type == ClaimTypes.Role).Value;
+	protected override async Task OnAfterRenderAsync(bool firstrender)
+	{
+		if (firstrender)
+		{
+			MyCustomTheme.PaletteLight.Background = new MudBlazor.Utilities.MudColor("#F5F5F5");
+			var claims = TokenService.GetClaimsFromToken();
+			if (!claims.Any())
+				return;
+			if (!int.TryParse(claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out int orgId))
+				return;
+			var userType = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-            if (userType == UserType.User.ToString())
-            {
-                User? user = await OrganizerApiService.GetUserAsync<User>(orgId);
-                UserName = user?.UserName;
-                Email = user?.Email;
+			if (userType == UserType.User.ToString())
+			{
+				User? user = await OrganizerApiService.GetUserAsync<User>(orgId);
+				UserName = user?.UserName;
+				Email = user?.Email;
 
-                UpcomingEventsList = await EventApiService.GetSignedUpEventsAsync() ?? new List<EventDto>();
-                EventsSignedUp = UpcomingEventsList.Count;
-            }
-            else
-            {
-                BusinessClient? bc = await OrganizerApiService.GetUserAsync<BusinessClient>(orgId);
-                UserName = bc?.UserName;
-                Email = bc?.Email;
-                TaxId = bc?.TaxID;
 
-                UpcomingEventsList = await EventApiService.GetSponsoredEventsAsync() ?? new List<EventDto>();
-                EventsSponsored = UpcomingEventsList.Count;
-            }
+				UpcomingEventsList = await EventApiService.GetSignedUpEventsAsync() ?? new List<EventDto>();
+				EventsSignedUp = UpcomingEventsList.Count;
+			}
+			else if (userType == UserType.BussinessClient.ToString())
+			{
+				BusinessClient? bc = await OrganizerApiService.GetUserAsync<BusinessClient>(orgId);
+				UserName = bc?.UserName;
+				Email = bc?.Email;
+				TaxId = bc?.TaxID;
 
-            EventsOrganized = (await EventApiService.GetOrganizedEventsAsync() ?? new List<EventDto>()).Count;
-            StateHasChanged();
-        }
-    }
+				UpcomingEventsList = await EventApiService.GetSponsoredEventsAsync() ?? new List<EventDto>();
+				EventsSponsored = UpcomingEventsList.Count;
+			}
+			else
+			{
+				return;
+			}
+			EventsOrganized = (await EventApiService.GetOrganizedEventsAsync() ?? new List<EventDto>()).Count;
+			StateHasChanged();
+		}
+	}
 }
 

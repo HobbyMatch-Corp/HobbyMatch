@@ -14,4 +14,5 @@ public interface IVenueRepository
         PaginationParameters paginationParams);
 
     public Task AddVenueAsync(Venue venue);
+	public Task SaveChangesAsync();
 }

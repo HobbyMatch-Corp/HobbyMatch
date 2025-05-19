@@ -13,4 +13,5 @@ public interface IVenueApiService
         PaginationParameters paginationParameters);
 
     public Task<VenueDetailsDto?> CreateVenueAsync(CreateVenueRequest request);
+    public Task<bool> UpdateVenueAsync(UpdateVenueDto request, int venueId);
 }

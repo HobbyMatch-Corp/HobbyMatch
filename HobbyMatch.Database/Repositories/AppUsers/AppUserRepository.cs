@@ -34,6 +34,7 @@ namespace HobbyMatch.Database.Repositories.AppUsers
             return await _dbContext.AppUsers.ToListAsync();
 		}
 
+        // TODO: Think about moving this code to service
         public async Task UpdateUserAsync(int userId, User user)
         {
             var dbUser = await GetUserByIdAsync(userId);

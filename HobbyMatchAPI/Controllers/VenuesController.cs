@@ -14,12 +14,12 @@ namespace HobbyMatch.API.Controllers;
 
 [ApiController]
 [Route("/api/v1/[controller]")]
-public class VenueController : ControllerBase
+public class VenuesController : ControllerBase
 {
     private readonly UserManager<Organizer> _userManager;
     private readonly IVenueService _venueService;
 
-    public VenueController(IVenueService venueService, UserManager<Organizer> userManager)
+    public VenuesController(IVenueService venueService, UserManager<Organizer> userManager)
     {
         _venueService = venueService;
         _userManager = userManager;
@@ -33,6 +33,14 @@ public class VenueController : ControllerBase
     }
 
     [Authorize]
+	[HttpPut("edit/{venueId}")]
+	public async Task<IActionResult> EditVenue([FromRoute] int venueId, [FromBody] UpdateVenueDto updateVenueDto)
+	{
+		var result = await _venueService.EditVenueAsync(venueId, updateVenueDto);
+		return Ok(result);
+	}
+
+	[Authorize]
     [HttpGet("client")]
     public async Task<IActionResult> GetClientVenues(
         [FromQuery] PaginationParameters paginationParams)

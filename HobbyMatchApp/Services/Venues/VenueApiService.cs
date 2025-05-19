@@ -9,6 +9,8 @@ public class VenueApiService : IVenueApiService
 {
     private readonly HttpClient _httpClient;
     private readonly HttpClient _unauthorizedClient;
+    // TODO: Change it later
+    private readonly string _baseUrlForUnauthenticatedClient = "/api/v1";
 
     public VenueApiService(IHttpClientFactory httpClientFactory)
     {
@@ -31,7 +33,7 @@ public class VenueApiService : IVenueApiService
 
     public async Task<VenueDetailsDto?> GetVenueByIdAsync(int venueId)
     {
-        var result = await _unauthorizedClient.GetFromJsonAsync<VenueDetailsDto>("/venues/create");
+        var result = await _unauthorizedClient.GetFromJsonAsync<VenueDetailsDto>($"{_baseUrlForUnauthenticatedClient }/venues/{venueId}");
         return result;
     }
 
@@ -41,6 +43,11 @@ public class VenueApiService : IVenueApiService
         if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<VenueDetailsDto>();
 
         return null;
+    }
+    public async Task<bool> UpdateVenueAsync(UpdateVenueDto request, int venueId)
+    {
+        var response = await _httpClient.PutAsJsonAsync($"/venues/edit/{venueId}", request);
+        return response.IsSuccessStatusCode;
     }
 
     public async Task<PaginatedData<VenueDto>> GetFilteredVenues(string? filter,

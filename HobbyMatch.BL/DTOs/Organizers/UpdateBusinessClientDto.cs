@@ -7,7 +7,7 @@ namespace HobbyMatch.BL.DTOs.Organizers
 
 	public static class BusinessClientDtoExtensions
 	{
-		public static UpdateBusinessClientDto ToDto(this BusinessClient user) => new(
+		public static UpdateBusinessClientDto ToUpdateDto(this BusinessClient user) => new(
 			user.UserName ?? "",
 			user.Email ?? "",
 			user.TaxID ?? ""
