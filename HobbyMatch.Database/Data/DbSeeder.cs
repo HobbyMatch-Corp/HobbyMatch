@@ -131,8 +131,28 @@ public class DbSeeder
             Location = new LocationNullable { Latitude = null, Longitude = null }
         }
     };
-
     private readonly List<User> _users;
+
+    private readonly List<Hobby> _hobbies = new()
+    {
+        new Hobby { Name = "Reading" },
+        new Hobby { Name = "Gardening" },
+        new Hobby { Name = "Painting" },
+        new Hobby { Name = "Cycling" },
+        new Hobby { Name = "Photography" },
+        new Hobby { Name = "Cooking" },
+        new Hobby { Name = "Hiking" },
+        new Hobby { Name = "Swimming" },
+        new Hobby { Name = "Writing" },
+        new Hobby { Name = "Drawing" },
+        new Hobby { Name = "Fishing" },
+        new Hobby { Name = "Knitting" },
+        new Hobby { Name = "Woodworking" },
+        new Hobby { Name = "Yoga" },
+        new Hobby { Name = "Playing Guitar" },
+        new Hobby { Name = "Bird Watching" },
+        new Hobby { Name = "Dancing" }
+    };
 
     public DbSeeder()
     {
@@ -183,6 +203,12 @@ public class DbSeeder
                     if (user == null) userManager.CreateAsync(newUser, "Pass123!").Wait();
                 }
 
+                foreach (var newHobby in _hobbies)
+                {
+                    var hobby = context.Set<Hobby>().FirstOrDefault(h => h.Name == newHobby.Name);
+                    if (hobby == null) context.Set<Hobby>().Add(newHobby);
+                }
+
                 context.SaveChanges();
             })
             .UseAsyncSeeding(async (context, _, ct) =>
@@ -206,6 +232,12 @@ public class DbSeeder
                     {
                         var res = await userManager.CreateAsync(newUser, "Pass123!");
                     }
+                }
+
+                foreach (var newHobby in _hobbies)
+                {
+                    var hobby = context.Set<Hobby>().FirstOrDefault(h => h.Name == newHobby.Name);
+                    if (hobby == null)  await context.Set<Hobby>().AddAsync(newHobby);
                 }
 
                 await context.SaveChangesAsync();

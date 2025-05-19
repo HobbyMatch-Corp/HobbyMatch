@@ -27,7 +27,7 @@ namespace HobbyMatch.API.Controllers
         }
 
         [Authorize]
-        [HttpGet("{userId}")]
+        [HttpGet("{businessClientId}")]
         public async Task<IActionResult> GetUserAsync(int businessClientId)
         {
             var emailJwt = User.FindFirst(ClaimTypes.Email)?.Value;

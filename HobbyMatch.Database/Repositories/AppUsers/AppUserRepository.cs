@@ -13,18 +13,23 @@ namespace HobbyMatch.Database.Repositories.AppUsers
             _dbContext = dbContext;
         }
 
-        public async Task<Domain.Entities.User?> GetUserByEmailAsync(string email)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
-            return await _dbContext.AppUsers.FirstOrDefaultAsync(x => x.Email == email);
+            return await _dbContext.AppUsers
+                .Include(x => x.Hobbies)
+                .FirstOrDefaultAsync(x => x.Email == email);
         }
 
-        public async Task<Domain.Entities.User?> GetUserByIdAsync(int id)
+        public async Task<User?> GetUserByIdAsync(int id)
         {
-            var x = await _dbContext.AppUsers.ToListAsync();
-			return await _dbContext.AppUsers.FindAsync(id);
+            return await _dbContext.AppUsers
+                .Include(x => x.Hobbies)
+                .FirstOrDefaultAsync(x => x.Id == id);
+   //         var x = await _dbContext.AppUsers.ToListAsync();
+			//return await _dbContext.AppUsers.FindAsync(id);
         }
 
-        public async Task<List<Domain.Entities.User>> GetUsersAsync()
+        public async Task<List<User>> GetUsersAsync()
         {
             return await _dbContext.AppUsers.ToListAsync();
 		}
@@ -38,6 +43,7 @@ namespace HobbyMatch.Database.Repositories.AppUsers
             {
                 dbUser.Email = user.Email;
                 dbUser.UserName = user.UserName;
+                dbUser.Hobbies = user.Hobbies;
             }
             await _dbContext.SaveChangesAsync();
         }
