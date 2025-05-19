@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace HobbyMatch.BL.DTOs.Venues
 {
+	// TODO: When internet available, check documentation for requirements
 	public record UpdateVenueDto(
-		string? Name,
+		string Name,
 		string? Address,
 		int? MaxUsers,
 		decimal? Price,
-		Location? Location,
-		string? Description
+		Location Location,
+		string Description
 	);
 
 	public static partial class VenueExtensions

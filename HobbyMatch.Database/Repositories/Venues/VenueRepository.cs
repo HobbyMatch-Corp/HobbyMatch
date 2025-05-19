@@ -35,6 +35,11 @@ public class VenueRepository : IVenueRepository
     public async Task AddVenueAsync(Venue venue)
     {
         await _dbContext.AddAsync(venue);
+        await SaveChangesAsync();
+    }
+
+    public async Task SaveChangesAsync()
+    {
         await _dbContext.SaveChangesAsync();
     }
 }

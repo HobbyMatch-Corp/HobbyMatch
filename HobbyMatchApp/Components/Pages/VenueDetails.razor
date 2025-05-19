@@ -1,0 +1,9 @@
+﻿@page "/venue/{VenueId:int}"
+
+<HobbyMatch.App.Components.Components.VenueCard VenueId="VenueId"/>
+
+@code {
+	[Parameter]
+	public int VenueId { get; set; }
+
+}

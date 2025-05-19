@@ -31,7 +31,7 @@ public class VenueApiService : IVenueApiService
 
     public async Task<VenueDetailsDto?> GetVenueByIdAsync(int venueId)
     {
-        var result = await _unauthorizedClient.GetFromJsonAsync<VenueDetailsDto>("/venues/create");
+        var result = await _unauthorizedClient.GetFromJsonAsync<VenueDetailsDto>($"/venues/{venueId}");
         return result;
     }
 
