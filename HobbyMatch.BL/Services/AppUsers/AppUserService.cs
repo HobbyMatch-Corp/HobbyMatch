@@ -3,6 +3,7 @@ using HobbyMatch.BL.DTOs.Organizers;
 using HobbyMatch.BL.Services.Hobbies;
 using HobbyMatch.Database.Repositories.AppUsers;
 using HobbyMatch.Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace HobbyMatch.BL.Services.AppUsers
 {
@@ -45,5 +46,20 @@ namespace HobbyMatch.BL.Services.AppUsers
             };
 			await _appUserRepository.UpdateUserAsync(userId, user);
         }
-    }
+        public async Task<bool> AddFriendsAsync(int friendId, User user)
+        {
+			var friend = await _appUserRepository.GetUserByIdAsync(friendId);
+			if (friend == null) return false;
+			if (user.Friends.Any(u => u.Id == friend.Id) || friend.Friends.Any(u => u.Id == user.Id)) return false;
+			if (!await _appUserRepository.AddFriendToUserAsync(user, friend)) return false;
+			return await _appUserRepository.AddFriendToUserAsync(friend, user);
+		}
+		public async Task<bool> RemoveFriendsAsync(int friendId, User user)
+		{
+			var friend = user.Friends.FirstOrDefault(u => u.Id == friendId);
+			if (friend == null) return false;
+			if (!await _appUserRepository.RemoveFriendFromUserAsync(user, friend)) return false;
+			return await _appUserRepository.RemoveFriendFromUserAsync(friend, user);
+		}
+	}
 }

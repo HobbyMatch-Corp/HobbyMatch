@@ -46,5 +46,18 @@ namespace HobbyMatch.Database.Repositories.AppUsers
             }
             await _dbContext.SaveChangesAsync();
         }
-    }
+		public async Task<bool> AddFriendToUserAsync(User user, User friend)
+		{
+			user.Friends.Add(friend);
+			await _dbContext.SaveChangesAsync();
+			return true;
+		}
+
+		public async Task<bool> RemoveFriendFromUserAsync(User user, User friend)
+		{
+			user.Friends.Remove(friend);
+			await _dbContext.SaveChangesAsync();
+			return true;
+		}
+	}
 }

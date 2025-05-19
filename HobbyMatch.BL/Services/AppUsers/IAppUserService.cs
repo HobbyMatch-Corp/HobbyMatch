@@ -12,5 +12,10 @@ namespace HobbyMatch.BL.Services.AppUsers
         public Task<User?> GetUserByIdAsync(int id);
 
         public Task UpdateUserAsync(int userId, UpdateUserDto userDto);
-    }
+
+		public Task<bool> AddFriendsAsync(int friendId, User user);
+
+		public Task<bool> RemoveFriendsAsync(int friendId, User user);
+
+	}
 }
