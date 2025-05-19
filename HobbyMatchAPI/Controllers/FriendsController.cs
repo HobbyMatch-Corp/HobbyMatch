@@ -39,7 +39,7 @@ namespace HobbyMatch.API.Controllers
 			if (user == null || userType != UserType.User.ToString()) // Check if user is actually "User" and not "Business Client"
 				return Unauthorized();
 
-			var result = await _appUserService.RemoveFriendFromUserAsync(friendId, (user as User)!);
+			var result = await _appUserService.RemoveFriendsAsync(friendId, (user as User)!);
 			return result ? Ok(result) : BadRequest("Could not remove friend");
 
 		 }

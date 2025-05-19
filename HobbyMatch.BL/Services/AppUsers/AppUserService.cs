@@ -43,25 +43,16 @@ namespace HobbyMatch.BL.Services.AppUsers
         {
 			var friend = await _appUserRepository.GetUserByIdAsync(friendId);
 			if (friend == null) return false;
-            if (!await AddFriendToUserAsync(friend, user)) return false;
-            return await AddFriendToUserAsync(user, friend);
-		}
-		public async Task<bool> AddFriendToUserAsync(User friend, User user)
-		{
-			if (user.Friends.Any(u => u.Id == friend.Id)) return false;
-            return await _appUserRepository.AddFriendToUserAsync(user, friend);
+			if (user.Friends.Any(u => u.Id == friend.Id) || friend.Friends.Any(u => u.Id == user.Id)) return false;
+			if (!await _appUserRepository.AddFriendToUserAsync(user, friend)) return false;
+			return await _appUserRepository.AddFriendToUserAsync(friend, user);
 		}
 		public async Task<bool> RemoveFriendsAsync(int friendId, User user)
 		{
 			var friend = user.Friends.FirstOrDefault(u => u.Id == friendId);
 			if (friend == null) return false;
-			if (!await RemoveFriendFromUserAsync(friend, user)) return false;
-			return await RemoveFriendFromUserAsync(user, friend);
-		}
-
-		public async Task<bool> RemoveFriendFromUserAsync(User friend, User user)
-		{
-            return await _appUserRepository.RemoveFriendFromUserAsync(user, friend);
+			if (!await _appUserRepository.RemoveFriendFromUserAsync(user, friend)) return false;
+			return await _appUserRepository.RemoveFriendFromUserAsync(friend, user);
 		}
 	}
 }
