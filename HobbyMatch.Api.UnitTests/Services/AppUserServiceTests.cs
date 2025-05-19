@@ -13,7 +13,7 @@ namespace UnitTests
 		public AppUserServiceTests()
 		{
 			_appUserRepository = new Mock<IAppUserRepository>();
-			_appUserService = new AppUserService(_appUserRepository.Object);
+			_appUserService = new AppUserService(_appUserRepository.Object, null);
 		}
 
 		#region AddFriendsAsync Tests
