@@ -6,6 +6,7 @@
 @using HobbyMatch.App.Services.Api
 @using HobbyMatch.App.Services.Events
 @using HobbyMatch.BL.DTOs.Events
+@using HobbyMatch.BL.DTOs.Organizers
 @using HobbyMatch.Domain.Entities
 @using HobbyMatch.App.Components.Layout;
 @using System.Security.Claims
@@ -68,9 +69,9 @@
 
 			if (userType == UserType.User.ToString())
 			{
-				User? user = await OrganizerApiService.GetUserAsync<User>(orgId);
-				UserName = user?.UserName;
-				Email = user?.Email;
+				UserDto? user = await OrganizerApiService.GetUserAsync<UserDto>(orgId);
+				UserName = user?.userName;
+				Email = user?.email;
 
 
 				UpcomingEventsList = await EventApiService.GetSignedUpEventsAsync() ?? new List<EventDto>();
@@ -78,10 +79,10 @@
 			}
 			else if (userType == UserType.BussinessClient.ToString())
 			{
-				BusinessClient? bc = await OrganizerApiService.GetUserAsync<BusinessClient>(orgId);
-				UserName = bc?.UserName;
-				Email = bc?.Email;
-				TaxId = bc?.TaxID;
+				BusinessClientDto? bc = await OrganizerApiService.GetUserAsync<BusinessClientDto>(orgId);
+				UserName = bc?.userName;
+				Email = bc?.email;
+				TaxId = bc?.taxId;
 
 				UpcomingEventsList = await EventApiService.GetSponsoredEventsAsync() ?? new List<EventDto>();
 				EventsSponsored = UpcomingEventsList.Count;

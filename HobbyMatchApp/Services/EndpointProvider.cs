@@ -1,4 +1,5 @@
-﻿using HobbyMatch.Domain.Entities;
+﻿using HobbyMatch.BL.DTOs.Organizers;
+using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.App.Services
 {
@@ -6,10 +7,10 @@ namespace HobbyMatch.App.Services
 	{
 		private readonly Dictionary<Type, string> _endpointMap = new() 
 		{
-			{ typeof(User), "users" },
-			{ typeof(BusinessClient), "businessClients" },
+			{ typeof(UserDto), "users" },
+			{ typeof(BusinessClientDto), "businessClients" },
 		};
-		public string GetEndpoint<T>()  where T : Organizer
+		public string GetEndpoint<T>()  where T : OrganizerDto
 		{
 			if (_endpointMap.TryGetValue(typeof(T), out var endpoint))
 			{

@@ -35,7 +35,7 @@ namespace HobbyMatch.API.Controllers
             var businessClient = await _businessClientService.GetBusinessClientByIdAsync(businessClientId);
             if (businessClient == null || string.IsNullOrEmpty(emailJwt) || businessClient.Email != emailJwt) return BadRequest();
 
-            return Ok(businessClient);
+            return Ok(businessClient.ToDto());
         }
         [Authorize]
         [HttpGet("me")]
@@ -46,7 +46,7 @@ namespace HobbyMatch.API.Controllers
             var businessClient = await _businessClientService.GetBusinessClientByEmailAsync(emailJwt);
             if (businessClient == null) return BadRequest();
 
-            return Ok(businessClient);
+            return Ok(businessClient.ToDto());
         }
 
         [Authorize]

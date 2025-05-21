@@ -14,7 +14,7 @@ namespace HobbyMatch.App.Services.Api
             _endpointProvider = endpointProvider;	
 		}
 
-		public async Task<T?> GetMe<T>() where T: Organizer
+		public async Task<T?> GetMe<T>() where T: OrganizerDto
 		{
 			string endpoint = "";
 			try
@@ -36,7 +36,7 @@ namespace HobbyMatch.App.Services.Api
 			return user;
 		}
 
-		public async Task<T[]?> GetUsersAsync<T>() where T : Organizer
+		public async Task<T[]?> GetUsersAsync<T>() where T : OrganizerDto
 		{
 			string endpoint = "";
 			try
@@ -59,7 +59,7 @@ namespace HobbyMatch.App.Services.Api
 
 		}
 
-		public async Task<T?> GetUserAsync<T>(int id) where T : Organizer
+		public async Task<T?> GetUserAsync<T>(int id) where T : OrganizerDto
 		{
 			string endpoint = "";
 			try
@@ -81,7 +81,7 @@ namespace HobbyMatch.App.Services.Api
 			return user;
 		}
 
-		public async Task<bool> UpdateUserAsync<T, TDto>(int id, TDto editedUser) where T : Organizer
+		public async Task<bool> UpdateUserAsync<T, TDto>(string id, TDto editedUser) where T : OrganizerDto
 		{
 			string endpoint = "";
 			try
