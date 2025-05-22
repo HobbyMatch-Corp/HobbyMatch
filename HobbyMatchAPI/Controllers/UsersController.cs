@@ -35,7 +35,7 @@ namespace HobbyMatch.API.Controllers
             var user = await _appUserService.GetUserByIdAsync(userId);
             if (user == null || string.IsNullOrEmpty(emailJWT) || user.Email != emailJWT) return BadRequest();
 
-            return Ok(user);
+            return Ok(user.ToDto());
         }
 		[Authorize]
 		[HttpGet("me")]
@@ -46,7 +46,7 @@ namespace HobbyMatch.API.Controllers
 			var user = await _appUserService.GetUserByEmailAsync(emailJWT);
 			if (user == null ) return BadRequest();
 
-			return Ok(user);
+			return Ok(user.ToDto());
 		}
 
 		[Authorize]

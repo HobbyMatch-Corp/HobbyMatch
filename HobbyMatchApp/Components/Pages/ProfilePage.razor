@@ -65,16 +65,16 @@
     bool success;
     bool editable = false;
     string[] errors = { };
-    int _userId = 0;
+    string _userId;
     private UserFormModel formModel = new();
-    Organizer? user;
+    OrganizerDto? user;
     UserType? userType = null;
 
     MudTextField<string>? usernameField;
     MudTextField<string>? emailField;
     MudTextField<string>? taxIdField;
 
-    private ClaimsPrincipal? currentUser;
+    private ClaimsPrincipal? userClaimsPrincipal;
 
     private HobbiesList? hobbiesList;
     private List<HobbyDto> hobbies { get; set; } = new();
@@ -86,10 +86,10 @@
         {
             await Task.Delay(1);
             var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
-            currentUser = authState.User;
-            if (currentUser.Identity is { IsAuthenticated: true })
+            userClaimsPrincipal = authState.User;
+            if (userClaimsPrincipal.Identity is { IsAuthenticated: true })
             {
-                if (Enum.TryParse(currentUser.FindFirst(ClaimTypes.Role)?.Value, out UserType userType))
+                if (Enum.TryParse(userClaimsPrincipal.FindFirst(ClaimTypes.Role)?.Value, out UserType userType))
                 {
                     this.userType = userType;
                     await LoadData();
@@ -116,28 +116,28 @@
         {
             if (userType == UserType.User)
             {
-                user = await organizerApiService.GetMe<User>();
+                user = await organizerApiService.GetMe<UserDto>();
             }
             else if (userType == UserType.BussinessClient)
-                user = await organizerApiService.GetMe<BusinessClient>();
+                user = await organizerApiService.GetMe<BusinessClientDto>();
 
             if (user is not null)
             {
-                _userId = user.Id;
+                _userId = user.userId;
                 formModel = new UserFormModel
                     {
-                        UserName = user.UserName,
-                        Email = user.Email,
+                        UserName = user.userName,
+                        Email = user.email,
                     };
                 if (userType is not null && userType == UserType.BussinessClient)
                 {
                     formModel.AccountType = "BusinessClient";
-                    formModel.TaxId = ((BusinessClient)user).TaxID;
+                    formModel.TaxId = ((BusinessClientDto)user).taxId;
                 }
                 else
                 {
                     formModel.AccountType = "User";
-                    initialHobbies = ((User)user).Hobbies.Select(h => h.ToDto()).ToList();
+                    initialHobbies = ((UserDto)user).hobbies.ToList();
                 }
             }
 
@@ -155,9 +155,9 @@
         if (userType == UserType.User)
         {
             var hobbyDtos = hobbiesList?.SelectedHobbies.ToArray() ?? [];
-            var updatedUser = new UpdateUserDto(formModel.UserName, formModel.Email, hobbyDtos);
+            var updatedUser = new UpdateUserDto(user.userId.ToString(),formModel.UserName, formModel.Email, hobbyDtos);
 
-            if (await organizerApiService.UpdateUserAsync<User, UpdateUserDto>(_userId, updatedUser))
+            if (await organizerApiService.UpdateUserAsync<UserDto, UpdateUserDto>(_userId, updatedUser))
             {
                 _snackbar.Add("Saved changes", Severity.Success);
                 await LoadData();
@@ -170,7 +170,7 @@
         else if (userType == UserType.BussinessClient && formModel.TaxId != null)
         {
             var updatedBusinessClient = new UpdateBusinessClientDto(formModel.UserName, formModel.Email, formModel.TaxId);
-            if (await organizerApiService.UpdateUserAsync<BusinessClient, UpdateBusinessClientDto>(_userId, updatedBusinessClient))
+            if (await organizerApiService.UpdateUserAsync<BusinessClientDto, UpdateBusinessClientDto>(_userId, updatedBusinessClient))
             {
                 _snackbar.Add("Saved changes", Severity.Success);
                 await LoadData();

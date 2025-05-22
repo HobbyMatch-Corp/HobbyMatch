@@ -36,12 +36,12 @@ namespace HobbyMatch.BL.Services.AppUsers
 
         public async Task UpdateUserAsync(int userId, UpdateUserDto userDto)
         {
-            var hobbies = await _hobbyService.GetHobbiesAsync(userDto.Hobbies.ToList());
+            var hobbies = await _hobbyService.GetHobbiesAsync(userDto.hobbies.ToList());
 
 			var user = new User
 			{
-				Email = userDto.Email,
-				UserName = userDto.UserName,
+				Email = userDto.email,
+				UserName = userDto.userName,
                 Hobbies = hobbies
             };
 			await _appUserRepository.UpdateUserAsync(userId, user);
