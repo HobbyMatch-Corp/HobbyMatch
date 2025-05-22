@@ -34,14 +34,14 @@ namespace UnitTests
             var organizerId = 1;
             var expectedEvent = new Event
             {
-                Name = createEventRequest.Name,
-                Description = createEventRequest.Description,
-                StartTime = createEventRequest.StartTime,
-                EndTime = createEventRequest.EndTime,
+                Name = createEventRequest.title,
+                Description = createEventRequest.description,
+                StartTime = createEventRequest.startTime,
+                EndTime = createEventRequest.endTime,
                 Location = createEventRequest.Location,
-                Price = createEventRequest.Price,
-                MaxUsers = createEventRequest.MaxUsers,
-                MinUsers = createEventRequest.MinUsers,
+                Price = createEventRequest.price,
+                MaxUsers = createEventRequest.maxUsers,
+                MinUsers = createEventRequest.minUsers,
                 OrganizerId = organizerId
             };
             _eventRepository
@@ -97,11 +97,11 @@ namespace UnitTests
             var result = await _eventService.EditEventAsync(updateRequest, eventId, organizerId);
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(updateRequest.Name, result.Name);
-            Assert.Equal(updateRequest.Description, result.Description);
-            Assert.Equal(updateRequest.StartTime, result.StartTime);
-            Assert.Equal(updateRequest.EndTime, result.EndTime);
-            Assert.Equal(updateRequest.Price, result.Price);
+            Assert.Equal(updateRequest.title, result.Name);
+            Assert.Equal(updateRequest.description, result.Description);
+            Assert.Equal(updateRequest.startTime, result.StartTime);
+            Assert.Equal(updateRequest.endTime, result.EndTime);
+            Assert.Equal(updateRequest.price, result.Price);
             _eventRepository.Verify(x => x.GetEventByIdAsync(eventId), Times.Once);
             _eventRepository.Verify(x => x.UpdateEventAsync(It.IsAny<Event>()), Times.Once);
         }

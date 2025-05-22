@@ -67,7 +67,7 @@ namespace HobbyMatch.DbIntegrationTests
         public async Task CreateEvent_ValidData_ShouldPass()
         {
             // Arrange
-            CreateEventRequest createEventRequest = new(
+            CreateEventDto createEventRequest = new(
                 "Test Event",
                 "A sample description",
                 DateTime.UtcNow,
@@ -80,14 +80,14 @@ namespace HobbyMatch.DbIntegrationTests
             var organizerId = 1;
             var expectedEvent = new Event
             {
-                Name = createEventRequest.Name,
-                Description = createEventRequest.Description,
-                StartTime = createEventRequest.StartTime,
-                EndTime = createEventRequest.EndTime,
+                Name = createEventRequest.title,
+                Description = createEventRequest.description,
+                StartTime = createEventRequest.startTime,
+                EndTime = createEventRequest.endTime,
                 Location = createEventRequest.Location,
-                Price = createEventRequest.Price,
-                MaxUsers = createEventRequest.MaxUsers,
-                MinUsers = createEventRequest.MinUsers,
+                Price = createEventRequest.price,
+                MaxUsers = createEventRequest.maxUsers,
+                MinUsers = createEventRequest.minUsers,
                 OrganizerId = organizerId
             };
 

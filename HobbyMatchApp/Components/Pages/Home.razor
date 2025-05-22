@@ -70,8 +70,8 @@
 			if (userType == UserType.User.ToString())
 			{
 				UserDto? user = await OrganizerApiService.GetUserAsync<UserDto>(orgId);
-				UserName = user?.userName;
-				Email = user?.email;
+				UserName = user?.Name;
+				Email = user?.Email;
 
 
 				UpcomingEventsList = await EventApiService.GetSignedUpEventsAsync() ?? new List<EventDto>();
@@ -80,8 +80,8 @@
 			else if (userType == UserType.BussinessClient.ToString())
 			{
 				BusinessClientDto? bc = await OrganizerApiService.GetUserAsync<BusinessClientDto>(orgId);
-				UserName = bc?.userName;
-				Email = bc?.email;
+				UserName = bc?.Name;
+				Email = bc?.Email;
 				TaxId = bc?.taxId;
 
 				UpcomingEventsList = await EventApiService.GetSponsoredEventsAsync() ?? new List<EventDto>();

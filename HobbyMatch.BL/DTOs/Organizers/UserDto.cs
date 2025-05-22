@@ -1,14 +1,9 @@
 ﻿using HobbyMatch.BL.DTOs.Hobbies;
 using HobbyMatch.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HobbyMatch.BL.DTOs.Organizers
 {
-	public record UserDto(string userId, string userName, string email, HobbyDto[] hobbies) : OrganizerDto(userId, userName, email);
+	public record UserDto(string Id, string Name, string Email, HobbyDto[] Hobbies) : OrganizerDto(Id, Name);
 	public static partial class UserDtoExtensions
 	{
 		public static UserDto ToDto(this User user) => new(

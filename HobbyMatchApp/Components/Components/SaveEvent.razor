@@ -63,7 +63,7 @@
 	{
 		if (_isEditMode && eventObj != null)
 		{
-			_eventName = eventObj.Name;
+			_eventName = eventObj.Title;
 			_eventDescription = eventObj.Description;
 			_startDate = eventObj.StartTime.Date;
 			_startTime = eventObj.StartTime.TimeOfDay;
@@ -81,7 +81,7 @@
 		var startDateTime = (_startDate ?? DateTime.Today).Add(_startTime ?? TimeSpan.Zero);
 		var endDateTime = (_endDate ?? DateTime.Today).Add(_endTime ?? TimeSpan.Zero);
 
-		var request = new Domain.Requests.CreateEventRequest(
+		var request = new CreateEventDto(
 			_eventName,
 			_eventDescription,
 			startDateTime,
@@ -89,7 +89,9 @@
 			_location,
 			_price,
 			_maxUsers,
-			_minUsers);
+			_minUsers,
+			[]
+		);
 
 		EventDto? result;
 

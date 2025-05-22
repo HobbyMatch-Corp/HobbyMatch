@@ -15,13 +15,13 @@ namespace HobbyMatch.BL.Services.Events
 		Task<bool> CheckIfUserInSignInList(int eventId, User user);
 		Task<IEnumerable<Event>> GetEventsWithFilterAsync(string? filter);
 		Task<bool> RemoveUserFromEventAsync(int eventId, User user);
-        Task<Event?> CreateEventAsync(CreateEventRequest dto, int organizerId);
+        Task<Event?> CreateEventAsync(CreateEventDto dto, int organizerId);
 
         Task<List<Event>?> GetSignedUpEventsAsync(string userEmail);
 
         Task<List<Event>?> GetOrganizedEventsAsync(string organizerEmail);
 
         Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail);
-		Task<Event?> EditEventAsync(CreateEventRequest createRequest, int eventId, int id);
+		Task<Event?> EditEventAsync(CreateEventDto createRequest, int eventId, int id);
     }
 }

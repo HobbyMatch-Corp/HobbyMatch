@@ -23,7 +23,7 @@ namespace HobbyMatch.API.Controllers
 
 		[HttpPost("create")]
 		[Authorize]
-		public async Task<ActionResult<Event?>> EventCreate([FromBody] CreateEventRequest createRequest)
+		public async Task<ActionResult<Event?>> EventCreate([FromBody] CreateEventDto createRequest)
 		{
 			var user = await _userManager.GetUserAsync(User);
 			if (user == null) return Unauthorized();
@@ -32,7 +32,7 @@ namespace HobbyMatch.API.Controllers
 		}
 		[HttpPut("edit/{eventId}")]
 		[Authorize]
-		public async Task<ActionResult<Event?>> EventEdit([FromBody] CreateEventRequest createRequest, [FromRoute] int eventId)
+		public async Task<ActionResult<Event?>> EventEdit([FromBody] CreateEventDto createRequest, [FromRoute] int eventId)
 		{
 			var user = await _userManager.GetUserAsync(User);
 			if (user == null) return Unauthorized();
@@ -56,32 +56,32 @@ namespace HobbyMatch.API.Controllers
 			if (user == null || userType != UserType.User.ToString()) // Check if user is actually "User" and not "Business Client"
 				return Unauthorized();
 
-			var result = await _eventService.CheckIfUserInSignInList(dto.eventId, (user as User)!);
+			var result = await _eventService.CheckIfUserInSignInList(dto.EventId, (user as User)!);
             return Ok(result);
         }
-		[HttpPost("signin")]
+		[HttpPost("{eventId}/enroll")]
 		[Authorize]
-		public async Task<ActionResult> EventSignin([FromBody] EventSignDto dto)
+		public async Task<ActionResult> EventSignin([FromRoute] int eventId)
 		{
 			var user = await _userManager.GetUserAsync(User);
 			var userType = User.FindFirst(ClaimTypes.Role)?.Value;
 			if (user == null || userType != UserType.User.ToString()) // Check if user is actually "User" and not "Business Client"
 				return Unauthorized();
 
-			var result = await _eventService.AddUserToEventAsync(dto.eventId, (user as User)!);
+			var result = await _eventService.AddUserToEventAsync(eventId, (user as User)!);
 			return result ? Ok(result) : BadRequest("Could not sign in to event");
 		}
 
-		[HttpPost("signout")]
-        [Authorize]
-        public async Task<ActionResult> EventSignout([FromBody] EventSignDto dto)
-        {
+		[HttpPost("{eventId}/withdraw")]
+		[Authorize]
+		public async Task<ActionResult> EventSignout([FromRoute] int eventId)
+		{
             var user = await _userManager.GetUserAsync(User);
 			var userType = User.FindFirst(ClaimTypes.Role)?.Value;
 			if (user == null || userType != UserType.User.ToString()) // Check if user is actually "User" and not "Business Client"
 				return Unauthorized();
 
-			var result = await _eventService.RemoveUserFromEventAsync(dto.eventId, (user as User)!);
+			var result = await _eventService.RemoveUserFromEventAsync(eventId, (user as User)!);
             return result ? Ok(result) : BadRequest("Could not sign out from event");
         }
 

@@ -35,14 +35,14 @@ Elevation="3">
                                         <MudText Typo="Typo.h6" Class="mb-1"
                                         Style="cursor: pointer;"
                                         @onclick="() => NavigateToEventDetails(evt.Id)">
-                                            @evt.Name
+                                            @evt.Title
                                         </MudText>
 
                                         <!-- Event Details -->
                                         <MudText Typo="Typo.body2" Class="mb-1">
                                             Price: @(evt.Price > 0 ? $"${evt.Price:F2}" : "Free") |
                                             Location: @(GetLocationString(evt)) |
-                                            Organizer: @(string.IsNullOrEmpty(evt.OrganizerName) ? "Unknown" : evt.OrganizerName)
+                                            Organizer: @(string.IsNullOrEmpty(evt.Organizer.Name) ? "Unknown" : evt.Organizer.Name)
                                         </MudText>
 
                                     </div>
