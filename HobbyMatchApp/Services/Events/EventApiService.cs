@@ -14,7 +14,7 @@ namespace HobbyMatch.App.Services.Events
 
         }
 
-		public async Task<EventDto?> CreateEventAsync(CreateEventRequest eventRequest)
+		public async Task<EventDto?> CreateEventAsync(CreateEventDto eventRequest)
 		{
 			EventDto? success = null;
 			var response = await _httpClient.PostAsJsonAsync("events/create", eventRequest);
@@ -34,7 +34,7 @@ namespace HobbyMatch.App.Services.Events
 			}
 			return success;
 		}
-        public async Task<EventDto?> EditEventAsync(CreateEventRequest eventRequest, int eventId)
+        public async Task<EventDto?> EditEventAsync(CreateEventDto eventRequest, int eventId)
 		{
 			EventDto? success = null;
 			var response = await _httpClient.PutAsJsonAsync($"events/edit/{eventId}", eventRequest);
@@ -48,7 +48,7 @@ namespace HobbyMatch.App.Services.Events
 		public async Task<bool> EventSigninAsync(int eventId)
         {
             bool success = false;
-            var response = await _httpClient.PostAsJsonAsync("events/signin", new EventSignDto(eventId));
+            var response = await _httpClient.PostAsJsonAsync($"events/{eventId}/enroll", new { });
             if (response.IsSuccessStatusCode)
             {
                 success = await response.Content.ReadFromJsonAsync<bool>();
@@ -59,7 +59,7 @@ namespace HobbyMatch.App.Services.Events
         public async Task<bool> EventSignoutAsync(int eventId)
         {
             bool success = false;
-            var response = await _httpClient.PostAsJsonAsync("events/signout", new EventSignDto(eventId));
+            var response = await _httpClient.PostAsJsonAsync($"events/{eventId}/withdraw", new { });
             if (response.IsSuccessStatusCode)
             {
                 success = await response.Content.ReadFromJsonAsync<bool>();

@@ -1,9 +1,13 @@
-﻿using HobbyMatch.BL.Services.Events;
+﻿using HobbyMatch.BL.DTOs.Events;
+using HobbyMatch.BL.Services.Events;
+using HobbyMatch.BL.Services.Hobbies;
 using HobbyMatch.Database.Repositories.Events;
+using HobbyMatch.Database.Repositories.Hobbies;
 using HobbyMatch.DbIntegrationTests.Infrastrucutre;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Requests;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 
 namespace HobbyMatch.DbIntegrationTests
 {
@@ -11,12 +15,16 @@ namespace HobbyMatch.DbIntegrationTests
     {
 
         private readonly IEventRepository _eventRepository;
+        private readonly IHobbyRepository _hobbyRepository;
         private readonly IEventService _eventService;
+        private readonly IHobbyService _hobbyService;
 
-        public EventTests(IntegrationTestWebAppFactory factory) : base(factory)
+		public EventTests(IntegrationTestWebAppFactory factory) : base(factory)
         {
             _eventRepository = new EventRepository(DbContext);
-            _eventService = new EventService(_eventRepository, null);
+            _hobbyRepository = new HobbyRepository(DbContext);
+			_hobbyService = new HobbyService(_hobbyRepository);
+			_eventService = new EventService(_eventRepository, _hobbyService);
         }
 
         [Fact]
@@ -67,7 +75,7 @@ namespace HobbyMatch.DbIntegrationTests
         public async Task CreateEvent_ValidData_ShouldPass()
         {
             // Arrange
-            CreateEventRequest createEventRequest = new(
+            CreateEventDto createEventRequest = new(
                 "Test Event",
                 "A sample description",
                 DateTime.UtcNow,
@@ -75,12 +83,13 @@ namespace HobbyMatch.DbIntegrationTests
                 new LocationNullable(),
                 20.0f,
                 100,
-                10
+                10,
+                []
             );
             var organizerId = 1;
             var expectedEvent = new Event
             {
-                Name = createEventRequest.Name,
+                Name = createEventRequest.Title,
                 Description = createEventRequest.Description,
                 StartTime = createEventRequest.StartTime,
                 EndTime = createEventRequest.EndTime,
@@ -88,7 +97,8 @@ namespace HobbyMatch.DbIntegrationTests
                 Price = createEventRequest.Price,
                 MaxUsers = createEventRequest.MaxUsers,
                 MinUsers = createEventRequest.MinUsers,
-                OrganizerId = organizerId
+                OrganizerId = organizerId,
+                RelatedHobbies = [],
             };
 
             // Act

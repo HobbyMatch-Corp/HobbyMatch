@@ -1,4 +1,6 @@
-﻿using HobbyMatch.BL.Services.Hobbies;
+﻿using HobbyMatch.BL.DTOs.Events;
+using HobbyMatch.BL.DTOs.Hobbies;
+using HobbyMatch.BL.Services.Hobbies;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Requests;
@@ -34,12 +36,14 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
         return true;
     }
 
-    public async Task<Event?> CreateEventAsync(CreateEventRequest dto, int organizerId)
+    public async Task<Event?> CreateEventAsync(CreateEventDto dto, int organizerId)
     {
-        //var hobbies = await _hobbyService.GetHobbiesAsync(dto.RelatedHobbies);
+        var hobbies = await _hobbyService.GetHobbiesAsync();
+        var dtoHobbiesList = dto.Hobbies.ToList();
+        var relatedHobbies = hobbies.Where(h => dtoHobbiesList.Contains(h.ToDto()));
         var entity = new Event
         {
-            Name = dto.Name,
+            Name = dto.Title,
             Description = dto.Description,
             StartTime = dto.StartTime,
             EndTime = dto.EndTime,
@@ -47,21 +51,22 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
             Price = dto.Price,
             MaxUsers = dto.MaxUsers,
             MinUsers = dto.MinUsers,
-            OrganizerId = organizerId
+            OrganizerId = organizerId,
+            RelatedHobbies = relatedHobbies.ToArray(),
         };
 
         var result = await _eventRepository.AddEvent(entity);
         return result;
     }
 
-    public async Task<Event?> EditEventAsync(CreateEventRequest dto, int eventId, int userId)
+    public async Task<Event?> EditEventAsync(CreateEventDto dto, int eventId, int userId)
     {
         //var hobbies = await _hobbyService.GetHobbiesAsync(dto.RelatedHobbies);
         var eventToEdit = await _eventRepository.GetEventByIdAsync(eventId);
 
         if (eventToEdit == null || eventToEdit.OrganizerId != userId) return null;
 
-        eventToEdit.Name = dto.Name;
+        eventToEdit.Name = dto.Title;
         eventToEdit.Description = dto.Description;
         eventToEdit.StartTime = dto.StartTime;
         eventToEdit.EndTime = dto.EndTime;

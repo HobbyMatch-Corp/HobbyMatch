@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace HobbyMatch.BL.DTOs.Organizers
 {
-	public record OrganizerDto(string userId, string userName, string email);
+	public record OrganizerDto(string Id, string Name);
 
 }

@@ -114,20 +114,24 @@
     {
         if (userType != null)
         {
+            var email = "";
             if (userType == UserType.User)
             {
                 user = await organizerApiService.GetMe<UserDto>();
+                email = (user as UserDto).Email;
             }
-            else if (userType == UserType.BussinessClient)
+            else if (userType == UserType.BussinessClient){
                 user = await organizerApiService.GetMe<BusinessClientDto>();
+                email = (user as BusinessClientDto).Email;
+            }
 
             if (user is not null)
             {
-                _userId = user.userId;
+                _userId = user.Id;
                 formModel = new UserFormModel
                     {
-                        UserName = user.userName,
-                        Email = user.email,
+                        UserName = user.Name,
+                        Email = email,
                     };
                 if (userType is not null && userType == UserType.BussinessClient)
                 {
@@ -137,7 +141,7 @@
                 else
                 {
                     formModel.AccountType = "User";
-                    initialHobbies = ((UserDto)user).hobbies.ToList();
+                    initialHobbies = ((UserDto)user).Hobbies.ToList();
                 }
             }
 
@@ -155,7 +159,7 @@
         if (userType == UserType.User)
         {
             var hobbyDtos = hobbiesList?.SelectedHobbies.ToArray() ?? [];
-            var updatedUser = new UpdateUserDto(user.userId.ToString(),formModel.UserName, formModel.Email, hobbyDtos);
+            var updatedUser = new UpdateUserDto(user.Id.ToString(),formModel.UserName, formModel.Email, hobbyDtos);
 
             if (await organizerApiService.UpdateUserAsync<UserDto, UpdateUserDto>(_userId, updatedUser))
             {
