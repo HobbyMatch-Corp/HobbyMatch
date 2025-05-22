@@ -24,11 +24,11 @@
 
 		<MudForm @bind-IsValid="@success" @bind-Errors="@errors" ReadOnly="@(!isEditingActive)">
 			<MudTextField @bind-Value="formModel.Name" T="string" Label="Name" />
-			<MudTextField @bind-Value="formModel.ClientName" T="string" Label="ClientName" />
-			<MudTextField @bind-Value="formModel.Address" T="string" Label="Address" />
+			<MudTextField ReadOnly="true" @bind-Value="formModel.ClientName" T="string" Label="ClientName" />
+			<MudTextField ReadOnly="true" @bind-Value="formModel.Address" T="string" Label="Address" />
 			<MudTextField @bind-Value="formModel.Description" T="string" Label="Description" />
-			<MudNumericField @bind-Value="formModel.MaxUsers" T="int" Label="MaxUsers" />
-			<MudNumericField @bind-Value="formModel.Price" T="decimal" Label="Price" />
+			<MudNumericField ReadOnly="true" @bind-Value="formModel.MaxUsers" T="int" Label="MaxUsers" />
+			<MudNumericField ReadOnly="true" @bind-Value="formModel.Price" T="decimal" Label="Price" />
 			<LocationDisplay Location="new (formModel.Location)" />
 
 			@if (CanEdit())
@@ -124,7 +124,7 @@
 	private async Task SaveAction()
 	{
 
-		var updateVenueDto = new UpdateVenueDto(formModel.Name, formModel.Address, formModel.MaxUsers, formModel.Price, formModel.Location, formModel.Description);
+		var updateVenueDto = new UpdateVenueDto(formModel.Name, formModel.Description);
 
 		if (venueDetails.Id != null && await venueApiService.UpdateVenueAsync(updateVenueDto, venueDetails.Id))
 		{

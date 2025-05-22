@@ -17,7 +17,7 @@ namespace HobbyMatch.App.Services.Events
 		public async Task<EventDto?> CreateEventAsync(CreateEventDto eventRequest)
 		{
 			EventDto? success = null;
-			var response = await _httpClient.PostAsJsonAsync("", eventRequest);
+			var response = await _httpClient.PostAsJsonAsync("events", eventRequest);
 			if (response.IsSuccessStatusCode)
 			{
 				success = await response.Content.ReadFromJsonAsync<EventDto>();

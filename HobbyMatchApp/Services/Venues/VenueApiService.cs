@@ -14,7 +14,7 @@ public class VenueApiService : IVenueApiService
 
     public VenueApiService(IHttpClientFactory httpClientFactory)
     {
-        _httpClient = httpClientFactory.CreateClient("AuthenticatedClient");
+    	_httpClient = httpClientFactory.CreateClient("AuthenticatedClient");
         _unauthorizedClient = httpClientFactory.CreateClient("AuthClient");
     }
 
