@@ -66,9 +66,12 @@ public class VenueService : IVenueService
 		}
 
 		// TODO: This can be extension method in partial UserExtensions (located in UpdateVenueDto file)
+		venue.Address = updateVenueDto.Address ?? "";
 		venue.Name = updateVenueDto.Name;
+		venue.Price = updateVenueDto.Price ?? 0;
 		venue.Description = updateVenueDto.Description;
-
+		venue.Location = updateVenueDto.Location;
+		venue.MaxUsers = updateVenueDto.MaxUsers ?? 0;
 
 		await _venueRepository.SaveChangesAsync();
 

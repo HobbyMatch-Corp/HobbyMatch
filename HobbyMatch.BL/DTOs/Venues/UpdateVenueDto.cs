@@ -10,6 +10,10 @@ namespace HobbyMatch.BL.DTOs.Venues
 	// TODO: When internet available, check documentation for requirements
 	public record UpdateVenueDto(
 		string Name,
+		string? Address,
+		int? MaxUsers,
+		decimal? Price,
+		Location Location,
 		string Description
 	);
 
@@ -17,7 +21,7 @@ namespace HobbyMatch.BL.DTOs.Venues
 	{
 		public static UpdateVenueDto ToUpdateDto(this Venue venue)
 		{
-			return new UpdateVenueDto(venue.Name,
+			return new UpdateVenueDto(venue.Name, venue.Address, venue.MaxUsers, venue.Price, venue.Location,
 				venue.Description);
 		}
 	}
