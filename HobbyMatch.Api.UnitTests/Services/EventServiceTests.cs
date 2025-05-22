@@ -52,9 +52,10 @@ namespace UnitTests
             _eventRepository
                 .Setup(x => x.AddEvent(It.IsAny<Event>()))
                 .ReturnsAsync(expectedEvent); // Mocking AddEvent to return what we expect
-                                              // Act
-            _hobbyService.Setup(x => x.GetHobbiesAsync()).ReturnsAsync([]);
-            var result = await _eventService.CreateEventAsync(createEventRequest, organizerId);
+			_hobbyService.Setup(x => x.GetHobbiesAsync()).ReturnsAsync([]);
+
+			// Act
+			var result = await _eventService.CreateEventAsync(createEventRequest, organizerId);
             // Assert
             Assert.NotNull(result);
             Assert.Equal(expectedEvent.Name, result.Name);
