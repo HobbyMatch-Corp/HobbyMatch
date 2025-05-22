@@ -33,7 +33,7 @@ public class VenuesController : ControllerBase
     }
 
     [Authorize]
-	[HttpPut("edit/{venueId}")]
+	[HttpPut("{venueId}")]
 	public async Task<IActionResult> EditVenue([FromRoute] int venueId, [FromBody] UpdateVenueDto updateVenueDto)
 	{
 		var result = await _venueService.EditVenueAsync(venueId, updateVenueDto);
@@ -66,7 +66,7 @@ public class VenuesController : ControllerBase
     }
 
     [Authorize]
-    [HttpPost("create")]
+    [HttpPost("")]
     public async Task<IActionResult> CreateVenue([FromBody] CreateVenueRequest request)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);

@@ -21,7 +21,7 @@ namespace HobbyMatch.API.Controllers
         private readonly UserManager<Organizer> _userManager = userManager;
 		// TODO: Think about moving userType check to service and adding "if result is ActionResult actionResult" check 
 
-		[HttpPost("create")]
+		[HttpPost("")]
 		[Authorize]
 		public async Task<ActionResult<Event?>> EventCreate([FromBody] CreateEventDto createRequest)
 		{
@@ -30,7 +30,7 @@ namespace HobbyMatch.API.Controllers
 			var result = await _eventService.CreateEventAsync(createRequest, user.Id);
 			return result != null ? Ok(result.ToDto()) : BadRequest("Could not create event");
 		}
-		[HttpPut("edit/{eventId}")]
+		[HttpPut("{eventId}")]
 		[Authorize]
 		public async Task<ActionResult<Event?>> EventEdit([FromBody] CreateEventDto createRequest, [FromRoute] int eventId)
 		{
@@ -85,7 +85,7 @@ namespace HobbyMatch.API.Controllers
             return result ? Ok(result) : BadRequest("Could not sign out from event");
         }
 
-        [HttpGet("events")]
+        [HttpGet("")]
         public async Task<IActionResult> GetFilteredEvents([FromQuery] string? filter)
         {
             var filteredResults = await _eventService.GetEventsWithFilterAsync(filter);
