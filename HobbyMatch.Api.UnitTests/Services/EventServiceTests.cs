@@ -3,6 +3,8 @@ using HobbyMatch.Domain.Requests;
 using Moq;
 using HobbyMatch.BL.Services.Events;
 using HobbyMatch.Database.Repositories.Events;
+using HobbyMatch.BL.DTOs.Events;
+using HobbyMatch.BL.Services.Hobbies;
 
 namespace UnitTests
 {
@@ -10,18 +12,20 @@ namespace UnitTests
     {
         private IEventService _eventService;
         private Mock<IEventRepository> _eventRepository;
+        private Mock<IHobbyService> _hobbyService;
 
         public EventServiceTests()
         {
             _eventRepository = new Mock<IEventRepository>();
-            _eventService = new EventService(_eventRepository.Object, null);
+            _hobbyService = new Mock<IHobbyService>();
+            _eventService = new EventService(_eventRepository.Object, _hobbyService.Object);
         }
 
         [Fact]
         public async Task CreateEventAsync_ReturnsCreatedEvent_OnCorrectValuesPassed()
         {
             // Arrange
-            var createEventRequest = new CreateEventRequest(
+            var createEventRequest = new CreateEventDto(
                 "Test Event",
                 "A sample description",
                 DateTime.UtcNow,
@@ -29,25 +33,27 @@ namespace UnitTests
                 new LocationNullable(),
                 20.0f,
                 100,
-                10
+                10,
+                []
             );
             var organizerId = 1;
             var expectedEvent = new Event
             {
-                Name = createEventRequest.title,
-                Description = createEventRequest.description,
-                StartTime = createEventRequest.startTime,
-                EndTime = createEventRequest.endTime,
+                Name = createEventRequest.Title,
+                Description = createEventRequest.Description,
+                StartTime = createEventRequest.StartTime,
+                EndTime = createEventRequest.EndTime,
                 Location = createEventRequest.Location,
-                Price = createEventRequest.price,
-                MaxUsers = createEventRequest.maxUsers,
-                MinUsers = createEventRequest.minUsers,
+                Price = createEventRequest.Price,
+                MaxUsers = createEventRequest.MaxUsers,
+                MinUsers = createEventRequest.MinUsers,
                 OrganizerId = organizerId
             };
             _eventRepository
                 .Setup(x => x.AddEvent(It.IsAny<Event>()))
                 .ReturnsAsync(expectedEvent); // Mocking AddEvent to return what we expect
                                               // Act
+            _hobbyService.Setup(x => x.GetHobbiesAsync()).ReturnsAsync([]);
             var result = await _eventService.CreateEventAsync(createEventRequest, organizerId);
             // Assert
             Assert.NotNull(result);
@@ -79,7 +85,7 @@ namespace UnitTests
                 Price = 50,
                 OrganizerId = organizerId
             };
-            var updateRequest = new CreateEventRequest(
+            var updateRequest = new CreateEventDto(
                 "Updated Name",
                 "Updated Description",
                 DateTime.UtcNow.AddDays(1),
@@ -87,7 +93,8 @@ namespace UnitTests
                 new LocationNullable(),
                 75.0f,
                 100,
-                10
+                10,
+                []
             );
             _eventRepository.Setup(x => x.GetEventByIdAsync(eventId))
                             .ReturnsAsync(existingEvent);
@@ -97,11 +104,11 @@ namespace UnitTests
             var result = await _eventService.EditEventAsync(updateRequest, eventId, organizerId);
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(updateRequest.title, result.Name);
-            Assert.Equal(updateRequest.description, result.Description);
-            Assert.Equal(updateRequest.startTime, result.StartTime);
-            Assert.Equal(updateRequest.endTime, result.EndTime);
-            Assert.Equal(updateRequest.price, result.Price);
+            Assert.Equal(updateRequest.Title, result.Name);
+            Assert.Equal(updateRequest.Description, result.Description);
+            Assert.Equal(updateRequest.StartTime, result.StartTime);
+            Assert.Equal(updateRequest.EndTime, result.EndTime);
+            Assert.Equal(updateRequest.Price, result.Price);
             _eventRepository.Verify(x => x.GetEventByIdAsync(eventId), Times.Once);
             _eventRepository.Verify(x => x.UpdateEventAsync(It.IsAny<Event>()), Times.Once);
         }
