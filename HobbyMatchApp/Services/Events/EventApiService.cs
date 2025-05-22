@@ -11,8 +11,7 @@ namespace HobbyMatch.App.Services.Events
         {
             _httpClient = httpClientFactory.CreateClient("AuthenticatedClient");
             _unauthorizedClient = httpClientFactory.CreateClient("AuthClient");
-
-        }
+		}
 
 		public async Task<EventDto?> CreateEventAsync(CreateEventDto eventRequest)
 		{
@@ -80,7 +79,7 @@ namespace HobbyMatch.App.Services.Events
 
 		public async Task<List<EventOverviewDto>?> GetFilteredEvents(string? filter)
         {
-            var response = await _unauthorizedClient.GetFromJsonAsync<List<EventOverviewDto>>($"events/events?filter={filter}");
+            var response = await _unauthorizedClient.GetFromJsonAsync<List<EventOverviewDto>>($"events/?filter={filter}");
             return response;
         }
 
