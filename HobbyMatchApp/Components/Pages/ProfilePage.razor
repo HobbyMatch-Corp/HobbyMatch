@@ -30,13 +30,13 @@
             Immediate="true" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" Style="margin-bottom:8px" />
             @if (userType != null && userType.Value == UserType.BussinessClient)
             {
-                <MudTextField @ref="taxIdField" T="string" Label="TaxId" Required="true" RequiredError="Tax ID is required!" style="margin-bottom:8px" @bind-Value="formModel.TaxId" />
+            <MudTextField @ref="taxIdField" T="string" Label="TaxId" Required="true" RequiredError="Tax ID is required!" style="margin-bottom:8px" @bind-Value="formModel.TaxId" />
             }
             @if (userType != null && userType.Value == UserType.User)
-            {
-                <di style ="margin-bottom:8px">
-                    <HobbyMatch.App.Components.Components.HobbiesList @ref="hobbiesList"
-                    Hobbies="hobbies" InitialSelectedHobbies="initialHobbies" />
+                        {
+            <di style ="margin-bottom:8px">
+                <HobbyMatch.App.Components.Components.HobbiesList @ref="hobbiesList"
+                    Hobbies="hobbies" InitialSelectedHobbies="initialHobbies" ReadOnly="@(!editable)"/>
                 </di>
 
             }
@@ -151,7 +151,6 @@
     private void ToggleEdit()
     {
         editable = !editable;
-        if (hobbiesList is not null) hobbiesList.ReadOnly = !editable;
     }
 
     private async Task SaveAction()

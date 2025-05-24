@@ -73,7 +73,8 @@
     [Parameter]
     public List<HobbyDto> InitialSelectedHobbies { get; set; } = new();
 
-    public bool ReadOnly = true;
+    [Parameter]
+    public bool ReadOnly { get; set; } = true;
 
     private IReadOnlyCollection<string> SelectedHobbyNames { get; set; } = new HashSet<string>();
 
