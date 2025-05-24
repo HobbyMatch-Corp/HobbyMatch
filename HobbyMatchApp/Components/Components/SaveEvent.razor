@@ -32,10 +32,14 @@
 			<MudNumericField @bind-Value="_location.Latitude" T="double?" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
 			<MudNumericField @bind-Value="_location.Longitude" T="double?" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
 			<MudNumericField @bind-Value="_price" T="float" Min="0" Label="Price" Required="true" RequiredError="Price is required!" />
-			<di style="margin-bottom:8px">
-				<HobbyMatch.App.Components.Components.HobbiesList @ref="_hobbiesList"
-				Hobbies="_hobbies" InitialSelectedHobbies="_initialHobbies" ReadOnly="false"/>
-			</di>
+			@if (_loadHobby)
+			{
+				<di style="margin-bottom:8px">
+					<HobbyMatch.App.Components.Components.HobbiesList @ref="_hobbiesList"
+																	  Hobbies="_hobbies" InitialSelectedHobbies="_initialHobbies" ReadOnly="false" />
+				</di>
+
+			}
 		</MudForm>
 		<div class="d-flex align-center justify-end mt-4">
 			<button class="btn btn-primary" @onclick="HandleSubmitAsync">@(_isEditMode ? "Save Changes" : "Create Event")</button>
@@ -67,6 +71,7 @@
 	private HobbiesList? _hobbiesList;
 	private List<HobbyDto> _hobbies { get; set; } = new();
 	private List<HobbyDto> _initialHobbies { get; set; } = new();
+	private bool _loadHobby = false;
 
 	MudForm form;
 
@@ -78,6 +83,7 @@
 			if (_isEditMode && eventObj != null)
 				_initialHobbies = new List<HobbyDto>(eventObj.Hobbies);
 
+			_loadHobby = true;
 			StateHasChanged();
 			base.OnAfterRender(firstRender);			
 		}
