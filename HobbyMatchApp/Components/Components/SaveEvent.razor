@@ -75,6 +75,8 @@
 		if (firstRender)
 		{
 			_hobbies = (await hobbyApiService.GetHobbiesAsync()).ToList();
+			if (_isEditMode && eventObj != null)
+				_initialHobbies = new List<HobbyDto>(eventObj.Hobbies);
 
 			StateHasChanged();
 			base.OnAfterRender(firstRender);			
@@ -95,7 +97,6 @@
 			_price = eventObj.Price;
 			_maxUsers = eventObj.MaxUsers;
 			_minUsers = eventObj.MinUsers;
-			_initialHobbies = new List<HobbyDto>(eventObj.Hobbies);
 		}
 	}
 

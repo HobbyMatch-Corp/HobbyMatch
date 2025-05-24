@@ -1,4 +1,5 @@
-﻿@page "/hobbies" 
+﻿@page "/hobbies"
+@rendermode InteractiveServer
 
 @using HobbyMatch.BL.DTOs.Hobbies
 @using HobbyMatch.Domain.Entities
@@ -81,16 +82,13 @@
     public List<HobbyDto> SelectedHobbies =>
         Hobbies.Where(h => SelectedHobbyNames.Contains(h.Name)).ToList();
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         if (InitialSelectedHobbies?.Any() == true)
         {
             SelectedHobbyNames = InitialSelectedHobbies.Select(h => h.Name).ToHashSet();
         }
-    }
 
-    protected override void OnParametersSet()
-    {
         // Ensure selected hobbies are still valid when hobbies list changes
         var validHobbyNames = Hobbies.Select(h => h.Name).ToHashSet();
         SelectedHobbyNames = SelectedHobbyNames.Where(validHobbyNames.Contains).ToHashSet();
