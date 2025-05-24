@@ -8,9 +8,9 @@ namespace HobbyMatch.BL.Services.Hobbies
     {
         private readonly IHobbyRepository _hobbyRepository = hobbyRepository;
 
-        public Task<ICollection<Hobby>> GetHobbiesAsync()
+        public async Task<ICollection<Hobby>> GetHobbiesAsync()
         {
-            return _hobbyRepository.GetHobbiesAsync();
+            return await _hobbyRepository.GetHobbiesAsync();
         }
 
         public async Task<ICollection<Hobby>> GetHobbiesAsync(List<HobbyDto> hobbyDtos)
@@ -26,14 +26,14 @@ namespace HobbyMatch.BL.Services.Hobbies
             return hobbies;
         }
 
-        public Task<Hobby?> GetHobbyAsync(int id)
+        public async Task<Hobby?> GetHobbyAsync(int id)
         {
-            return _hobbyRepository.GetHobbyAsync(id);
+            return await _hobbyRepository.GetHobbyAsync(id);
         }
 
-        public Task<Hobby?> GetHobbyAsync(string name)
+        public async Task<Hobby?> GetHobbyAsync(string name)
         {
-            return _hobbyRepository.GetHobbyAsync(name);
+            return await _hobbyRepository.GetHobbyAsync(name);
         }
     }
 }

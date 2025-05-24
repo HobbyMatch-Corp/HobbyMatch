@@ -98,7 +98,7 @@ namespace HobbyMatch.DbIntegrationTests
                 MaxUsers = createEventRequest.MaxUsers,
                 MinUsers = createEventRequest.MinUsers,
                 OrganizerId = organizerId,
-                RelatedHobbies = [],
+                Hobbies = [],
             };
 
             // Act

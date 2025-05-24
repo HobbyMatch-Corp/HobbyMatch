@@ -52,7 +52,7 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
             MaxUsers = dto.MaxUsers,
             MinUsers = dto.MinUsers,
             OrganizerId = organizerId,
-            RelatedHobbies = hobbies,
+            Hobbies = hobbies,
         };
 
         var result = await _eventRepository.AddEvent(entity);
@@ -73,7 +73,7 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
         eventToEdit.EndTime = dto.EndTime;
         eventToEdit.Location = dto.Location;
         eventToEdit.Price = dto.Price;
-        eventToEdit.RelatedHobbies = hobbies;
+        eventToEdit.Hobbies = hobbies;
 
         await _eventRepository.UpdateEventAsync(eventToEdit); // Assuming this method exists
 
