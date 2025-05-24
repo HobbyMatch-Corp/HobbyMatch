@@ -38,9 +38,7 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
 
     public async Task<Event?> CreateEventAsync(CreateEventDto dto, int organizerId)
     {
-        var hobbies = await _hobbyService.GetHobbiesAsync();
-        var dtoHobbiesList = dto.Hobbies.ToList();
-        var relatedHobbies = hobbies.Where(h => dtoHobbiesList.Contains(h.ToDto()));
+        var hobbies = await _hobbyService.GetHobbiesAsync(dto.Hobbies.ToList());
         var entity = new Event
         {
             Name = dto.Title,
@@ -52,7 +50,7 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
             MaxUsers = dto.MaxUsers,
             MinUsers = dto.MinUsers,
             OrganizerId = organizerId,
-            RelatedHobbies = relatedHobbies.ToArray(),
+            RelatedHobbies = hobbies.ToArray(),
         };
 
         var result = await _eventRepository.AddEvent(entity);

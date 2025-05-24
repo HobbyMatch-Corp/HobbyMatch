@@ -5,7 +5,6 @@ namespace HobbyMatch.App.Services.Api
 {
 	public class OrganizerApiService : IOrganizerApiService
 	{
-		// TODO: get rid of redundant try catch blocks, fix them
 		private readonly HttpClient _httpClient;
 		private readonly EndpointProvider _endpointProvider;
 		public OrganizerApiService(IHttpClientFactory httpClientFactory, EndpointProvider endpointProvider)

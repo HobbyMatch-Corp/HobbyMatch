@@ -19,7 +19,6 @@ namespace HobbyMatch.API.Controllers
 
 		private readonly IEventService _eventService = eventService; 
         private readonly UserManager<Organizer> _userManager = userManager;
-		// TODO: Think about moving userType check to service and adding "if result is ActionResult actionResult" check 
 
 		[HttpPost("")]
 		[Authorize]
