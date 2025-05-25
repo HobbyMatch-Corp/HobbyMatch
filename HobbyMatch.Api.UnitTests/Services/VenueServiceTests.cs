@@ -65,7 +65,7 @@ public class VenueServiceTests
     [Fact]
     public async Task CreateVenue_CreatesAndReturnsVenue()
     {
-        var createRequest = new CreateVenueRequest("New Venue", "Here",
+        var createRequest = new CreateVenueDto("New Venue", "Here",
             10, 10.0m, new Location { Longitude = 1, Latitude = 1 }, "Nice place");
         Venue? capturedVenue = null;
         _venueRepositoryMock.Setup(repo => repo.AddVenueAsync(It.IsAny<Venue>()))

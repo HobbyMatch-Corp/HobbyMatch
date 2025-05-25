@@ -39,7 +39,7 @@ public class VenueService : IVenueService
 		return await _venueRepository.GetFilteredVenuesAsync(filter, paginationParams);
 	}
 
-	public async Task<Venue> CreateVenue(CreateVenueRequest createRequest, int businessClientId)
+	public async Task<Venue> CreateVenue(CreateVenueDto createRequest, int businessClientId)
 	{
 		var venue = new Venue
 		{
@@ -65,7 +65,6 @@ public class VenueService : IVenueService
 			return false;
 		}
 
-		// TODO: This can be extension method in partial UserExtensions (located in UpdateVenueDto file)
 		venue.Name = updateVenueDto.Name;
 		venue.Description = updateVenueDto.Description;
 

@@ -82,7 +82,7 @@ public class VenueTests : BaseIntegrationTest
         var startCount = await DbContext.Venues.CountAsync();
         var businessClientId = 2;
 
-        var request = new CreateVenueRequest(
+        var request = new CreateVenueDto(
             "Test name",
             "Test address",
             10,

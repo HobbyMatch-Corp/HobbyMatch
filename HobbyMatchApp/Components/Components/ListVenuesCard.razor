@@ -64,8 +64,8 @@
     [Parameter]
     public List<ClientsVenueDto> VenuesList { get; set; } = new List<ClientsVenueDto>();
 
-    private void NavigateToVenueDetails(int eventId)
+    private void NavigateToVenueDetails(int venueId)
     {
-        //NavigationManager.NavigateTo($"/venues/{venueId}"); //TODO update uri
+        NavigationManager.NavigateTo($"/venue/{venueId}"); 
     }
 }
