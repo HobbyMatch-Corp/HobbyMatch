@@ -34,7 +34,7 @@ namespace HobbyMatch.App.Services.Api
 
 		public async Task<HttpResponseMessage> RegisterBusinessClientAsync(string username, string email, string password, string taxId)
 		{
-			var request = new BusinessRegisterRequest(email, password, taxId, username);
+			var request = new BusinessRegisterDto(email, password, taxId, username);
 			var response = await _httpClient.PostAsJsonAsync("auth/register", request);
 			return response;
 		}

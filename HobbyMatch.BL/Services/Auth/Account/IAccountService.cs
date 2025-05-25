@@ -6,7 +6,7 @@ namespace HobbyMatch.BL.Services.Auth.Account;
 
 public interface IAccountService
 {
-    public Task RegisterBusinessClientAsync(BusinessRegisterRequest registerRequest);
+    public Task RegisterBusinessClientAsync(BusinessRegisterDto registerRequest);
     public Task RegisterUserAsync(UserRegisterRequest registerRequest);
     public Task<AuthResult> LoginUserAsync(LoginRequestDto loginRequest);
     public Task<AuthResult> RefreshTokenAsync(string? refreshToken);

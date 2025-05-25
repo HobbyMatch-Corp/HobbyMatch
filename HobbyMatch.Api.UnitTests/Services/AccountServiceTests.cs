@@ -40,8 +40,8 @@ namespace UnitTests
 		[Fact]
 		public async Task RegisterBusinessClientAsync_ThrowsUserAlreadyExists_WhenUserWithThisMailAlreadyExists()
 		{
-			// Arrange
-			BusinessRegisterRequest request = new BusinessRegisterRequest("test@example.com", "Passwort", "TaxId", "TestUserName");
+            // Arrange
+            var request = new BusinessRegisterDto("test@example.com", "Passwort", "TaxId", "TestUserName");
 			var existingUsers = new List<BusinessClient> { new BusinessClient { Email = "test@example.com" } }.AsQueryable().BuildMock();
 			_userManager.Setup(x => x.Users).Returns(existingUsers);
 
@@ -53,7 +53,7 @@ namespace UnitTests
 		public async Task RegisterBusinessClientAsync_CreatesUser_WhenCorrectDataIsPassed()
 		{
 			// Arrange
-			var request = new BusinessRegisterRequest("test@example.com", "SecurePassword123", "1234567890", "TestUser");
+			var request = new BusinessRegisterDto("test@example.com", "SecurePassword123", "1234567890", "TestUser");
 
 			var emptyUsers = new List<BusinessClient>().AsQueryable().BuildMock();
 			_userManager.Setup(x => x.Users).Returns(emptyUsers);

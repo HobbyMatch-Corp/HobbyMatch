@@ -24,7 +24,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register/business")]
-    public async Task<IActionResult> Register([FromBody] BusinessRegisterRequest request)
+    public async Task<IActionResult> Register([FromBody] BusinessRegisterDto request)
     {
         await _accountService.RegisterBusinessClientAsync(request);
         return Ok();

@@ -22,7 +22,7 @@ public class AccountService : IAccountService
         _userRepository = userRepository;
     }
 
-    public async Task RegisterBusinessClientAsync(BusinessRegisterRequest registerRequest)
+    public async Task RegisterBusinessClientAsync(BusinessRegisterDto registerRequest)
     {
         var userExists = await _userManager.Users.AnyAsync(u => u.Email == registerRequest.Email);
         if (userExists)
