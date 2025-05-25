@@ -1,15 +1,13 @@
 using HobbyMatch.BL.DTOs.Venues;
-using HobbyMatch.Database.Common.Pagination;
 
 namespace HobbyMatch.App.Services.Venues;
 
 public interface IVenueApiService
 {
-    public Task<PaginatedData<VenueDto>> GetClientVenuesAsync(PaginationParameters paginationParameters);
+    public Task<List<VenueDto>> GetClientVenuesAsync();
     public Task<VenueDetailsDto?> GetVenueByIdAsync(int venueId);
 
-    public Task<PaginatedData<VenueDto>> GetFilteredVenues(string? filter,
-        PaginationParameters paginationParameters);
+    public Task<List<VenueDto>> GetFilteredVenues(string? filter);
 
     public Task<IEnumerable<VenueDto>> GetVenuesAsync();
     public Task<VenueDetailsDto?> CreateVenueAsync(CreateVenueDto request);

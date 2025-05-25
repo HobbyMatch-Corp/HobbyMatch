@@ -1,5 +1,4 @@
 using HobbyMatch.BL.DTOs.Venues;
-using HobbyMatch.Database.Common.Pagination;
 using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.BL.Services.Venues;
@@ -8,11 +7,11 @@ public interface IVenueService
 {
     public Task<Venue?> GetVenueByIdAsync(int venueId);
 
-    public Task<PaginatedData<Venue>> GetClientVenuesAsync(int businessClientId, PaginationParameters paginationParams);
+    public Task<List<Venue>> GetClientVenuesAsync(int businessClientId);
 
-    public Task<PaginatedData<Venue>> GetFilteredVenuesAsync(string filter, PaginationParameters paginationParams);
+    public Task<List<Venue>> GetFilteredVenuesAsync(string filter);
 
     public Task<List<Venue>> GetVenuesAsync();
-    public Task<Venue> CreateVenue(CreateVenueDto createRequest,int businessClientId);
-	public Task<bool> EditVenueAsync(int venueId, UpdateVenueDto updateVenueDto);
+    public Task<Venue> CreateVenue(CreateVenueDto createRequest, int businessClientId);
+    public Task<bool> EditVenueAsync(int venueId, UpdateVenueDto updateVenueDto);
 }
