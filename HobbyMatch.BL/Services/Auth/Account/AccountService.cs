@@ -1,3 +1,4 @@
+using HobbyMatch.BL.DTOs.Auth;
 using HobbyMatch.BL.Models.Auth;
 using HobbyMatch.Database.Repositories.Users;
 using HobbyMatch.Domain.Entities;
@@ -64,7 +65,7 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<AuthResult> LoginUserAsync(LoginRequest loginRequest)
+    public async Task<AuthResult> LoginUserAsync(LoginRequestDto loginRequest)
     {
         var user = await _userManager.FindByEmailAsync(loginRequest.Email);
 

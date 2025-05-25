@@ -1,4 +1,5 @@
-﻿using HobbyMatch.BL.Models.Auth;
+﻿using HobbyMatch.BL.DTOs.Auth;
+using HobbyMatch.BL.Models.Auth;
 using HobbyMatch.Domain.Requests;
 
 namespace HobbyMatch.App.Services.Api
@@ -15,7 +16,7 @@ namespace HobbyMatch.App.Services.Api
 		public async Task<AuthResult?> LoginAsync(string email, string password)
 		{
 			AuthResult? authResult = null;
-			var request = new LoginRequest(email, password);
+			var request = new LoginRequestDto(email, password);
 			var response = await _httpClient.PostAsJsonAsync("auth/login", request);
 			if (response.IsSuccessStatusCode)
 			{

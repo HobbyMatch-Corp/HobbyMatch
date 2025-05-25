@@ -1,3 +1,4 @@
+using HobbyMatch.BL.DTOs.Auth;
 using HobbyMatch.BL.Models.Auth;
 using HobbyMatch.Domain.Requests;
 
@@ -7,6 +8,6 @@ public interface IAccountService
 {
     public Task RegisterBusinessClientAsync(BusinessRegisterRequest registerRequest);
     public Task RegisterUserAsync(UserRegisterRequest registerRequest);
-    public Task<AuthResult> LoginUserAsync(LoginRequest loginRequest);
+    public Task<AuthResult> LoginUserAsync(LoginRequestDto loginRequest);
     public Task<AuthResult> RefreshTokenAsync(string? refreshToken);
 }
