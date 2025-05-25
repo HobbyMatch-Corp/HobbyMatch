@@ -1,0 +1,124 @@
+﻿@page "/create-venue"
+
+@inject IOrganizerApiService organizerApiService
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject IOrganizerApiService organizerApiService
+@inject IVenueApiService venueApiService
+@inject NavigationManager navigationManager
+@inject ISnackbar _snackbar
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+@using HobbyMatch.App.Services.Api
+@using HobbyMatch.App.Services.Venues
+@using HobbyMatch.BL.DTOs.Organizers
+@using HobbyMatch.BL.DTOs.Venues
+@using HobbyMatch.BL.Services.AppUsers
+@using HobbyMatch.Domain.Entities
+@using HobbyMatch.App.Auth.CustomAuthStateProvider
+@using HobbyMatch.Domain.Enums
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+
+<MudContainer Class="d-flex" Style="justify-content: center" MaxWidth="MaxWidth.Medium">
+
+    <MudPaper Class="px-4" MinWidth="400px">
+        <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">Venue</MudText>
+
+        <MudForm @bind-IsValid="@success" @bind-Errors="@errors" ReadOnly="false">
+            <MudTextField @bind-Value="formModel.Name" T="string" Label="Name" Required="true" />
+            <MudTextField ReadOnly="true" @bind-Value="formModel.ClientName" T="string" Label="ClientName" />
+            <MudTextField @bind-Value="formModel.Address" T="string" Label="Address" Required="true" />
+            <MudNumericField @bind-Value="formModel.Location.Latitude" T="double" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
+            <MudNumericField @bind-Value="formModel.Location.Longitude" T="double" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
+            <MudTextField @bind-Value="formModel.Description" T="string" Label="Description" Required="true" />
+            <MudNumericField @bind-Value="formModel.MaxUsers" T="int" Label="MaxUsers" Min="1" Required="true" />
+            <MudNumericField @bind-Value="formModel.Price" T="decimal" Label="Price" Min="0" Required="true" />
+            <div class="d-flex align-center justify-center mb-2" style="margin:8px">
+                <button Type="button" Class="btn btn-primary" @onclick="SaveAction">Create</button>
+            </div>
+        </MudForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    bool success;
+    string[] errors = { };
+    int _userId = 0;
+    VenueFormModel formModel = new();
+    Organizer? user;
+    UserType? userType = null;
+
+
+    private ClaimsPrincipal? currentUser;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(1);
+            await LoadUser();
+            if (userType != UserType.BussinessClient)
+                navigationManager.NavigateTo("/error");
+            StateHasChanged();
+            base.OnAfterRender(firstRender);
+        }
+    }
+
+    private async Task LoadUser()
+    {
+        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        currentUser = authState.User;
+        if (currentUser.Identity is { IsAuthenticated: true })
+        {
+            if (Enum.TryParse(currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value, out UserType userType))
+            {
+                this.userType = userType;
+            }
+            else
+            {
+                navigationManager.NavigateTo("/error");
+            }
+        }
+        else
+        {
+            navigationManager.NavigateTo("/error");
+        }
+    }
+    private async Task SaveAction()
+    {
+        if (success)
+        {
+            var dto = new CreateVenueDto(formModel.Name, formModel.Address, formModel.MaxUsers,
+                formModel.Price, formModel.Location, formModel.Description);
+
+            await venueApiService.CreateVenueAsync(dto);
+            navigationManager.NavigateTo("/profile");
+        }
+
+    }
+    public class VenueFormModel
+    {
+        public string Name = "";
+        public string Address = "";
+        public int MaxUsers = 0;
+        public decimal Price = 0;
+        public Location Location = new();
+        public string Description = "";
+        public string ClientName = "";
+        public VenueFormModel(VenueDetailsDto dto)
+        {
+            Name = dto.Name;
+            Address = dto.Address;
+            MaxUsers = dto.MaxUsers;
+            Price = dto.Price;
+            Location = new Location
+                {
+                    Latitude = dto.Location.Latitude,
+                    Longitude = dto.Location.Longitude
+                };
+            Description = dto.Description;
+            ClientName = dto.ClientName;
+        }
+        public VenueFormModel() { }
+    }
+}
