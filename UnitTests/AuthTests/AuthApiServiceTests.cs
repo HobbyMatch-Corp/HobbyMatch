@@ -2,8 +2,8 @@
 using System.Net;
 using System.Text.Json;
 using Moq.Protected;
-using HobbyMatch.BL.Models.Auth;
 using HobbyMatch.App.Services.Api;
+using HobbyMatch.BL.DTOs.Auth;
 namespace UnitTests.AuthTests
 {
 	public class AuthApiServiceTests
@@ -30,7 +30,7 @@ namespace UnitTests.AuthTests
 			// Arrange
 			var email = "test@example.com";
 			var password = "password";
-			var expectedAuthResult = new AuthResult { JwtToken = "test", JwtTokenExpirationDate = DateTime.Now, RefreshToken = "test", RefreshTokenExpirationDate = DateTime.Now };
+			var expectedAuthResult = new AuthResultDto("test", DateTime.Now, "test", DateTime.Now);
 
 			var responseMessage = new HttpResponseMessage(HttpStatusCode.OK)
 			{

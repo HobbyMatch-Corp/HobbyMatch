@@ -1,8 +1,8 @@
+using HobbyMatch.BL.DTOs.Venues;
 using HobbyMatch.BL.Services.Venues;
 using HobbyMatch.Database.Common.Pagination;
 using HobbyMatch.Database.Repositories.Venues;
 using HobbyMatch.Domain.Entities;
-using HobbyMatch.Domain.Requests;
 using Moq;
 
 namespace UnitTests;

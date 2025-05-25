@@ -1,6 +1,6 @@
 using HobbyMatch.Domain.Entities;
 
-namespace HobbyMatch.Domain.Requests;
+namespace HobbyMatch.BL.DTOs.Venues;
 
 public record CreateVenueDto(
     string Name,

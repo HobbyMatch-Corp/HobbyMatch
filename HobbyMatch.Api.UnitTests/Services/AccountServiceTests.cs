@@ -3,10 +3,10 @@ using HobbyMatch.BL.Services.Auth.Account;
 using HobbyMatch.Database.Repositories.Users;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Exceptions.AuthExceptions;
-using HobbyMatch.Domain.Requests;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using MockQueryable;
+using HobbyMatch.BL.DTOs.Auth;
 
 namespace UnitTests
 {
@@ -39,8 +39,8 @@ namespace UnitTests
 		[Fact]
 		public async Task RegisterBusinessClientAsync_ThrowsUserAlreadyExists_WhenUserWithThisMailAlreadyExists()
 		{
-			// Arrange
-			BusinessRegisterRequest request = new BusinessRegisterRequest("test@example.com", "Passwort", "TaxId", "TestUserName");
+            // Arrange
+            var request = new BusinessRegisterDto("test@example.com", "Passwort", "TaxId", "TestUserName");
 			var existingUsers = new List<BusinessClient> { new BusinessClient { Email = "test@example.com" } }.AsQueryable().BuildMock();
 			_userManager.Setup(x => x.Users).Returns(existingUsers);
 
@@ -52,7 +52,7 @@ namespace UnitTests
 		public async Task RegisterBusinessClientAsync_CreatesUser_WhenCorrectDataIsPassed()
 		{
 			// Arrange
-			var request = new BusinessRegisterRequest("test@example.com", "SecurePassword123", "1234567890", "TestUser");
+			var request = new BusinessRegisterDto("test@example.com", "SecurePassword123", "1234567890", "TestUser");
 
 			var emptyUsers = new List<BusinessClient>().AsQueryable().BuildMock();
 			_userManager.Setup(x => x.Users).Returns(emptyUsers);
@@ -76,7 +76,7 @@ namespace UnitTests
 		public async Task LoginUserAsync_ReturnsAuthResult_WhenCredentialsAreValid()
 		{
 			// Arrange
-			var request = new LoginRequest("valid@example.com", "ValidPassword");
+			var request = new LoginRequestDto("valid@example.com", "ValidPassword");
 			var user = new User { Email = request.Email };
 
 			_userManager.Setup(x => x.FindByEmailAsync(request.Email))
@@ -107,7 +107,7 @@ namespace UnitTests
 		public async Task LoginUserAsync_ThrowsLoginFailedException_WhenPasswordNotValid()
 		{
 			// Arrange
-			var request = new LoginRequest("valid@example.com", "InvalidPassword");
+			var request = new LoginRequestDto("valid@example.com", "InvalidPassword");
 			var user = new User { Email = request.Email };
 
 			_userManager.Setup(x => x.FindByEmailAsync(request.Email))
@@ -122,7 +122,7 @@ namespace UnitTests
 		public async Task LoginUserAsync_ThrowsLoginFailedException_WhenUserNotFoundNotValid()
 		{
 			// Arrange
-			var request = new LoginRequest("Invalid@example.com", "InvalidPassword");
+			var request = new LoginRequestDto("Invalid@example.com", "InvalidPassword");
 
 			_userManager.Setup(x => x.FindByEmailAsync(request.Email))
 				.ReturnsAsync((Organizer?)null);

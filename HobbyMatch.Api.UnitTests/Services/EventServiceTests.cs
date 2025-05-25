@@ -1,5 +1,4 @@
 ﻿using HobbyMatch.Domain.Entities;
-using HobbyMatch.Domain.Requests;
 using Moq;
 using HobbyMatch.BL.Services.Events;
 using HobbyMatch.Database.Repositories.Events;

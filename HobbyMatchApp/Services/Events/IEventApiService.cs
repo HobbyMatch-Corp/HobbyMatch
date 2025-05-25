@@ -1,6 +1,4 @@
 ﻿using HobbyMatch.BL.DTOs.Events;
-using HobbyMatch.Domain.Entities;
-using HobbyMatch.Domain.Requests;
 
 namespace HobbyMatch.App.Services.Events
 {
