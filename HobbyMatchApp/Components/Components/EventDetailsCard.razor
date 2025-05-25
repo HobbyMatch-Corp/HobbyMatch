@@ -18,6 +18,8 @@
         <LabelValueComponent label="Price" value="@Event.Price.ToString(CultureInfo.InvariantCulture)" />
         <LabelValueComponent label="Start Time" value="@Event.StartTime.ToString("HH:mm dd.MM.yyyy")" />
         <LabelValueComponent label="End Time" value="@Event.EndTime.ToString("HH:mm dd.MM.yyyy")" />
+        <LabelValueComponent label="Min users" value="@Event.MinUsers.ToString(CultureInfo.InvariantCulture)" />
+        <LabelValueComponent label="Max users" value="@Event.MaxUsers.ToString(CultureInfo.InvariantCulture)" />
         <LocationDisplay Location="@Event.Location" />
         <HobbiesChips Hobbbies="@Event.Hobbies.ToList()"/>
         <div class="d-flex align-center justify-center mt-4">

@@ -32,6 +32,8 @@
 			<MudNumericField @bind-Value="_location.Latitude" T="double?" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
 			<MudNumericField @bind-Value="_location.Longitude" T="double?" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
 			<MudNumericField @bind-Value="_price" T="float" Min="0" Label="Price" Required="true" RequiredError="Price is required!" />
+			<MudNumericField @bind-Value="_minUsers" T="int" Min="0" Label="Min users" Required="true" RequiredError="Min users is required!" />
+			<MudNumericField @bind-Value="_maxUsers" T="int" Min="@_minUsers" Label="Max users" Required="true" RequiredError="Max users is required!" />
 			@if (_loadHobby)
 			{
 				<di style="margin-bottom:8px">
