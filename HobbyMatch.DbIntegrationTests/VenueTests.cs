@@ -1,6 +1,5 @@
 using HobbyMatch.BL.DTOs.Venues;
 using HobbyMatch.BL.Services.Venues;
-using HobbyMatch.Database.Common.Pagination;
 using HobbyMatch.Database.Repositories.Venues;
 using HobbyMatch.DbIntegrationTests.Infrastrucutre;
 using HobbyMatch.Domain.Entities;
@@ -25,12 +24,9 @@ public class VenueTests : BaseIntegrationTest
     {
         var filter = "";
 
-        var result = await _venueRepository.GetFilteredVenuesAsync(
-            filter,
-            new PaginationParameters(1, 100)
-        );
+        var result = await _venueRepository.GetFilteredVenuesAsync(filter);
 
-        Assert.Contains(result.Data, v => v.Name == "The Creative Canvas");
+        Assert.Contains(result, v => v.Name == "The Creative Canvas");
     }
 
     [Fact]
@@ -38,13 +34,10 @@ public class VenueTests : BaseIntegrationTest
     {
         var filter = "Creative";
 
-        var result = await _venueRepository.GetFilteredVenuesAsync(
-            filter,
-            new PaginationParameters(1, 100)
-        );
+        var result = await _venueRepository.GetFilteredVenuesAsync(filter);
 
-        Assert.Contains(result.Data, v => v.Name == "The Creative Canvas");
-        Assert.Single(result.Data);
+        Assert.Contains(result, v => v.Name == "The Creative Canvas");
+        Assert.Single(result);
     }
 
     [Fact]
@@ -52,14 +45,11 @@ public class VenueTests : BaseIntegrationTest
     {
         var clientId = 1;
 
-        var result = await _venueRepository.GetBusinessClientVenuesAsync(
-            clientId,
-            new PaginationParameters(1, 100)
-        );
+        var result = await _venueRepository.GetBusinessClientVenuesAsync(clientId);
 
-        Assert.NotEmpty(result.Data);
-        Assert.Equal(2, result.Data.Count);
-        Assert.Contains(result.Data, v => v.Name == "The Creative Canvas");
+        Assert.NotEmpty(result);
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, v => v.Name == "The Creative Canvas");
     }
 
     [Fact]

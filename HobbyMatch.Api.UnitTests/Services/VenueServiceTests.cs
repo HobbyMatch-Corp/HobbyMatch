@@ -22,8 +22,7 @@ public class VenueServiceTests
     public async Task GetVenueByIdAsync_ReturnsVenue_WhenExists()
     {
         var venue = new Venue { Id = 1, Name = "Test Venue" };
-        _venueRepositoryMock.Setup(repo => repo.GetVenueByIdAsync(1))
-            .ReturnsAsync(venue);
+        _venueRepositoryMock.Setup(repo => repo.GetVenueByIdAsync(1)).ReturnsAsync(venue);
 
         var result = await _venueService.GetVenueByIdAsync(1);
 
@@ -33,42 +32,53 @@ public class VenueServiceTests
     [Fact]
     public async Task GetClientVenuesAsync_ReturnsPaginatedVenues()
     {
-        var paginatedData = new PaginatedData<Venue>([new Venue { Id = 1, Name = "Venue A" }],
-            1, 1, 1);
+        var data = new List<Venue>
+        {
+            new() { Id = 1, Name = "Venue A" },
+        };
         var paginationParams = new PaginationParameters(1, 10);
 
-        _venueRepositoryMock.Setup(repo => repo.GetBusinessClientVenuesAsync(42, paginationParams))
-            .ReturnsAsync(paginatedData);
+        _venueRepositoryMock
+            .Setup(repo => repo.GetBusinessClientVenuesAsync(42))
+            .ReturnsAsync(data);
 
-        var result = await _venueService.GetClientVenuesAsync(42, paginationParams);
+        var result = await _venueService.GetClientVenuesAsync(42);
 
-        Assert.Single(result.Data);
-        Assert.Equal(1, result.TotalCount);
+        Assert.Single(result);
     }
 
     [Fact]
     public async Task GetFilteredVenuesAsync_ReturnsFilteredVenues()
     {
-        var paginatedData = new PaginatedData<Venue>([new Venue { Id = 2, Name = "Filtered Venue" }],
-            1, 1, 1);
-        var paginationParams = new PaginationParameters(1, 10);
+        var data = new List<Venue>
+        {
+            new() { Id = 2, Name = "Filtered Venue" },
+        };
 
-        _venueRepositoryMock.Setup(repo => repo.GetFilteredVenuesAsync("Filtered", paginationParams))
-            .ReturnsAsync(paginatedData);
+        _venueRepositoryMock
+            .Setup(repo => repo.GetFilteredVenuesAsync("Filtered"))
+            .ReturnsAsync(data);
 
-        var result = await _venueService.GetFilteredVenuesAsync("Filtered", paginationParams);
+        var result = await _venueService.GetFilteredVenuesAsync("Filtered");
 
-        Assert.Single(result.Data);
-        Assert.Equal("Filtered Venue", result.Data[0].Name);
+        Assert.Single(result);
+        Assert.Equal("Filtered Venue", result[0].Name);
     }
 
     [Fact]
     public async Task CreateVenue_CreatesAndReturnsVenue()
     {
-        var createRequest = new CreateVenueDto("New Venue", "Here",
-            10, 10.0m, new Location { Longitude = 1, Latitude = 1 }, "Nice place");
+        var createRequest = new CreateVenueDto(
+            "New Venue",
+            "Here",
+            10,
+            10.0m,
+            new Location { Longitude = 1, Latitude = 1 },
+            "Nice place"
+        );
         Venue? capturedVenue = null;
-        _venueRepositoryMock.Setup(repo => repo.AddVenueAsync(It.IsAny<Venue>()))
+        _venueRepositoryMock
+            .Setup(repo => repo.AddVenueAsync(It.IsAny<Venue>()))
             .Callback<Venue>(v => capturedVenue = v)
             .Returns(Task.CompletedTask);
 
