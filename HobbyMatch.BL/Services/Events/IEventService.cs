@@ -5,7 +5,8 @@ namespace HobbyMatch.BL.Services.Events
 {
     public interface IEventService
     {
-		Task<bool> AddUserToEventAsync(int eventId, User user);
+        Task<Event?> GetEventByIdAsync(int eventId);
+        Task<bool> AddUserToEventAsync(int eventId, User user);
 		Task<bool> CheckIfUserInSignInList(int eventId, User user);
 		Task<IEnumerable<Event>> GetEventsWithFilterAsync(string? filter);
 		Task<bool> RemoveUserFromEventAsync(int eventId, User user);

@@ -1,6 +1,5 @@
 ﻿using HobbyMatch.BL.DTOs.Events;
 using HobbyMatch.BL.Services.Events;
-using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -12,10 +11,8 @@ namespace HobbyMatch.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class EventsController(IEventRepository eventRepository, UserManager<Organizer> userManager, IEventService eventService) : ControllerBase
+    public class EventsController(UserManager<Organizer> userManager, IEventService eventService) : ControllerBase
     {
-		private readonly IEventRepository _eventRepository = eventRepository;
-
 		private readonly IEventService _eventService = eventService; 
         private readonly UserManager<Organizer> _userManager = userManager;
 
@@ -41,7 +38,7 @@ namespace HobbyMatch.API.Controllers
         //[Authorize]
         public async Task<IActionResult> EventGetById([FromRoute] int eventId)
 		{
-			var result = await _eventRepository.GetEventByIdAsync(eventId);
+			var result = await _eventService.GetEventByIdAsync(eventId);
 			return result != null ? Ok(result.ToDto()) : BadRequest("Could not get event");
 		}
 
