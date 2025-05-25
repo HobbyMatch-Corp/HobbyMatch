@@ -10,39 +10,58 @@
 @using Microsoft.AspNetCore.Components.Authorization
 
 @* TODO: figure out why this doesnt work <CascadingAuthenticationState> *@
-    <AuthorizeView>
-        <Authorized>
-            @{
-                navigationManager.NavigateTo("/home");
-            }
-        </Authorized>
-    </AuthorizeView>
+<AuthorizeView>
+    <Authorized>
+        @{
+            navigationManager.NavigateTo("/home");
+        }
+    </Authorized>
+</AuthorizeView>
 @* </CascadingAuthenticationState> *@
+<div class="row">
+    <MudContainer Style="justify-content: center" MaxWidth="MaxWidth.Small">
 
-<MudContainer Style="justify-content: center" MaxWidth="MaxWidth.Small">
-
-    <MudPaper Class="pa-4">
-        <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">Sign in to your account</MudText>
-        <MudForm @bind-IsValid="@success" @bind-Errors="@errors">
-            <MudTextField @ref="emailField" T="string" Label="Email" Required="true" RequiredError="Email is required!"
-            Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" style="margin-bottom:8px"/>
-            <MudTextField @ref="passwordField" T="string" Label="Password" InputType="InputType.Password"
-            Required="true" RequiredError="Password is required!" Style="margin-bottom:32px"/>
-            @* <div class="d-flex">
+        <MudPaper Class="pa-4">
+            <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">Sign in to your account</MudText>
+            <MudForm @bind-IsValid="@success" @bind-Errors="@errors">
+                <MudTextField @ref="emailField" T="string" Label="Email" Required="true" RequiredError="Email is required!"
+                Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" style="margin-bottom:8px"/>
+                <MudTextField @ref="passwordField" T="string" Label="Password" InputType="InputType.Password"
+                Required="true" RequiredError="Password is required!" Style="margin-bottom:32px"/>
+                @* <div class="d-flex">
                 <MudRadioGroup @ref="accountType" T="string" Required="true" RequiredError="Account type is required!">
                     <MudRadio Color="Color.Primary" Value="@("User")">User</MudRadio>
                     <MudRadio Color="Color.Primary" Value="@("BusinessClient")">Business Client</MudRadio>
                 </MudRadioGroup>
-            </div> *@
-        </MudForm>
+                </div> *@
+            </MudForm>
+                <MudText>Don’t have an account yet?  <MudLink Href="/SignUp">Sign up here</MudLink></MudText>
+            <div class="d-flex align-center justify-space-around pt-3">
+                <button disabled="@(!success)" class="btn btn-primary" style="width: fit-content" @onclick="() => _showBearerAuthForm = !_showBearerAuthForm">
+                    Toggle Bearer Auth
+                </button>
+                <button disabled="@(!success)" Class="btn btn-primary" @onclick="SignInAction">Sign in</button>
+            </div>
+        </MudPaper>
 
-        <div class="d-flex align-center justify-space-between">
-            <MudText>Don’t have an account yet?  <MudLink Href="/SignUp">Sign up here</MudLink></MudText>
-            <button disabled="@(!success)" Class="btn btn-primary" @onclick="SignInAction">Sign in</button>
-        </div>
-    </MudPaper>
-</MudContainer>
+    </MudContainer>
+    @if (_showBearerAuthForm)
+    {
+        <MudContainer Style="justify-content: center" MaxWidth="MaxWidth.Small">
 
+            <MudPaper Class="pa-4">
+                <MudText Typo="Typo.h4" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">Sign In via Token</MudText>
+                <MudForm @bind-IsValid="@success" @bind-Errors="@errors">
+                    <MudTextField @ref="tokenField" T="string" Label="Token" style="margin-bottom:8px" />
+                </MudForm>
+
+                <div class="d-flex align-center justify-space-between">
+                    <button disabled="@(!success)" Class="btn btn-primary" @onclick="SignInViaTokenAction">Sign in</button>
+                </div>
+            </MudPaper>
+        </MudContainer>
+    }
+</div>
 @if (_showAlert)
 {
     <MudCard Class="centered-top rounded-xl">
@@ -59,7 +78,10 @@
     MudTextField<string>? passwordField;
     MudRadioGroup<string>? accountType;
 
+    MudTextField<string>? tokenField;
+
     private bool _showAlert = false;
+    private bool _showBearerAuthForm = false;
     private string _alertText = "";
 
     private async Task SignInAction()
@@ -78,7 +100,21 @@
         navigationManager.NavigateTo("/home");
         StateHasChanged();
     }
+    private async Task SignInViaTokenAction()
+    {
+        if (tokenField is null) return;
 
+        var token = tokenField.Value ?? "";
+        var result = await CustomAuthStateProvider.LoginAsync(token);
+        if (!result)
+        {
+            await ShowAlert("Login failed!", 5000);
+            return;
+        }
+
+        navigationManager.NavigateTo("/home");
+        StateHasChanged();
+    }
 
     public async Task ShowAlert(string text, int delay)
     {
