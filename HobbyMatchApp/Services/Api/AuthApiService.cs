@@ -27,7 +27,7 @@ namespace HobbyMatch.App.Services.Api
 
 		public async Task<HttpResponseMessage> RegisterUserAsync(string username, string email, string password)
 		{
-			var request = new UserRegisterRequest(email, password, username);
+			var request = new UserRegisterDto(email, password, username);
 			var response = await _httpClient.PostAsJsonAsync("auth/register", request);
 			return response;
 		}

@@ -44,7 +44,7 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task RegisterUserAsync(UserRegisterRequest registerRequest)
+    public async Task RegisterUserAsync(UserRegisterDto registerRequest)
     {
         var userExists = await _userManager.FindByEmailAsync(registerRequest.Email) != null;
         if (userExists)

@@ -1,4 +1,5 @@
 ﻿using HobbyMatch.BL.Configuration;
+using HobbyMatch.BL.DTOs.Auth;
 using HobbyMatch.BL.Services.Auth;
 using HobbyMatch.BL.Services.Auth.Account;
 using HobbyMatch.Database.Repositories.Users;
@@ -27,7 +28,7 @@ namespace HobbyMatch.DbIntegrationTests
             var email = "integrationtest1@test.com";
             var pass = "IntegTest1!";
             var username = "IntegTestUser";
-            var userRegisterRequest = new UserRegisterRequest(email, pass, username);
+            var userRegisterRequest = new UserRegisterDto(email, pass, username);
 
             var userRepo = new UserRepository(DbContext);
             var accountService = new AccountService(null, UserManager, userRepo);
