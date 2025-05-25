@@ -179,7 +179,7 @@
         if (userType == UserType.User)
         {
             var hobbyDtos = hobbiesList?.SelectedHobbies.ToArray() ?? [];
-            var updatedUser = new UpdateUserDto(user.Id.ToString(), formModel.UserName, formModel.Email, hobbyDtos);
+            var updatedUser = new UpdateUserDto(formModel.UserName, formModel.Email, hobbyDtos);
 
             if (await organizerApiService.UpdateUserAsync<UserDto, UpdateUserDto>(_userId, updatedUser))
             {
