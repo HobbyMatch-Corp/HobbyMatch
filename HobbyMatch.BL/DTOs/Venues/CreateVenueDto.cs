@@ -2,7 +2,7 @@ using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.Domain.Requests;
 
-public record CreateVenueRequest(
+public record CreateVenueDto(
     string Name,
     string Address,
     int MaxUsers,

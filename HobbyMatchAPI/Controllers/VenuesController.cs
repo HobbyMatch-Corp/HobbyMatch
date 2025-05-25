@@ -67,7 +67,7 @@ public class VenuesController : ControllerBase
 
     [Authorize]
     [HttpPost("")]
-    public async Task<IActionResult> CreateVenue([FromBody] CreateVenueRequest request)
+    public async Task<IActionResult> CreateVenue([FromBody] CreateVenueDto request)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 

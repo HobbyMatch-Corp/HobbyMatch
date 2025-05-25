@@ -35,7 +35,7 @@ public class VenueApiService : IVenueApiService
         return result;
     }
 
-    public async Task<VenueDetailsDto?> CreateVenueAsync(CreateVenueRequest request)
+    public async Task<VenueDetailsDto?> CreateVenueAsync(CreateVenueDto request)
     {
         var response = await _httpClient.PostAsJsonAsync("venues", request);
         if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<VenueDetailsDto>();
