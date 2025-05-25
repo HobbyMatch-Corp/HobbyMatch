@@ -11,10 +11,8 @@ namespace HobbyMatch.API.Controllers
 {
 	[Route("api/v1/[controller]")]
 	[ApiController]
-	public class FriendsController(IAppUserRepository appUserRepository, UserManager<Organizer> userManager, IAppUserService appUserService) : ControllerBase
+	public class FriendsController(UserManager<Organizer> userManager, IAppUserService appUserService) : ControllerBase
 	{
-		private readonly IAppUserRepository _appUserRepository = appUserRepository;
-
 		private readonly IAppUserService _appUserService = appUserService;
 		private readonly UserManager<Organizer> _userManager = userManager;
 		[HttpPost("add")]
