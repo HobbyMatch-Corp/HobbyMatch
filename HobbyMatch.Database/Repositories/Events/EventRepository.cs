@@ -24,6 +24,7 @@ namespace HobbyMatch.Database.Repositories.Events
             return await _context.Events
                 .Include(e => e.SignUpList)
                 .Include(e => e.Hobbies)
+                .Include(e => e.Organizer)
                 .FirstOrDefaultAsync(e => e.Id == eventId);
         }
 
