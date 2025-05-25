@@ -33,6 +33,11 @@ public class VenueRepository : IVenueRepository
 			.ToPaginatedData(paginationParams);
 	}
 
+	public async Task<List<Venue>> GetVenuesAsync()
+	{
+		return await _dbContext.Venues.ToListAsync();
+	}
+
 	public async Task AddVenueAsync(Venue venue)
 	{
 		await _dbContext.AddAsync(venue);

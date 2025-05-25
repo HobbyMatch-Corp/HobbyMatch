@@ -62,4 +62,10 @@ public class VenueApiService : IVenueApiService
         var result = await _unauthorizedClient.GetFromJsonAsync<PaginatedData<VenueDto>>(uri);
         return result ?? PaginatedData<VenueDto>.Empty();
     }
+    
+    public async Task<IEnumerable<VenueDto>> GetVenuesAsync()
+    {
+        var Venues = await _unauthorizedClient.GetFromJsonAsync<IEnumerable<VenueDto>>("venues");
+        return Venues ?? [];
+    }
 }
