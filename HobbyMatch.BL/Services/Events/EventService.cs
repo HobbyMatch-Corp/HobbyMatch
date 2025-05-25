@@ -10,6 +10,10 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
     private readonly IEventRepository _eventRepository = eventRepository;
     private readonly IHobbyService _hobbyService = hobbyService;
 
+
+    public async Task<Event?> GetEventByIdAsync(int eventId) =>
+         await _eventRepository.GetEventByIdAsync(eventId);
+
     public async Task<bool> AddUserToEventAsync(int eventId, User user)
     {
         var ev = await _eventRepository.GetEventByIdAsync(eventId);
