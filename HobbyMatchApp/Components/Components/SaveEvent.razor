@@ -1,9 +1,13 @@
 ﻿@using HobbyMatch.App.Services.Events
 @using HobbyMatch.App.Services.Hobbies
+@using HobbyMatch.App.Services.Venues
 @using HobbyMatch.BL.DTOs.Events
 @using HobbyMatch.BL.DTOs.Hobbies
+@using HobbyMatch.Database.Common.Pagination
+@using HobbyMatch.BL.DTOs.Venues
 @using Microsoft.AspNetCore.Components.Authorization
 @inject IEventApiService _eventApiService
+@inject IVenueApiService _venueApiService
 @inject NavigationManager _navigationManager
 @inject ISnackbar Snackbar
 @inject IHobbyApiService hobbyApiService
@@ -28,9 +32,15 @@
 					<MudTimePicker Variant="Variant.Outlined" Label="End Time" Editable="true" @bind-Time="_endTime" />
 				</MudItem>
 			</MudGrid>
-			<MudTextField @bind-Value="_venue" T="string" Label="Venue" />
-			<MudNumericField @bind-Value="_location.Latitude" T="double?" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
-			<MudNumericField @bind-Value="_location.Longitude" T="double?" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
+			@if (!_isEditMode)
+			{
+				<MudAutocomplete @bind-Value="_venue" T="VenueDto" ToStringFunc="@FormatVenue" Label="Venue" SearchFunc="@Search" Variant="Variant.Outlined" ShowProgressIndicator="true" CoerceText="true" />
+			}
+			@if (_isEditMode || _venue is null || _venue.Id == -1)
+			{
+				<MudNumericField @bind-Value="_location.Latitude" T="double?" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
+				<MudNumericField @bind-Value="_location.Longitude" T="double?" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
+			}
 			<MudNumericField @bind-Value="_price" T="float" Min="0" Label="Price" Required="true" RequiredError="Price is required!" />
 			<MudNumericField @bind-Value="_minUsers" T="int" Min="0" Label="Min users" Required="true" RequiredError="Min users is required!" />
 			<MudNumericField @bind-Value="_maxUsers" T="int" Min="@_minUsers" Label="Max users" Required="true" RequiredError="Max users is required!" />
@@ -38,7 +48,7 @@
 			{
 				<di style="margin-bottom:8px">
 					<HobbyMatch.App.Components.Components.HobbiesList @ref="_hobbiesList"
-																	  Hobbies="_hobbies" InitialSelectedHobbies="_initialHobbies" ReadOnly="false" />
+					Hobbies="_hobbies" InitialSelectedHobbies="_initialHobbies" ReadOnly="false" />
 				</di>
 
 			}
@@ -64,7 +74,7 @@
 	private float _price = 0;
 	private int _maxUsers = 0;
 	private int _minUsers = 0;
-	private string _venue = "";
+	private VenueDto? _venue = null;
 	private DateTime? _startDate = DateTime.Today;
 	private TimeSpan? _startTime = new(0, 0, 0);
 	private DateTime? _endDate = DateTime.Today;
@@ -112,6 +122,11 @@
 	{
 		var startDateTime = (_startDate ?? DateTime.Today).Add(_startTime ?? TimeSpan.Zero);
 		var endDateTime = (_endDate ?? DateTime.Today).Add(_endTime ?? TimeSpan.Zero);
+		if(_venue is not null && _venue.Id != -1)
+		{
+			_location.Longitude = _venue.Location.Longitude;
+			_location.Latitude = _venue.Location.Latitude;
+		}
 
 		var request = new CreateEventDto(
 			_eventName,
@@ -144,5 +159,14 @@
 		{
 			Snackbar.Add("Error while saving the event", Severity.Error);
 		}
+	}
+	private async Task<IEnumerable<VenueDto>> Search(string value, CancellationToken token)
+	{
+		var Venues =  await _venueApiService.GetVenuesAsync();
+		return Venues.Append(new VenueDto(-1, "Other", "", new Domain.Entities.Location(), 0));
+	}
+	private string FormatVenue(VenueDto venue)
+	{
+		return venue.Address is not null && venue.Address != "" ? $"{venue?.Name}, {venue?.Address}" : $"{venue?.Name}";
 	}
 }

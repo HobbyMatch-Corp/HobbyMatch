@@ -13,6 +13,8 @@ public interface IVenueRepository
     public Task<PaginatedData<Venue>> GetFilteredVenuesAsync(string filter,
         PaginationParameters paginationParams);
 
+    public Task<List<Venue>> GetVenuesAsync(); 
+
     public Task AddVenueAsync(Venue venue);
 	public Task SaveChangesAsync();
 }

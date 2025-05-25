@@ -63,6 +63,13 @@ public class VenuesController : ControllerBase
         var paginatedVenues = await _venueService.GetFilteredVenuesAsync(filter, paginationParams);
         return Ok(paginatedVenues.MapItems(venue => venue.ToDto()));
     }
+    [HttpGet]
+    public async Task<IActionResult> GetVenuesAsync()
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+        var Venues = await _venueService.GetVenuesAsync();
+        return Ok(Venues.Select(venue => venue.ToDto()));
+    }
 
     [Authorize]
     [HttpPost("")]
