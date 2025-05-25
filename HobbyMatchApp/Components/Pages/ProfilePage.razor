@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject IOrganizerApiService organizerApiService
+@inject IVenueApiService venueApiService
 @inject IHobbyApiService hobbyApiService
 @inject NavigationManager navigationManager
 @inject ISnackbar _snackbar
@@ -10,8 +11,10 @@
 @using HobbyMatch.App.Components.Components
 @using HobbyMatch.App.Services.Api
 @using HobbyMatch.App.Services.Hobbies
+@using HobbyMatch.App.Services.Venues
 @using HobbyMatch.BL.DTOs.Organizers
 @using HobbyMatch.BL.DTOs.Hobbies
+@using HobbyMatch.BL.DTOs.Venues
 @using HobbyMatch.BL.Services.AppUsers
 @using HobbyMatch.Domain.Entities
 @using HobbyMatch.App.Auth.CustomAuthStateProvider
@@ -93,6 +96,8 @@
     private List<HobbyDto> hobbies { get; set; } = new();
     private List<HobbyDto> initialHobbies { get; set; } = new();
 
+    private List<ClientsVenueDto> _venuesList { get; set; } = new();
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -136,6 +141,7 @@
             else if (userType == UserType.BussinessClient)
             {
                 user = await organizerApiService.GetMe<BusinessClientDto>();
+                //_venuesList = await 
                 email = (user as BusinessClientDto)?.Email;
             }
 
