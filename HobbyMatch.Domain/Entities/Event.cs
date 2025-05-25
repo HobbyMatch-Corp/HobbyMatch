@@ -41,5 +41,8 @@ namespace HobbyMatch.Domain.Entities
 
         [JsonIgnore]
         public ICollection<Hobby> Hobbies { get; set; } = new List<Hobby>();
+
+        [JsonIgnore]
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

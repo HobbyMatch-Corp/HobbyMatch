@@ -89,9 +89,6 @@ namespace HobbyMatch.Database.Migrations
                     b.Property<int>("OrganizerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
@@ -552,13 +549,13 @@ namespace HobbyMatch.Database.Migrations
                     b.HasOne("HobbyMatch.Domain.Entities.Event", "Event")
                         .WithMany("Comments")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("HobbyMatch.Domain.Entities.Organizer", "Organizer")
                         .WithMany("Comments")
                         .HasForeignKey("OrganizerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Event");

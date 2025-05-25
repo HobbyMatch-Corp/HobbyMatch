@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HobbyMatch.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250524122749_ChangeColumnName")]
-    partial class ChangeColumnName
+    [Migration("20250525202411_InitMigration")]
+    partial class InitMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,6 +69,36 @@ namespace HobbyMatch.Database.Migrations
                     b.HasIndex("SignedUpEventsId");
 
                     b.ToTable("EventUser");
+                });
+
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrganizerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("OrganizerId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("HobbyMatch.Domain.Entities.Event", b =>
@@ -517,6 +547,25 @@ namespace HobbyMatch.Database.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.Comment", b =>
+                {
+                    b.HasOne("HobbyMatch.Domain.Entities.Event", "Event")
+                        .WithMany("Comments")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("HobbyMatch.Domain.Entities.Organizer", "Organizer")
+                        .WithMany("Comments")
+                        .HasForeignKey("OrganizerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Organizer");
+                });
+
             modelBuilder.Entity("HobbyMatch.Domain.Entities.Event", b =>
                 {
                     b.HasOne("HobbyMatch.Domain.Entities.Organizer", "Organizer")
@@ -643,8 +692,15 @@ namespace HobbyMatch.Database.Migrations
                         .HasForeignKey("UserId");
                 });
 
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.Event", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
             modelBuilder.Entity("HobbyMatch.Domain.Entities.Organizer", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("OrganizedEvents");
                 });
 
