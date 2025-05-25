@@ -38,13 +38,15 @@ namespace HobbyMatch.BL.Services.AppUsers
         {
             var hobbies = await _hobbyService.GetHobbiesAsync(userDto.hobbies.ToList());
 
-			var user = new User
+			var dbUser = await _appUserRepository.GetUserByIdAsync(userId);
+
+			if (dbUser != null)
 			{
-				Email = userDto.email,
-				UserName = userDto.userName,
-                Hobbies = hobbies
-            };
-			await _appUserRepository.UpdateUserAsync(userId, user);
+				dbUser.Email = userDto.email;
+				dbUser.UserName = userDto.userName;
+                dbUser.Hobbies = hobbies;
+			}
+			await _appUserRepository.SaveChangesAsync();
         }
         public async Task<bool> AddFriendsAsync(int friendId, User user)
         {

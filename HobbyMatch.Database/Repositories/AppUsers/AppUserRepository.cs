@@ -34,19 +34,6 @@ namespace HobbyMatch.Database.Repositories.AppUsers
             return await _dbContext.AppUsers.ToListAsync();
 		}
 
-        // TODO: Think about moving this code to service
-        public async Task UpdateUserAsync(int userId, User user)
-        {
-            var dbUser = await GetUserByIdAsync(userId);
-
-            if (dbUser != null)
-            {
-                dbUser.Email = user.Email;
-                dbUser.UserName = user.UserName;
-                dbUser.Hobbies = user.Hobbies;
-            }
-            await _dbContext.SaveChangesAsync();
-        }
 		public async Task<bool> AddFriendToUserAsync(User user, User friend)
 		{
 			user.Friends.Add(friend);
@@ -59,6 +46,11 @@ namespace HobbyMatch.Database.Repositories.AppUsers
 			user.Friends.Remove(friend);
 			await _dbContext.SaveChangesAsync();
 			return true;
+		}
+
+		public async Task SaveChangesAsync()
+		{
+			await _dbContext.SaveChangesAsync();
 		}
 	}
 }

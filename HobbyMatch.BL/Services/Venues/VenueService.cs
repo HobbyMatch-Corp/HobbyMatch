@@ -65,7 +65,6 @@ public class VenueService : IVenueService
 			return false;
 		}
 
-		// TODO: This can be extension method in partial UserExtensions (located in UpdateVenueDto file)
 		venue.Name = updateVenueDto.Name;
 		venue.Description = updateVenueDto.Description;
 

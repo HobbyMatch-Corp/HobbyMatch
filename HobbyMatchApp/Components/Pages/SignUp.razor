@@ -3,9 +3,11 @@
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
 @using HobbyMatch.App.Services.Api
+@using HobbyMatch.BL.Services.Validation
 
 @inject IAuthApiService AuthApiService
 @inject NavigationManager navigationManager
+@inject IValidationService validationService
 @using Microsoft.AspNetCore.Components.Authorization
 
 <CascadingAuthenticationState>
@@ -26,7 +28,7 @@
             <MudTextField @ref="emailField" T="string" Label="Email" Required="true" RequiredError="Email is required!"
             Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" Style="margin-bottom:8px" />
             <MudTextField @ref="passwordField" T="string" Label="Password" HelperText="Choose a strong password" InputType="InputType.Password"
-            Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
+                          Validation="@(new Func<string, IEnumerable<string>>(validationService.PasswordStrength))" Required="true"
             Style="margin-bottom:8px" RequiredError="Password is required!" />
             <MudTextField T="string"
             Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
@@ -68,24 +70,6 @@
 
     private bool _showAlert = false;
     private string _alertText = "";
-
-    // TODO: Proposition, to use a validation Service. This will be most likely needed in the future in "reset password" component
-    private IEnumerable<string> PasswordStrength(string pw)
-    {  
-        if (string.IsNullOrWhiteSpace(pw))
-        {
-            yield return "Password is required!";
-            yield break;
-        }
-        if (pw.Length < 8)
-            yield return "Password must be at least of length 8";
-        if (!Regex.IsMatch(pw, @"[A-Z]"))
-            yield return "Password must contain at least one capital letter";
-        if (!Regex.IsMatch(pw, @"[a-z]"))
-            yield return "Password must contain at least one lowercase letter";
-        if (!Regex.IsMatch(pw, @"[0-9]"))
-            yield return "Password must contain at least one digit";
-    }
 
     private string PasswordMatch(string arg)
     {
