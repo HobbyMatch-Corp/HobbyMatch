@@ -70,6 +70,8 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
         eventToEdit.EndTime = dto.EndTime;
         eventToEdit.Location = dto.Location;
         eventToEdit.Price = dto.Price;
+        eventToEdit.MaxUsers = dto.MaxUsers;
+        eventToEdit.MinUsers = dto.MinUsers;
         eventToEdit.Hobbies = hobbies;
 
         await _eventRepository.UpdateEventAsync(eventToEdit); // Assuming this method exists
