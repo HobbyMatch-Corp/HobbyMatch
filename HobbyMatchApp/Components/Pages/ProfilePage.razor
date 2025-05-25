@@ -25,9 +25,9 @@
         <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">My Profile</MudText>
         <MudForm @bind-IsValid="@success" @bind-Errors="@errors" ReadOnly="@(!editable)">
             <MudTextField @ref="usernameField" T="string" Label="Username" Required="editable"
-                          RequiredError="User name is required!" Style="margin-bottom:8px" @bind-Value="formModel.UserName" />
+            RequiredError="User name is required!" Style="margin-bottom:8px" @bind-Value="formModel.UserName" />
             <MudTextField @ref="emailField" T="string" Label="Email" Required="editable" RequiredError="Email is required!" @bind-Value="formModel.Email"
-                          Immediate="true" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" Style="margin-bottom:8px" />
+            Immediate="true" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" Style="margin-bottom:8px" />
             @if (userType != null && userType.Value == UserType.BussinessClient)
             {
                 <MudTextField @ref="taxIdField" T="string" Label="TaxId" Required="true" RequiredError="Tax ID is required!" style="margin-bottom:8px" @bind-Value="formModel.TaxId" />
@@ -42,9 +42,15 @@
                     else
                     {
                         <HobbyMatch.App.Components.Components.HobbiesList @ref="hobbiesList"
-                                                                          Hobbies="hobbies" InitialSelectedHobbies="initialHobbies" ReadOnly="@(!editable)" />
+                        Hobbies="hobbies" InitialSelectedHobbies="initialHobbies" ReadOnly="@(!editable)" />
                     }
 
+                }
+                else
+                {
+                    <div class="d-flex align-center justify-center mb-2" style="margin:8px">
+                    <button Type="button" Class="btn btn-primary" @onclick="CreateVenue">Create venue</button>
+                </div>  
                 }
             </di>
             @* <div class="d-flex"> *@
@@ -195,6 +201,9 @@
         await LoadData();
         ToggleEdit();
     }
+
+    private void CreateVenue() =>
+        navigationManager.NavigateTo("/create-venue");
 
     public class UserFormModel
     {
