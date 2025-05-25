@@ -4,13 +4,14 @@
 @inject NavigationManager NavigationManager
 
 <MudCard Class="ma-2 d-flex flex-column justify-center"
-         Style="width: calc(100% - 16px);"
-         Elevation="3">
+Style="width: calc(100% - 16px);"
+Elevation="3">
     <MudCardContent>
+        <MudText Typo="Typo.h3" Align="Align.Center" Color="Color.Secondary" style="margin-bottom:16px">Venues</MudText>
         <div style="overflow-y: auto;">
             @if (VenuesList != null && VenuesList.Any())
             {
-                <MudList T="Venue" Clickable="false">
+                <MudList T="Venue" Clickable="false" Style="max-height: 600px; overflow-y: scroll;">
                     @foreach (var ven in VenuesList.OrderBy(v => v.Name))
                     {
                         <MudListItem Expanded="false">
@@ -19,14 +20,14 @@
                                     <div style="flex: 1">
                                         <!-- Venue Name - Clickable -->
                                         <MudText Typo="Typo.h6" Class="mb-1"
-                                                 Style="cursor: pointer;"
-                                                 @onclick="() => NavigateToVenueDetails(ven.Id)">
+                                        Style="cursor: pointer;"
+                                        @onclick="() => NavigateToVenueDetails(ven.Id)">
                                             @ven.Name
                                         </MudText>
 
                                         <!-- Venue Details -->
                                         <MudText Typo="Typo.body2" Class="mb-1">
-                                            Price: @(ven.Price > 0 ? $"${ven.Price:F2}" : "Free") |
+                                            @*  Price: @(ven.Price > 0 ? $"${ven.Price:F2}" : "Free") | *@
                                             Address: @(ven.Address) |
                                             Location: @(ven.Location.ToString()) |
                                             Max Users: @($"{ven.MaxUsers}")
@@ -57,15 +58,28 @@
                 </MudText>
             }
         </div>
+        @if (ShowCreate && VenuesList is not null)
+        {
+            <div class="d-flex align-center justify-center mb-2" style="margin:8px">
+                <button Type="button" Class="btn btn-primary" @onclick="NavigateToCreateVenue">Create venue</button>
+            </div>
+        }
     </MudCardContent>
 </MudCard>
 
 @code {
     [Parameter]
-    public List<ClientsVenueDto> VenuesList { get; set; } = new List<ClientsVenueDto>();
+    public List<VenueDto> VenuesList { get; set; } = new();
+
+    [Parameter]
+    public bool ShowCreate { get; set; } = false;
 
     private void NavigateToVenueDetails(int venueId)
     {
         NavigationManager.NavigateTo($"/venue/{venueId}"); 
     }
+
+
+    private void NavigateToCreateVenue() =>
+        NavigationManager.NavigateTo("/create-venue");
 }
