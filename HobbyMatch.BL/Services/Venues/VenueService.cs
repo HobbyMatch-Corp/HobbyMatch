@@ -39,6 +39,11 @@ public class VenueService : IVenueService
 		return await _venueRepository.GetFilteredVenuesAsync(filter, paginationParams);
 	}
 
+	public async Task<List<Venue>> GetVenuesAsync()
+	{
+		return await _venueRepository.GetVenuesAsync();
+	}
+
 	public async Task<Venue> CreateVenue(CreateVenueRequest createRequest, int businessClientId)
 	{
 		var venue = new Venue

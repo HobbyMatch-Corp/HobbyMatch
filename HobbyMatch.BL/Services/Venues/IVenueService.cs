@@ -13,6 +13,8 @@ public interface IVenueService
 
     public Task<PaginatedData<Venue>> GetFilteredVenuesAsync(string filter, PaginationParameters paginationParams);
 
+    public Task<List<Venue>> GetVenuesAsync();
+
     public Task<Venue> CreateVenue(CreateVenueRequest createRequest,int businessClientId);
 	public Task<bool> EditVenueAsync(int venueId, UpdateVenueDto updateVenueDto);
 }

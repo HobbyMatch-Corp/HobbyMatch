@@ -1,7 +1,11 @@
 ﻿@using HobbyMatch.App.Services.Events
+@using HobbyMatch.App.Services.Venues
 @using HobbyMatch.BL.DTOs.Events
+@using HobbyMatch.Database.Common.Pagination
+@using HobbyMatch.BL.DTOs.Venues
 @using Microsoft.AspNetCore.Components.Authorization
 @inject IEventApiService _eventApiService
+@inject IVenueApiService _venueApiService
 @inject NavigationManager _navigationManager
 @inject ISnackbar Snackbar
 
@@ -25,7 +29,7 @@
 					<MudTimePicker Variant="Variant.Outlined" Label="End Time" Editable="true" @bind-Time="_endTime" />
 				</MudItem>
 			</MudGrid>
-			<MudTextField @bind-Value="_venue" T="string" Label="Venue" />
+			<MudAutocomplete @bind-Value="_venue" T="string" Label="Venue" SearchFunc="@Search" Variant="Variant.Outlined" ShowProgressIndicator="true"/>
 			<MudNumericField @bind-Value="_location.Latitude" T="double?" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
 			<MudNumericField @bind-Value="_location.Longitude" T="double?" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
 			<MudNumericField @bind-Value="_price" T="float" Min="0" Label="Price" Required="true" RequiredError="Price is required!" />
@@ -110,5 +114,10 @@
 		{
 			Snackbar.Add("Error while saving the event", Severity.Error);
 		}
+	}
+	private async Task<IEnumerable<string>> Search(string value, CancellationToken token)
+	{
+		var Venues = await _venueApiService.GetVenuesAsync();
+		return Venues.Select(v => $"{v.Name}, {v.Address}");
 	}
 }

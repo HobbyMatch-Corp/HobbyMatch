@@ -12,6 +12,8 @@ public interface IVenueApiService
     public Task<PaginatedData<VenueDto>> GetFilteredVenues(string? filter,
         PaginationParameters paginationParameters);
 
+    public Task<IEnumerable<VenueDto>> GetVenuesAsync();
+
     public Task<VenueDetailsDto?> CreateVenueAsync(CreateVenueRequest request);
     public Task<bool> UpdateVenueAsync(UpdateVenueDto request, int venueId);
 }
