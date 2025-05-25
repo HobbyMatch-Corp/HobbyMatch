@@ -1,10 +1,7 @@
 ﻿using HobbyMatch.BL.DTOs.Events;
-using HobbyMatch.BL.DTOs.Hobbies;
-using HobbyMatch.BL.DTOs.Organizers;
 using HobbyMatch.BL.Services.Hobbies;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
-using HobbyMatch.Domain.Requests;
 
 namespace HobbyMatch.BL.Services.Events;
 

@@ -5,9 +5,7 @@ using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Database.Repositories.Hobbies;
 using HobbyMatch.DbIntegrationTests.Infrastrucutre;
 using HobbyMatch.Domain.Entities;
-using HobbyMatch.Domain.Requests;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 
 namespace HobbyMatch.DbIntegrationTests
 {

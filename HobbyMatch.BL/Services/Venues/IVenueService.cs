@@ -1,7 +1,6 @@
 using HobbyMatch.BL.DTOs.Venues;
 using HobbyMatch.Database.Common.Pagination;
 using HobbyMatch.Domain.Entities;
-using HobbyMatch.Domain.Requests;
 
 namespace HobbyMatch.BL.Services.Venues;
 

@@ -5,7 +5,6 @@ using HobbyMatch.BL.Services.Venues;
 using HobbyMatch.Database.Common.Pagination;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Enums;
-using HobbyMatch.Domain.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

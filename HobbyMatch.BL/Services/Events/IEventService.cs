@@ -1,11 +1,5 @@
 ﻿using HobbyMatch.BL.DTOs.Events;
-using HobbyMatch.Domain.Requests;
 using HobbyMatch.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HobbyMatch.BL.Services.Events
 {

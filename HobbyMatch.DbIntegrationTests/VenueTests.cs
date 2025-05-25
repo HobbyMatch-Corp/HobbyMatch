@@ -1,11 +1,10 @@
+using HobbyMatch.BL.DTOs.Venues;
 using HobbyMatch.BL.Services.Venues;
 using HobbyMatch.Database.Common.Pagination;
 using HobbyMatch.Database.Repositories.Venues;
 using HobbyMatch.DbIntegrationTests.Infrastrucutre;
 using HobbyMatch.Domain.Entities;
-using HobbyMatch.Domain.Requests;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace HobbyMatch.DbIntegrationTests;
 

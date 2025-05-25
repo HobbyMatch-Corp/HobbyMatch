@@ -1,6 +1,4 @@
 ﻿using HobbyMatch.BL.DTOs.Auth;
-using HobbyMatch.BL.Models.Auth;
-using HobbyMatch.Domain.Requests;
 
 namespace HobbyMatch.App.Services.Api
 {
@@ -13,14 +11,14 @@ namespace HobbyMatch.App.Services.Api
 			_httpClient = httpClientFactory.CreateClient("AuthClient");
 		}
 
-		public async Task<AuthResult?> LoginAsync(string email, string password)
+		public async Task<AuthResultDto?> LoginAsync(string email, string password)
 		{
-			AuthResult? authResult = null;
+            AuthResultDto? authResult = null;
 			var request = new LoginRequestDto(email, password);
 			var response = await _httpClient.PostAsJsonAsync("auth/login", request);
 			if (response.IsSuccessStatusCode)
 			{
-				authResult = await response.Content.ReadFromJsonAsync<AuthResult>();
+				authResult = await response.Content.ReadFromJsonAsync<AuthResultDto>();
 			}
 			return authResult;
 		}

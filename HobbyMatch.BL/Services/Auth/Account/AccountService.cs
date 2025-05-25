@@ -1,9 +1,7 @@
 using HobbyMatch.BL.DTOs.Auth;
-using HobbyMatch.BL.Models.Auth;
 using HobbyMatch.Database.Repositories.Users;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Exceptions.AuthExceptions;
-using HobbyMatch.Domain.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -65,7 +63,7 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<AuthResult> LoginUserAsync(LoginRequestDto loginRequest)
+    public async Task<AuthResultDto> LoginUserAsync(LoginRequestDto loginRequest)
     {
         var user = await _userManager.FindByEmailAsync(loginRequest.Email);
 
@@ -84,16 +82,15 @@ public class AccountService : IAccountService
 
         await _userManager.UpdateAsync(user);
 
-        return new AuthResult
-        {
-            JwtToken = jwtToken,
-            JwtTokenExpirationDate = expiresAt,
-            RefreshToken = refreshToken,
-            RefreshTokenExpirationDate = refreshTokenExpiration
-        };
+        return new AuthResultDto(
+            jwtToken,
+            expiresAt,
+            refreshToken,
+            refreshTokenExpiration
+            );
     }
 
-    public async Task<AuthResult> RefreshTokenAsync(string? refreshToken)
+    public async Task<AuthResultDto> RefreshTokenAsync(string? refreshToken)
     {
         if (string.IsNullOrEmpty(refreshToken))
         {
@@ -122,12 +119,11 @@ public class AccountService : IAccountService
 
         await _userManager.UpdateAsync(user);
 
-        return new AuthResult
-        {
-            JwtToken = jwtToken,
-            JwtTokenExpirationDate = expiresAt,
-            RefreshToken = refreshToken,
-            RefreshTokenExpirationDate = refreshTokenExpiration
-        };
+        return new AuthResultDto(
+            jwtToken,
+            expiresAt,
+            refreshToken,
+            refreshTokenExpiration
+            );
     }
 }
