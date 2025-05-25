@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HobbyMatch.BL.ResultEnums
 {
-	public enum DeleteEventResult
+	public enum DeleteResult
 	{
 		NotFound,
 		Success,

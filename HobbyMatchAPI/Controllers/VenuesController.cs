@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using HobbyMatch.BL.DTOs.Venues;
+using HobbyMatch.BL.ResultEnums;
 using HobbyMatch.BL.Services.Venues;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Enums;
@@ -29,8 +30,26 @@ public class VenuesController : ControllerBase
         var venue = await _venueService.GetVenueByIdAsync(venueId);
         return venue == null ? NotFound() : Ok(venue.ToDetailsDto());
     }
+	[HttpDelete("{venueId}")]
+	[Authorize]
+	public async Task<IActionResult> DeleteEvent([FromRoute] int venueId)
+	{
+		var user = await _userManager.GetUserAsync(User);
+		if (user == null)
+			return Unauthorized();
 
-    [Authorize]
+		var result = await _venueService.DeleteVenueAsync(venueId);
+
+		return result switch
+		{
+			DeleteResult.Success => Ok(),
+			DeleteResult.NotFound => NotFound($"Venue with ID {venueId} not found."),
+			DeleteResult.Failed => StatusCode(500, "An error occurred while deleting the venue."),
+			_ => StatusCode(500, "Unknown error.")
+		};
+	}
+
+	[Authorize]
     [HttpPut("{venueId}")]
     public async Task<IActionResult> EditVenue(
         [FromRoute] int venueId,

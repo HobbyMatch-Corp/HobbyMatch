@@ -19,6 +19,6 @@ namespace HobbyMatch.BL.Services.Events
 
         Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail);
 		Task<Event?> EditEventAsync(CreateEventDto createRequest, int eventId, int id);
-		Task<DeleteEventResult> DeleteEventAsync(int eventId);
+		Task<DeleteResult> DeleteEventAsync(int eventId);
 	}
 }

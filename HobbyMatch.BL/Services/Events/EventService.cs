@@ -83,14 +83,14 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
 
 		return eventToEdit;
 	}
-	public async Task<DeleteEventResult> DeleteEventAsync(int eventId)
+	public async Task<DeleteResult> DeleteEventAsync(int eventId)
 	{
 		var eventToDelete = await _eventRepository.GetEventByIdAsync(eventId);
 		if (eventToDelete == null)
-			return DeleteEventResult.NotFound;
+			return DeleteResult.NotFound;
 
 		var deleted = await _eventRepository.DeleteEventAsync(eventToDelete);
-		return deleted ? DeleteEventResult.Success : DeleteEventResult.Failed;
+		return deleted ? DeleteResult.Success : DeleteResult.Failed;
 	}
 	public async Task<bool> RemoveUserFromEventAsync(int eventId, User user)
 	{

@@ -48,9 +48,9 @@ namespace HobbyMatch.API.Controllers
 
 			return result switch
 			{
-				DeleteEventResult.Success => Ok(),
-				DeleteEventResult.NotFound => NotFound($"Event with ID {eventId} not found."),
-				DeleteEventResult.Failed => StatusCode(500, "An error occurred while deleting the event."),
+				DeleteResult.Success => Ok(),
+				DeleteResult.NotFound => NotFound($"Event with ID {eventId} not found."),
+				DeleteResult.Failed => StatusCode(500, "An error occurred while deleting the event."),
 				_ => StatusCode(500, "Unknown error.")
 			};
 		}

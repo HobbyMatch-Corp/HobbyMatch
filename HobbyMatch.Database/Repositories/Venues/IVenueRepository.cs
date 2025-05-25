@@ -14,4 +14,6 @@ public interface IVenueRepository
 
     public Task AddVenueAsync(Venue venue);
     public Task SaveChangesAsync();
+    public Task<bool> DeleteVenueAsync(Venue venueToDelete);
+
 }

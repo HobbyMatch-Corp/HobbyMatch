@@ -48,4 +48,10 @@ public class VenueRepository : IVenueRepository
     {
         await _dbContext.SaveChangesAsync();
     }
+	public async Task<bool> DeleteVenueAsync(Venue venueToDelete)
+	{
+		_dbContext.Venues.Remove(venueToDelete);
+		await SaveChangesAsync();
+		return true;
+	}
 }
