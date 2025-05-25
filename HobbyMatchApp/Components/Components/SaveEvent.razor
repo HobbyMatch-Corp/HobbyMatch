@@ -32,8 +32,11 @@
 					<MudTimePicker Variant="Variant.Outlined" Label="End Time" Editable="true" @bind-Time="_endTime" />
 				</MudItem>
 			</MudGrid>
-			<MudAutocomplete @bind-Value="_venue" T="VenueDto" ToStringFunc="@FormatVenue" Label="Venue" SearchFunc="@Search" Variant="Variant.Outlined" ShowProgressIndicator="true" CoerceText="true"/>
-			@if (_venue is null || _venue.Id == -1)
+			@if (!_isEditMode)
+			{
+				<MudAutocomplete @bind-Value="_venue" T="VenueDto" ToStringFunc="@FormatVenue" Label="Venue" SearchFunc="@Search" Variant="Variant.Outlined" ShowProgressIndicator="true" CoerceText="true" />
+			}
+			@if (_isEditMode || _venue is null || _venue.Id == -1)
 			{
 				<MudNumericField @bind-Value="_location.Latitude" T="double?" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
 				<MudNumericField @bind-Value="_location.Longitude" T="double?" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
