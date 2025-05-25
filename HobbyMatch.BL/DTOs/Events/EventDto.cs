@@ -37,6 +37,6 @@ public static partial class EventExtensions
             ev.OrganizerId.ToString(),
             ev.Organizer?.UserName ?? ""),
             ev.SignUpList?.Select((el) => el.ToDto()).ToArray() ?? [],
-            ev.RelatedHobbies.Select(h => h.ToDto()).ToArray()
+            ev.Hobbies.Select(h => h.ToDto()).ToArray()
         );
 }

@@ -1,9 +1,12 @@
 ﻿@using HobbyMatch.App.Services.Events
+@using HobbyMatch.App.Services.Hobbies
 @using HobbyMatch.BL.DTOs.Events
+@using HobbyMatch.BL.DTOs.Hobbies
 @using Microsoft.AspNetCore.Components.Authorization
 @inject IEventApiService _eventApiService
 @inject NavigationManager _navigationManager
 @inject ISnackbar Snackbar
+@inject IHobbyApiService hobbyApiService
 
 <MudContainer Style="max-width: 50vw; justify-content: center" Class="pt-4">
 	<MudPaper Class="pa-4">
@@ -29,6 +32,14 @@
 			<MudNumericField @bind-Value="_location.Latitude" T="double?" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
 			<MudNumericField @bind-Value="_location.Longitude" T="double?" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
 			<MudNumericField @bind-Value="_price" T="float" Min="0" Label="Price" Required="true" RequiredError="Price is required!" />
+			@if (_loadHobby)
+			{
+				<di style="margin-bottom:8px">
+					<HobbyMatch.App.Components.Components.HobbiesList @ref="_hobbiesList"
+																	  Hobbies="_hobbies" InitialSelectedHobbies="_initialHobbies" ReadOnly="false" />
+				</di>
+
+			}
 		</MudForm>
 		<div class="d-flex align-center justify-end mt-4">
 			<button class="btn btn-primary" @onclick="HandleSubmitAsync">@(_isEditMode ? "Save Changes" : "Create Event")</button>
@@ -57,7 +68,26 @@
 	private DateTime? _endDate = DateTime.Today;
 	private TimeSpan? _endTime = new(0, 0, 0);
 
+	private HobbiesList? _hobbiesList;
+	private List<HobbyDto> _hobbies { get; set; } = new();
+	private List<HobbyDto> _initialHobbies { get; set; } = new();
+	private bool _loadHobby = false;
+
 	MudForm form;
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			_hobbies = (await hobbyApiService.GetHobbiesAsync()).ToList();
+			if (_isEditMode && eventObj != null)
+				_initialHobbies = new List<HobbyDto>(eventObj.Hobbies);
+
+			_loadHobby = true;
+			StateHasChanged();
+			base.OnAfterRender(firstRender);			
+		}
+	}
 
 	protected override void OnInitialized()
 	{
@@ -90,7 +120,7 @@
 			_price,
 			_maxUsers,
 			_minUsers,
-			[]
+			_hobbiesList?.SelectedHobbies.ToArray() ?? []
 		);
 
 		EventDto? result;

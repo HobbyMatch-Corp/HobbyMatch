@@ -1,5 +1,6 @@
 ﻿using HobbyMatch.BL.DTOs.Events;
 using HobbyMatch.BL.DTOs.Hobbies;
+using HobbyMatch.BL.DTOs.Organizers;
 using HobbyMatch.BL.Services.Hobbies;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.Domain.Entities;
@@ -38,8 +39,9 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
 
     public async Task<Event?> CreateEventAsync(CreateEventDto dto, int organizerId)
     {
-		var hobbies = await _hobbyService.GetHobbiesAsync(dto.Hobbies.ToList()) ?? new List<Hobby>();
-		var entity = new Event
+        var hobbies = await _hobbyService.GetHobbiesAsync(dto.Hobbies.ToList());
+
+        var entity = new Event
         {
             Name = dto.Title,
             Description = dto.Description,
@@ -50,7 +52,7 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
             MaxUsers = dto.MaxUsers,
             MinUsers = dto.MinUsers,
             OrganizerId = organizerId,
-            RelatedHobbies = hobbies,
+            Hobbies = hobbies,
         };
 
         var result = await _eventRepository.AddEvent(entity);
@@ -59,7 +61,8 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
 
     public async Task<Event?> EditEventAsync(CreateEventDto dto, int eventId, int userId)
     {
-        //var hobbies = await _hobbyService.GetHobbiesAsync(dto.RelatedHobbies);
+        var hobbies = await _hobbyService.GetHobbiesAsync(dto.Hobbies.ToList());
+
         var eventToEdit = await _eventRepository.GetEventByIdAsync(eventId);
 
         if (eventToEdit == null || eventToEdit.OrganizerId != userId) return null;
@@ -70,6 +73,7 @@ public class EventService(IEventRepository eventRepository, IHobbyService hobbyS
         eventToEdit.EndTime = dto.EndTime;
         eventToEdit.Location = dto.Location;
         eventToEdit.Price = dto.Price;
+        eventToEdit.Hobbies = hobbies;
 
         await _eventRepository.UpdateEventAsync(eventToEdit); // Assuming this method exists
 

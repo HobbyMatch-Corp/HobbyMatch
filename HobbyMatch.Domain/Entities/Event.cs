@@ -40,6 +40,6 @@ namespace HobbyMatch.Domain.Entities
         public ICollection<BusinessClient> SponsorsPartners { get; set; }
 
         [JsonIgnore]
-        public ICollection<Hobby> RelatedHobbies { get; set; } = new List<Hobby>();
+        public ICollection<Hobby> Hobbies { get; set; } = new List<Hobby>();
     }
 }

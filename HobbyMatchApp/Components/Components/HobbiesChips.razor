@@ -1,0 +1,19 @@
+﻿@using HobbyMatch.BL.DTOs.Hobbies
+<h3>Hobbies</h3>
+
+<div class="d-flex flex-wrap gap-2">
+    @foreach (var hobby in Hobbbies)
+    {
+        <MudChip T="string"
+                 Color="Color.Primary"
+                 Size="Size.Small">
+            @hobby.Name
+        </MudChip>
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public List<HobbyDto> Hobbbies { get; set; } = new();
+}

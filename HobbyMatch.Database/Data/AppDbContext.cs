@@ -78,7 +78,7 @@ namespace HobbyMatch.Database.Data
             {
                 b.HasOne("HobbyMatch.Domain.Entities.Hobby", null)
                     .WithMany()
-                    .HasForeignKey("RelatedHobbiesId")
+                    .HasForeignKey("HobbiesId")
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
