@@ -4,6 +4,7 @@ using HobbyMatch.App.Auth.TokenService;
 using HobbyMatch.App.Components;
 using HobbyMatch.App.Services;
 using HobbyMatch.App.Services.Api;
+using HobbyMatch.App.Services.Comments;
 using HobbyMatch.App.Services.Events;
 using HobbyMatch.App.Services.Hobbies;
 using HobbyMatch.App.Services.Venues;
@@ -15,8 +16,7 @@ using MudBlazor.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 
@@ -26,26 +26,37 @@ builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddSingleton<TokenStore>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-builder.Services.AddHttpClient("AuthenticatedClient", client =>
-{
-    var baseUrl = builder.Configuration.GetSection("ApiSettings")["BaseUrl"];
-    client.BaseAddress = new Uri(baseUrl!);
-}).AddHttpMessageHandler<AuthHttpClientHandler>();
+builder
+    .Services.AddHttpClient(
+        "AuthenticatedClient",
+        client =>
+        {
+            var baseUrl = builder.Configuration.GetSection("ApiSettings")["BaseUrl"];
+            client.BaseAddress = new Uri(baseUrl!);
+        }
+    )
+    .AddHttpMessageHandler<AuthHttpClientHandler>();
 
-builder.Services.AddHttpClient("AuthClient", client =>
-{
-    var baseUrl = builder.Configuration.GetSection("ApiSettings")["BaseUrl"];
-    client.BaseAddress = new Uri(baseUrl!);
-});
+builder.Services.AddHttpClient(
+    "AuthClient",
+    client =>
+    {
+        var baseUrl = builder.Configuration.GetSection("ApiSettings")["BaseUrl"];
+        client.BaseAddress = new Uri(baseUrl!);
+    }
+);
 builder.Services.AddScoped<CustomAuthStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
-    provider.GetRequiredService<CustomAuthStateProvider>());
+    provider.GetRequiredService<CustomAuthStateProvider>()
+);
 builder.Services.AddScoped<EndpointProvider>();
 builder.Services.AddScoped<IOrganizerApiService, OrganizerApiService>();
 builder.Services.AddScoped<IAuthApiService, AuthApiService>();
 builder.Services.AddScoped<IEventApiService, EventApiService>();
 builder.Services.AddScoped<IVenueApiService, VenueApiService>();
 builder.Services.AddScoped<IHobbyApiService, HobbyApiService>();
+builder.Services.AddScoped<ICommentApiService, CommentApiService>();
+
 builder.Services.AddMudServices();
 
 var app = builder.Build();
@@ -63,11 +74,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
 app.UseAntiforgery();
 
 app.MapStaticAssets();
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.Run();

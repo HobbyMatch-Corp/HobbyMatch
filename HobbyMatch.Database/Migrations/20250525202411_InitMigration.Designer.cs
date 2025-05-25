@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HobbyMatch.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250416121152_AddVenueEntity")]
-    partial class AddVenueEntity
+    [Migration("20250525202411_InitMigration")]
+    partial class InitMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,21 @@ namespace HobbyMatch.Database.Migrations
                     b.ToTable("BusinessClientEvent");
                 });
 
+            modelBuilder.Entity("EventHobby", b =>
+                {
+                    b.Property<int>("EventsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HobbiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EventsId", "HobbiesId");
+
+                    b.HasIndex("HobbiesId");
+
+                    b.ToTable("EventHobby");
+                });
+
             modelBuilder.Entity("EventUser", b =>
                 {
                     b.Property<int>("SignUpListId")
@@ -54,6 +69,36 @@ namespace HobbyMatch.Database.Migrations
                     b.HasIndex("SignedUpEventsId");
 
                     b.ToTable("EventUser");
+                });
+
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrganizerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("OrganizerId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("HobbyMatch.Domain.Entities.Event", b =>
@@ -95,7 +140,7 @@ namespace HobbyMatch.Database.Migrations
                     b.Property<int?>("VenueId")
                         .HasColumnType("int");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Location", "HobbyMatch.Domain.Entities.Event.Location#Location", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Location", "HobbyMatch.Domain.Entities.Event.Location#LocationNullable", b1 =>
                         {
                             b1.IsRequired();
 
@@ -113,6 +158,24 @@ namespace HobbyMatch.Database.Migrations
                     b.HasIndex("VenueId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.Hobby", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Hobbies");
                 });
 
             modelBuilder.Entity("HobbyMatch.Domain.Entities.Organizer", b =>
@@ -198,6 +261,21 @@ namespace HobbyMatch.Database.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.UserFriendship", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FriendId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "FriendId");
+
+                    b.HasIndex("FriendId");
+
+                    b.ToTable("UserFriendship");
+                });
+
             modelBuilder.Entity("HobbyMatch.Domain.Entities.Venue", b =>
                 {
                     b.Property<int>("Id")
@@ -209,6 +287,9 @@ namespace HobbyMatch.Database.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BusinessClientId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -230,16 +311,33 @@ namespace HobbyMatch.Database.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<double?>("Latitude")
+                            b1.Property<double>("Latitude")
                                 .HasColumnType("float");
 
-                            b1.Property<double?>("Longitude")
+                            b1.Property<double>("Longitude")
                                 .HasColumnType("float");
                         });
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BusinessClientId");
+
                     b.ToTable("Venues");
+                });
+
+            modelBuilder.Entity("HobbyUser", b =>
+                {
+                    b.Property<int>("HobbiesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("HobbiesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("HobbyUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -390,6 +488,11 @@ namespace HobbyMatch.Database.Migrations
                 {
                     b.HasBaseType("HobbyMatch.Domain.Entities.Organizer");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("UserId");
+
                     b.HasDiscriminator().HasValue("User");
                 });
 
@@ -404,6 +507,27 @@ namespace HobbyMatch.Database.Migrations
                     b.HasOne("HobbyMatch.Domain.Entities.BusinessClient", null)
                         .WithMany()
                         .HasForeignKey("SponsorsPartnersId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventHobby", b =>
+                {
+                    b.HasOne("HobbyMatch.Domain.Entities.Event", null)
+                        .WithMany()
+                        .HasForeignKey("EventsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HobbyMatch.Domain.Entities.Event", null)
+                        .WithMany()
+                        .HasForeignKey("HobbiesId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("HobbyMatch.Domain.Entities.Hobby", null)
+                        .WithMany()
+                        .HasForeignKey("HobbiesId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
@@ -423,6 +547,25 @@ namespace HobbyMatch.Database.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.Comment", b =>
+                {
+                    b.HasOne("HobbyMatch.Domain.Entities.Event", "Event")
+                        .WithMany("Comments")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("HobbyMatch.Domain.Entities.Organizer", "Organizer")
+                        .WithMany("Comments")
+                        .HasForeignKey("OrganizerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Organizer");
+                });
+
             modelBuilder.Entity("HobbyMatch.Domain.Entities.Event", b =>
                 {
                     b.HasOne("HobbyMatch.Domain.Entities.Organizer", "Organizer")
@@ -438,6 +581,57 @@ namespace HobbyMatch.Database.Migrations
                     b.Navigation("Organizer");
 
                     b.Navigation("Venue");
+                });
+
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.UserFriendship", b =>
+                {
+                    b.HasOne("HobbyMatch.Domain.Entities.User", "Friend")
+                        .WithMany()
+                        .HasForeignKey("FriendId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("HobbyMatch.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Friend");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.Venue", b =>
+                {
+                    b.HasOne("HobbyMatch.Domain.Entities.BusinessClient", "BusinessClient")
+                        .WithMany("Venues")
+                        .HasForeignKey("BusinessClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BusinessClient");
+                });
+
+            modelBuilder.Entity("HobbyUser", b =>
+                {
+                    b.HasOne("HobbyMatch.Domain.Entities.Hobby", null)
+                        .WithMany()
+                        .HasForeignKey("HobbiesId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("HobbyMatch.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("HobbiesId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("HobbyMatch.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -491,14 +685,38 @@ namespace HobbyMatch.Database.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.User", b =>
+                {
+                    b.HasOne("HobbyMatch.Domain.Entities.User", null)
+                        .WithMany("Friends")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.Event", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
             modelBuilder.Entity("HobbyMatch.Domain.Entities.Organizer", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("OrganizedEvents");
                 });
 
             modelBuilder.Entity("HobbyMatch.Domain.Entities.Venue", b =>
                 {
                     b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.BusinessClient", b =>
+                {
+                    b.Navigation("Venues");
+                });
+
+            modelBuilder.Entity("HobbyMatch.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Friends");
                 });
 #pragma warning restore 612, 618
         }
