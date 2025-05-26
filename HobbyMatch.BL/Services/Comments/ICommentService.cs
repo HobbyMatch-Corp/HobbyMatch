@@ -1,5 +1,5 @@
+using HobbyMatch.BL.DTOs.Comments;
 using HobbyMatch.Domain.Entities;
-using HobbyMatch.Domain.Requests;
 
 namespace HobbyMatch.BL.Services.Comments;
 

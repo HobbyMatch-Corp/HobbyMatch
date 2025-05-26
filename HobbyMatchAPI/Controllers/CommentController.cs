@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using HobbyMatch.BL.DTOs.Comments;
 using HobbyMatch.BL.Services.Comments;
-using HobbyMatch.Domain.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

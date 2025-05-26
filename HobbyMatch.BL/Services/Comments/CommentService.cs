@@ -1,7 +1,7 @@
+using HobbyMatch.BL.DTOs.Comments;
 using HobbyMatch.Database.Data;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Exceptions.CommentExceptions;
-using HobbyMatch.Domain.Requests;
 using Microsoft.EntityFrameworkCore;
 
 namespace HobbyMatch.BL.Services.Comments;
