@@ -63,16 +63,16 @@ namespace HobbyMatch.API.Controllers
 			return result != null ? Ok(result.ToDto()) : BadRequest("Could not get event");
 		}
 
-		[HttpPost("AmISignedIn")]
+		[HttpGet("{eventId}/AmISignedIn")]
         [Authorize]
-        public async Task<ActionResult> EventSigninStateCheck([FromBody] EventSignDto dto)
+        public async Task<ActionResult> EventSigninStateCheck([FromRoute] int eventId)
         {
             var user = await _userManager.GetUserAsync(User);
 			var userType = User.FindFirst(ClaimTypes.Role)?.Value;
 			if (user == null || userType != UserType.User.ToString()) // Check if user is actually "User" and not "Business Client"
 				return Unauthorized();
 
-			var result = await _eventService.CheckIfUserInSignInList(dto.EventId, (user as User)!);
+			var result = await _eventService.CheckIfUserInSignInList(eventId, (user as User)!);
             return Ok(result);
         }
 		[HttpPost("{eventId}/enroll")]

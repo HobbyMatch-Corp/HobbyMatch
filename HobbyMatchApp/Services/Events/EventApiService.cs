@@ -68,7 +68,7 @@ namespace HobbyMatch.App.Services.Events
 		public async Task<bool> AmISignedInAsync(int eventId)
 		{
 			bool success = false;
-			var response = await _httpClient.PostAsJsonAsync("events/amISignedIn", new EventSignDto(eventId));
+			var response = await _httpClient.GetAsync($"events/{eventId}/amISignedIn");
 			if (response.IsSuccessStatusCode)
 			{
 				success = await response.Content.ReadFromJsonAsync<bool>();
