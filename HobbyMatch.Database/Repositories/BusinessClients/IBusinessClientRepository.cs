@@ -4,11 +4,14 @@ namespace HobbyMatch.Database.Repositories.BusinessClients
 {
     public interface IBusinessClientRepository
     {
-        public Task<List<Domain.Entities.BusinessClient>> GetBusinessClientsAsync();
+        public Task<List<BusinessClient>> GetBusinessClientsAsync();
 
-        public Task<Domain.Entities.BusinessClient?> GetBusinessClientByIdAsync(int id);
+        public Task<BusinessClient?> GetBusinessClientByIdAsync(int id);
 
-        public Task UpdateUserAsync(int businessClientId, Domain.Entities.BusinessClient businessClient);
-		public Task<BusinessClient?> GetBusinessClientByEmailAsync(string email);
-	}
+        public Task<BusinessClient> UpdateUserAsync(
+            int businessClientId,
+            BusinessClient businessClient
+        );
+        public Task<BusinessClient?> GetBusinessClientByEmailAsync(string email);
+    }
 }
