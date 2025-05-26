@@ -42,9 +42,7 @@ public class VenueService : IVenueService
             Description = createRequest.Description,
             Location = createRequest.Location,
             Address = createRequest.Address,
-            BusinessClientId = businessClientId,
-            MaxUsers = createRequest.MaxUsers,
-            Price = createRequest.Price,
+            BusinessClientId = businessClientId
         };
 
         await _venueRepository.AddVenueAsync(venue);

@@ -70,11 +70,9 @@ public class VenueServiceTests
     {
         var createRequest = new CreateVenueDto(
             "New Venue",
+            "Nice place",
             "Here",
-            10,
-            10.0m,
-            new Location { Longitude = 1, Latitude = 1 },
-            "Nice place"
+            new Location { Longitude = 1, Latitude = 1 }
         );
         Venue? capturedVenue = null;
         _venueRepositoryMock

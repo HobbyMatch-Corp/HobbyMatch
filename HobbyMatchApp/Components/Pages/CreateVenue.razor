@@ -30,8 +30,6 @@
             <MudNumericField @bind-Value="formModel.Location.Latitude" T="double" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
             <MudNumericField @bind-Value="formModel.Location.Longitude" T="double" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
             <MudTextField @bind-Value="formModel.Description" T="string" Label="Description" Required="true" />
-            <MudNumericField @bind-Value="formModel.MaxUsers" T="int" Label="MaxUsers" Min="1" Required="true" />
-            <MudNumericField @bind-Value="formModel.Price" T="decimal" Label="Price" Min="0" Required="true" />
             <div class="d-flex align-center justify-center mb-2" style="margin:8px">
                 <button Type="button" Class="btn btn-primary" @onclick="SaveAction">Create</button>
             </div>
@@ -87,8 +85,7 @@
     {
         if (success)
         {
-            var dto = new CreateVenueDto(formModel.Name, formModel.Address, formModel.MaxUsers,
-                formModel.Price, formModel.Location, formModel.Description);
+            var dto = new CreateVenueDto(formModel.Name, formModel.Description, formModel.Address, formModel.Location);
 
             await venueApiService.CreateVenueAsync(dto);
             navigationManager.NavigateTo("/profile");
@@ -99,8 +96,6 @@
     {
         public string Name = "";
         public string Address = "";
-        public int MaxUsers = 1;
-        public decimal Price = 0;
         public Location Location = new();
         public string Description = "";
         public string ClientName = "";
@@ -108,15 +103,13 @@
         {
             Name = dto.Name;
             Address = dto.Address;
-            MaxUsers = dto.MaxUsers;
-            Price = dto.Price;
             Location = new Location
                 {
                     Latitude = dto.Location.Latitude,
                     Longitude = dto.Location.Longitude
                 };
             Description = dto.Description;
-            ClientName = dto.ClientName;
+            ClientName = dto.Owner.Name;
         }
         public VenueFormModel() { }
     }

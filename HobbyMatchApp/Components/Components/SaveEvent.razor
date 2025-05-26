@@ -36,7 +36,7 @@
 			{
 				<MudAutocomplete @bind-Value="_venue" T="VenueDto" ToStringFunc="@FormatVenue" Label="Venue" SearchFunc="@Search" Variant="Variant.Outlined" ShowProgressIndicator="true" CoerceText="true" />
 			}
-			@if (_isEditMode || _venue is null || _venue.Id == -1)
+			@if (_isEditMode || _venue is null || _venue.Id == "-1")
 			{
 				<MudNumericField @bind-Value="_location.Latitude" T="double?" Min="0" Label="Location Latitude" Required="true" RequiredError="Location is required!" />
 				<MudNumericField @bind-Value="_location.Longitude" T="double?" Min="0" Label="Location Longitude" Required="true" RequiredError="Location is required!" />
@@ -85,7 +85,7 @@
 	private List<HobbyDto> _initialHobbies { get; set; } = new();
 	private bool _loadHobby = false;
 
-	MudForm form;
+	MudForm? form;
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
@@ -122,7 +122,7 @@
 	{
 		var startDateTime = (_startDate ?? DateTime.Today).Add(_startTime ?? TimeSpan.Zero);
 		var endDateTime = (_endDate ?? DateTime.Today).Add(_endTime ?? TimeSpan.Zero);
-		if(_venue is not null && _venue.Id != -1)
+		if(_venue is not null && _venue.Id != "-1")
 		{
 			_location.Longitude = _venue.Location.Longitude;
 			_location.Latitude = _venue.Location.Latitude;
@@ -163,7 +163,7 @@
 	private async Task<IEnumerable<VenueDto>> Search(string value, CancellationToken token)
 	{
 		var Venues =  await _venueApiService.GetVenuesAsync();
-		return Venues.Append(new VenueDto(-1, "Other", "", new Domain.Entities.Location(), 0));
+		return Venues.Append(new VenueDto("-1", "Other", "", "", new Domain.Entities.Location(), new BL.DTOs.Organizers.OrganizerDto("", "")));
 	}
 	private string FormatVenue(VenueDto venue)
 	{
