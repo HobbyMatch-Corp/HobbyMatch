@@ -21,7 +21,7 @@ Elevation="3">
                                         <!-- Venue Name - Clickable -->
                                         <MudText Typo="Typo.h6" Class="mb-1"
                                         Style="cursor: pointer;"
-                                        @onclick="() => NavigateToVenueDetails(ven.Id)">
+                                        @onclick="() => NavigateToVenueDetails(int.Parse(ven.Id))">
                                             @ven.Name
                                         </MudText>
 
@@ -29,8 +29,7 @@ Elevation="3">
                                         <MudText Typo="Typo.body2" Class="mb-1">
                                             @*  Price: @(ven.Price > 0 ? $"${ven.Price:F2}" : "Free") | *@
                                             Address: @(ven.Address) |
-                                            Location: @(ven.Location.ToString()) |
-                                            Max Users: @($"{ven.MaxUsers}")
+                                            Location: @(ven.Location.ToString())
                                         </MudText>
 
                                     </div>
