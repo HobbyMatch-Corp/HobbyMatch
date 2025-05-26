@@ -73,22 +73,18 @@ public class VenueTests : BaseIntegrationTest
 
         var request = new CreateVenueDto(
             "Test name",
+            "Test description",
             "Test address",
-            10,
-            10.0m,
-            new Location { Latitude = 1, Longitude = 1 },
-            "Test description"
+            new Location { Latitude = 1, Longitude = 1 }
         );
 
         var expectedVenue = new Venue
         {
             Name = request.Name,
-            Address = request.Address,
-            MaxUsers = request.MaxUsers,
-            Price = request.Price,
-            Location = request.Location,
             Description = request.Description,
-            BusinessClientId = businessClientId,
+            Address = request.Address,
+            Location = request.Location,
+            BusinessClientId = businessClientId
         };
 
         // Act
@@ -98,8 +94,6 @@ public class VenueTests : BaseIntegrationTest
         Assert.NotNull(result);
         Assert.Equal(expectedVenue.Name, result.Name);
         Assert.Equal(expectedVenue.Address, result.Address);
-        Assert.Equal(expectedVenue.MaxUsers, result.MaxUsers);
-        Assert.Equal(expectedVenue.Price, result.Price);
         Assert.Equal(expectedVenue.Location.Latitude, result.Location.Latitude);
         Assert.Equal(expectedVenue.Location.Longitude, result.Location.Longitude);
         Assert.Equal(expectedVenue.Description, result.Description);
