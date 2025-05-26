@@ -3,11 +3,11 @@ using HobbyMatch.BL.DTOs.Organizers;
 using HobbyMatch.BL.Services.Hobbies;
 using HobbyMatch.Database.Repositories.AppUsers;
 using HobbyMatch.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace HobbyMatch.BL.Services.AppUsers
 {
-
     public class AppUserService : IAppUserService
     {
         private readonly IAppUserRepository _appUserRepository;
@@ -34,34 +34,49 @@ namespace HobbyMatch.BL.Services.AppUsers
             return await _appUserRepository.GetUsersAsync();
         }
 
-        public async Task UpdateUserAsync(int userId, UpdateUserDto userDto)
+        public async Task<User> UpdateUserAsync(int userId, UpdateUserDto userDto)
         {
             var hobbies = await _hobbyService.GetHobbiesAsync(userDto.hobbies.ToList());
 
-			var dbUser = await _appUserRepository.GetUserByIdAsync(userId);
+            var dbUser = await _appUserRepository.GetUserByIdAsync(userId);
 
-			if (dbUser != null)
-			{
-				dbUser.Email = userDto.email;
-				dbUser.UserName = userDto.userName;
+            if (dbUser != null)
+            {
+                dbUser.Email = userDto.email;
+                dbUser.UserName = userDto.userName;
                 dbUser.Hobbies = hobbies;
-			}
-			await _appUserRepository.SaveChangesAsync();
+            }
+            else
+            {
+                throw new DbUpdateException("User to be updated was not found");
+            }
+            await _appUserRepository.SaveChangesAsync();
+
+            return dbUser;
         }
+
         public async Task<bool> AddFriendsAsync(int friendId, User user)
         {
-			var friend = await _appUserRepository.GetUserByIdAsync(friendId);
-			if (friend == null) return false;
-			if (user.Friends.Any(u => u.Id == friend.Id) || friend.Friends.Any(u => u.Id == user.Id)) return false;
-			if (!await _appUserRepository.AddFriendToUserAsync(user, friend)) return false;
-			return await _appUserRepository.AddFriendToUserAsync(friend, user);
-		}
-		public async Task<bool> RemoveFriendsAsync(int friendId, User user)
-		{
-			var friend = user.Friends.FirstOrDefault(u => u.Id == friendId);
-			if (friend == null) return false;
-			if (!await _appUserRepository.RemoveFriendFromUserAsync(user, friend)) return false;
-			return await _appUserRepository.RemoveFriendFromUserAsync(friend, user);
-		}
-	}
+            var friend = await _appUserRepository.GetUserByIdAsync(friendId);
+            if (friend == null)
+                return false;
+            if (
+                user.Friends.Any(u => u.Id == friend.Id) || friend.Friends.Any(u => u.Id == user.Id)
+            )
+                return false;
+            if (!await _appUserRepository.AddFriendToUserAsync(user, friend))
+                return false;
+            return await _appUserRepository.AddFriendToUserAsync(friend, user);
+        }
+
+        public async Task<bool> RemoveFriendsAsync(int friendId, User user)
+        {
+            var friend = user.Friends.FirstOrDefault(u => u.Id == friendId);
+            if (friend == null)
+                return false;
+            if (!await _appUserRepository.RemoveFriendFromUserAsync(user, friend))
+                return false;
+            return await _appUserRepository.RemoveFriendFromUserAsync(friend, user);
+        }
+    }
 }
