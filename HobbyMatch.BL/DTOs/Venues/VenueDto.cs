@@ -1,13 +1,15 @@
 using HobbyMatch.Domain.Entities;
+using HobbyMatch.BL.DTOs.Organizers;
 
 namespace HobbyMatch.BL.DTOs.Venues;
 
 public record VenueDto(
-    int Id,
+    string Id,
     string Name,
+    string Description,
     string Address,
     Location Location,
-    int MaxUsers
+    OrganizerDto Owner
     );
 
 public static partial class VenueExtensions
@@ -15,6 +17,6 @@ public static partial class VenueExtensions
 
     public static VenueDto ToDto(this Venue venue)
     {
-        return new VenueDto(venue.Id, venue.Name, venue.Address, venue.Location, venue.MaxUsers);
+        return new VenueDto($"{venue.Id}", venue.Name, venue.Description, venue.Address, venue.Location, new OrganizerDto($"{venue.BusinessClientId}", venue.BusinessClient.UserName ?? ""));
     }
 }

@@ -4,8 +4,7 @@ namespace HobbyMatch.BL.DTOs.Venues;
 
 public record CreateVenueDto(
     string Name,
+    string Description,
     string Address,
-    int MaxUsers,
-    decimal Price,
-    Location Location,
-    string Description);
+    Location Location
+    );
