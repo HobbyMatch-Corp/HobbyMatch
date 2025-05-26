@@ -1,4 +1,5 @@
 ﻿using HobbyMatch.BL.DTOs.Events;
+using HobbyMatch.BL.ResultEnums;
 using HobbyMatch.BL.Services.Events;
 using HobbyMatch.Domain.Entities;
 using HobbyMatch.Domain.Enums;
@@ -34,6 +35,26 @@ namespace HobbyMatch.API.Controllers
 			var result = await _eventService.EditEventAsync(createRequest, eventId, user.Id);
 			return result != null ? Ok(result.ToDto()) : BadRequest("Could not create event");
 		}
+
+		[HttpDelete("{eventId}")]
+		[Authorize]
+		public async Task<IActionResult> DeleteEvent([FromRoute] int eventId)
+		{
+			var user = await _userManager.GetUserAsync(User);
+			if (user == null)
+				return Unauthorized();
+
+			var result = await _eventService.DeleteEventAsync(eventId);
+
+			return result switch
+			{
+				DeleteResult.Success => Ok(),
+				DeleteResult.NotFound => NotFound($"Event with ID {eventId} not found."),
+				DeleteResult.Failed => StatusCode(500, "An error occurred while deleting the event."),
+				_ => StatusCode(500, "Unknown error.")
+			};
+		}
+
 		[HttpGet("{eventId}")]
         //[Authorize]
         public async Task<IActionResult> EventGetById([FromRoute] int eventId)

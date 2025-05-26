@@ -65,7 +65,14 @@ namespace HobbyMatch.Database.Repositories.Events
                 .ToListAsync();
         }
 
-        public async Task<List<Event>?> GetSignedUpEventsAsync(string userEmail)
+        public async Task<bool> DeleteEventAsync(Event eventToDelete)
+        {
+            _context.Events.Remove(eventToDelete);
+            await SaveChangesAsync();
+            return true;
+        }
+
+		public async Task<List<Event>?> GetSignedUpEventsAsync(string userEmail)
         {
             return await _context.Events
                 .Where(e => e.SignUpList.Where(u => u.Email == userEmail).Any())

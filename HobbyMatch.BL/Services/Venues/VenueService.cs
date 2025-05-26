@@ -1,4 +1,5 @@
 using HobbyMatch.BL.DTOs.Venues;
+using HobbyMatch.BL.ResultEnums;
 using HobbyMatch.Database.Repositories.Venues;
 using HobbyMatch.Domain.Entities;
 
@@ -64,4 +65,14 @@ public class VenueService : IVenueService
 
         return true;
     }
+
+	public async Task<DeleteResult> DeleteVenueAsync(int eventId)
+	{
+		var eventToDelete = await _venueRepository.GetVenueByIdAsync(eventId);
+		if (eventToDelete == null)
+			return DeleteResult.NotFound;
+
+		var deleted = await _venueRepository.DeleteVenueAsync(eventToDelete);
+		return deleted ? DeleteResult.Success : DeleteResult.Failed;
+	}
 }

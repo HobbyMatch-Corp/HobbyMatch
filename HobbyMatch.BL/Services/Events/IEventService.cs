@@ -1,4 +1,5 @@
 ﻿using HobbyMatch.BL.DTOs.Events;
+using HobbyMatch.BL.ResultEnums;
 using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.BL.Services.Events
@@ -18,5 +19,6 @@ namespace HobbyMatch.BL.Services.Events
 
         Task<List<Event>?> GetSponsoredEventsAsync(string businessClientEmail);
 		Task<Event?> EditEventAsync(CreateEventDto createRequest, int eventId, int id);
-    }
+		Task<DeleteResult> DeleteEventAsync(int eventId);
+	}
 }
