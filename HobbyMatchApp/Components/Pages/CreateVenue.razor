@@ -87,8 +87,7 @@
     {
         if (success)
         {
-            var dto = new CreateVenueDto(formModel.Name, formModel.Address, formModel.MaxUsers,
-                formModel.Price, formModel.Location, formModel.Description);
+            var dto = new CreateVenueDto(formModel.Name, formModel.Description, formModel.Address, formModel.Location);
 
             await venueApiService.CreateVenueAsync(dto);
             navigationManager.NavigateTo("/profile");
@@ -108,15 +107,13 @@
         {
             Name = dto.Name;
             Address = dto.Address;
-            MaxUsers = dto.MaxUsers;
-            Price = dto.Price;
             Location = new Location
                 {
                     Latitude = dto.Location.Latitude,
                     Longitude = dto.Location.Longitude
                 };
             Description = dto.Description;
-            ClientName = dto.ClientName;
+            ClientName = dto.Owner.Name;
         }
         public VenueFormModel() { }
     }
