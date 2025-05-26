@@ -1,24 +1,24 @@
+using HobbyMatch.BL.DTOs.Events;
+using HobbyMatch.BL.DTOs.Organizers;
 using HobbyMatch.Domain.Entities;
 
 namespace HobbyMatch.BL.DTOs.Venues;
 
 public record VenueDetailsDto(
-    int Id,
+    string Id,
     string Name,
-    string Address,
-    int MaxUsers,
-    decimal Price,
-    Location Location,
     string Description,
-    int BusinessClientId,
-    string ClientName
+    string Address,
+    Location Location,
+    OrganizerDto Owner,
+    List<EventInVenueDto> Events
 );
 
 public static partial class VenueExtensions
 {
     public static VenueDetailsDto ToDetailsDto(this Venue venue)
     {
-        return new VenueDetailsDto(venue.Id, venue.Name, venue.Address, venue.MaxUsers, venue.Price, venue.Location,
-            venue.Description, venue.BusinessClientId, venue.BusinessClient.UserName!);
+        return new VenueDetailsDto($"{venue.Id}", venue.Name, venue.Description, venue.Address, venue.Location,
+            new OrganizerDto($"{venue.BusinessClientId}", venue.BusinessClient.UserName ?? ""), venue.Events.Select(v => v.ToEventInVenueDto()).ToList());
     }
 }
