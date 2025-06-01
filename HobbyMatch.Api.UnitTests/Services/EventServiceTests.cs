@@ -114,7 +114,7 @@ namespace UnitTests
             _eventRepository.Verify(x => x.UpdateEventAsync(It.IsAny<Event>()), Times.Once);
         }
 
-#region CheckIfUserSignedIn Tests
+        #region CheckIfUserSignedIn Tests
         [Fact]
         public async Task CheckIfUserInSignInList_ReturnsTrue_WhenUserIsSignedIn()
         { 
@@ -249,7 +249,7 @@ namespace UnitTests
 			// Assert
 			Assert.False(result);
 		}
-#endregion
+        #endregion
 		#region AddUserToEventAsync Tests
 
 		[Fact]
@@ -382,7 +382,6 @@ namespace UnitTests
         }
 
         #endregion
-
         #region RemoveUserFromEventAsync Tests
 
         [Fact]
@@ -483,7 +482,6 @@ namespace UnitTests
         }
 
         #endregion
-
         #region GetSponsoredEventsAsync Tests
 
         [Fact]
@@ -547,7 +545,7 @@ namespace UnitTests
         }
 
 		#endregion
-
+        #region GetEventsWithFilterAsync Tests
 		[Fact]
 		public async Task GetEventsWithFilterAsync_ReturnsEvents_WhenEventsExistAndFilterIsNull()
 		{
@@ -588,5 +586,6 @@ namespace UnitTests
 			Assert.Empty(result);
 			_eventRepository.Verify(x => x.GetEventsWithFilterAsync(null), Times.Once);
 		}
+		#endregion
 	}
 }
