@@ -4,6 +4,7 @@ using HobbyMatch.BL.Services.Events;
 using HobbyMatch.Database.Repositories.Events;
 using HobbyMatch.BL.DTOs.Events;
 using HobbyMatch.BL.Services.Hobbies;
+using Microsoft.Extensions.Logging;
 
 namespace UnitTests
 {
@@ -113,9 +114,145 @@ namespace UnitTests
             _eventRepository.Verify(x => x.UpdateEventAsync(It.IsAny<Event>()), Times.Once);
         }
 
-        #region AddUserToEventAsync Tests
-
+        #region CheckIfUserSignedIn Tests
         [Fact]
+        public async Task CheckIfUserInSignInList_ReturnsTrue_WhenUserIsSignedIn()
+        { 
+            var eventId = 1;
+            var organizerId = 1;
+
+            var user = new User
+            {
+                Id = 1
+            };
+
+            var ev = new Event
+            {
+                Id = eventId,
+                Name = "Old Name",
+                Description = "Old Description",
+                StartTime = DateTime.UtcNow,
+                EndTime = DateTime.UtcNow.AddHours(2),
+                Location = new LocationNullable(),
+                Price = 50,
+                OrganizerId = organizerId,
+                SignUpList = new List<User>() { user }
+            };
+
+            _eventRepository.Setup(x => x.GetEventByIdAsync(eventId)).ReturnsAsync(ev);
+
+            // Act
+            var result = await _eventService.CheckIfUserInSignInList(eventId, user);
+
+            // Assert
+            Assert.True(result);
+
+		}
+
+		[Fact]
+		public async Task CheckIfUserInSignInList_ReturnsFalse_WhenUserIsNotSignedIn()
+		{
+			var eventId = 1;
+			var organizerId = 1;
+
+			var user = new User
+			{
+				Id = 1
+			};
+
+			var ev = new Event
+			{
+				Id = eventId,
+				Name = "Old Name",
+				Description = "Old Description",
+				StartTime = DateTime.UtcNow,
+				EndTime = DateTime.UtcNow.AddHours(2),
+				Location = new LocationNullable(),
+				Price = 50,
+				OrganizerId = organizerId,
+				SignUpList = new List<User>() {  }
+			};
+
+			_eventRepository.Setup(x => x.GetEventByIdAsync(eventId)).ReturnsAsync(ev);
+
+			// Act
+			var result = await _eventService.CheckIfUserInSignInList(eventId, user);
+
+			// Assert
+			Assert.False(result);
+
+		}
+
+		[Fact]
+		public async Task CheckIfUserInSignInList_ReturnsFalse_WhenEventIdIsWrong()
+		{
+			var eventId = 1;
+			var organizerId = 1;
+
+			var user = new User
+			{
+				Id = 1
+			};
+
+			var ev = new Event
+			{
+				Id = eventId,
+				Name = "Old Name",
+				Description = "Old Description",
+				StartTime = DateTime.UtcNow,
+				EndTime = DateTime.UtcNow.AddHours(2),
+				Location = new LocationNullable(),
+				Price = 50,
+				OrganizerId = organizerId,
+				SignUpList = new List<User>() { }
+			};
+
+			_eventRepository.Setup(x => x.GetEventByIdAsync(eventId)).ReturnsAsync(ev);
+
+			// Act
+			var result = await _eventService.CheckIfUserInSignInList(eventId, user);
+
+			// Assert
+			Assert.False(result);
+
+		}
+
+
+		[Fact]
+		public async Task CheckIfUserInSignInList_ReturnsFalse_WhenEventHasNotSignedUpList()
+		{
+			var eventId = 1;
+			var organizerId = 1;
+
+			var user = new User
+			{
+				Id = 1
+			};
+
+			var ev = new Event
+			{
+				Id = eventId,
+				Name = "Old Name",
+				Description = "Old Description",
+				StartTime = DateTime.UtcNow,
+				EndTime = DateTime.UtcNow.AddHours(2),
+				Location = new LocationNullable(),
+				Price = 50,
+				OrganizerId = organizerId,
+			};
+
+			_eventRepository.Setup(x => x.GetEventByIdAsync(eventId)).ReturnsAsync(ev);
+
+			// Act
+			var result = await _eventService.CheckIfUserInSignInList(eventId, user);
+
+			// Assert
+			Assert.False(result);
+		}
+        #endregion
+		#region AddUserToEventAsync Tests
+
+		[Fact]
         public async Task AddUserToEventAsync_ReturnsTrue_WhenUserAddedSuccessfully()
         {
             // Arrange
@@ -245,7 +382,6 @@ namespace UnitTests
         }
 
         #endregion
-
         #region RemoveUserFromEventAsync Tests
 
         [Fact]
@@ -346,7 +482,6 @@ namespace UnitTests
         }
 
         #endregion
-
         #region GetSponsoredEventsAsync Tests
 
         [Fact]
@@ -409,6 +544,48 @@ namespace UnitTests
             _eventRepository.Verify(x => x.GetSponsoredEventsAsync(businessEmail), Times.Once);
         }
 
-        #endregion
-    }
+		#endregion
+        #region GetEventsWithFilterAsync Tests
+		[Fact]
+		public async Task GetEventsWithFilterAsync_ReturnsEvents_WhenEventsExistAndFilterIsNull()
+		{
+			// Arrange
+			var expectedEvents = new List<Event>
+			{
+				new Event { Id = 1, Name = "Event 1" },
+				new Event { Id = 2, Name = "Event 2" }
+			};
+
+			_eventRepository.Setup(x => x.GetEventsWithFilterAsync(null))
+							.ReturnsAsync(expectedEvents);
+
+			// Act
+			var result = await _eventService.GetEventsWithFilterAsync(null);
+
+			// Assert
+			Assert.NotNull(result);
+			Assert.Equal(2, result.Count());
+			Assert.Equal(expectedEvents, result);
+			_eventRepository.Verify(x => x.GetEventsWithFilterAsync(null), Times.Once);
+		}
+
+		[Fact]
+		public async Task GetEventsWithFilterAsync_ReturnsEmptyList_WhenNoEventsExistAndFilterIsNull()
+		{
+			// Arrange
+			var emptyList = new List<Event>();
+
+			_eventRepository.Setup(x => x.GetEventsWithFilterAsync(null))
+							.ReturnsAsync(emptyList);
+
+			// Act
+			var result = await _eventService.GetEventsWithFilterAsync(null);
+
+			// Assert
+			Assert.NotNull(result);
+			Assert.Empty(result);
+			_eventRepository.Verify(x => x.GetEventsWithFilterAsync(null), Times.Once);
+		}
+		#endregion
+	}
 }
