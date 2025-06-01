@@ -209,6 +209,12 @@ public class DbSeeder
                     if (hobby == null) context.Set<Hobby>().Add(newHobby);
                 }
 
+                foreach (var newEvent in _events)
+                {
+                    var ev = context.Set<Event>().FirstOrDefault(e => e.Name == newEvent.Name);
+                    if (ev == null) context.Set<Event>().Add(newEvent);
+                }
+
                 context.SaveChanges();
             })
             .UseAsyncSeeding(async (context, _, ct) =>
@@ -236,8 +242,14 @@ public class DbSeeder
 
                 foreach (var newHobby in _hobbies)
                 {
-                    var hobby = context.Set<Hobby>().FirstOrDefault(h => h.Name == newHobby.Name);
-                    if (hobby == null)  await context.Set<Hobby>().AddAsync(newHobby);
+                    var hobby = await context.Set<Hobby>().FirstOrDefaultAsync(h => h.Name == newHobby.Name);
+                    if (hobby == null) await context.Set<Hobby>().AddAsync(newHobby);
+                }
+
+                foreach (var newEvent in _events)
+                {
+                    var ev = await context.Set<Event>().FirstOrDefaultAsync(e => e.Name == newEvent.Name);
+                    if (ev == null) await context.Set<Event>().AddAsync(newEvent);
                 }
 
                 await context.SaveChangesAsync();
