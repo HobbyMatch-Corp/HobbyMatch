@@ -76,6 +76,21 @@ namespace HobbyMatch.App.Services
             }
         }
 
+        public async Task<bool> DeleteAsyncSafe(string url, bool unauthorized = false)
+        {
+            try
+            {
+                var response = await GetClient(unauthorized).DeleteAsync(url);
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Wyjątek POST: {ex.Message}");
+                return default;
+            }
+        }
+
         private async Task<T?> ReturnRespone<T>(HttpResponseMessage response)
         {
             if (typeof(T) == typeof(HttpResponseMessage))

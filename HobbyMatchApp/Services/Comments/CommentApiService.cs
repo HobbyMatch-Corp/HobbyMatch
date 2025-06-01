@@ -4,42 +4,25 @@ namespace HobbyMatch.App.Services.Comments;
 
 public class CommentApiService : ICommentApiService
 {
-    private readonly HttpClient _httpClient;
-
-    public CommentApiService(IHttpClientFactory httpClientFactory)
+    private readonly HttpClientUtils _httpClientUtils;
+    public CommentApiService(HttpClientUtils httpClientUtils)
     {
-        _httpClient = httpClientFactory.CreateClient("AuthenticatedClient");
+        _httpClientUtils = httpClientUtils;
     }
 
     public async Task<CommentDto?> CreateComment(int eventId, string content)
     {
-        var uri = "comment";
-
         var commentRequest = new CreateCommentRequest(eventId, content);
-
-        var response = await _httpClient.PostAsJsonAsync(uri, commentRequest);
-
-        if (response.IsSuccessStatusCode)
-            return await response.Content.ReadFromJsonAsync<CommentDto>();
-
-        return null;
+        return await _httpClientUtils.PostAsyncSafe<CreateCommentRequest, CommentDto>("comment", commentRequest);
     }
 
     public async Task<bool> DeleteComment(int commentId)
     {
-        var uri = $"comment/{commentId}";
-
-        var response = await _httpClient.DeleteAsync(uri);
-
-        return response.IsSuccessStatusCode;
+        return await _httpClientUtils.DeleteAsyncSafe($"comment/{commentId}");
     }
 
     public async Task<List<CommentDto>?> GetComments(int eventId)
     {
-        var uri = $"comment/event/{eventId}";
-
-        var response = await _httpClient.GetFromJsonAsync<List<CommentDto>>(uri);
-
-        return response;
+        return await _httpClientUtils.GetAsyncSafe<List<CommentDto>>($"comment/event/{eventId}");
     }
 }
