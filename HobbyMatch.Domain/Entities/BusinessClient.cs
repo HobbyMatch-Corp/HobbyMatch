@@ -7,9 +7,9 @@ namespace HobbyMatch.Domain.Entities
         public string TaxID { get; set; }
 
         [JsonIgnore]
-        public ICollection<Event> SponsoredEvents { get; set; }
+        public ICollection<Event> SponsoredEvents { get; set; } = new List<Event>();
 
         [JsonIgnore]
-        public ICollection<Venue> Venues { get; set; }
+        public ICollection<Venue> Venues { get; set; } = new List<Venue>();
     }
 }
