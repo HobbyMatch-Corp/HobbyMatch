@@ -167,6 +167,6 @@
 	}
 	private string FormatVenue(VenueDto venue)
 	{
-		return venue.Address is not null && venue.Address != "" ? $"{venue?.Name}, {venue?.Address}" : $"{venue?.Name}";
+		return venue is not null && venue.Address is not null && venue.Address != "" ? $"{venue?.Name}, {venue?.Address}" : $"{venue?.Name}";
 	}
 }
