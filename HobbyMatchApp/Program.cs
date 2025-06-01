@@ -8,6 +8,7 @@ using HobbyMatch.App.Services.Comments;
 using HobbyMatch.App.Services.Events;
 using HobbyMatch.App.Services.Hobbies;
 using HobbyMatch.App.Services.Venues;
+using HobbyMatch.BL.Services.Validation;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Options;
@@ -50,12 +51,14 @@ builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
     provider.GetRequiredService<CustomAuthStateProvider>()
 );
 builder.Services.AddScoped<EndpointProvider>();
+builder.Services.AddScoped<HttpClientUtils>();
 builder.Services.AddScoped<IOrganizerApiService, OrganizerApiService>();
 builder.Services.AddScoped<IAuthApiService, AuthApiService>();
 builder.Services.AddScoped<IEventApiService, EventApiService>();
 builder.Services.AddScoped<IVenueApiService, VenueApiService>();
 builder.Services.AddScoped<IHobbyApiService, HobbyApiService>();
 builder.Services.AddScoped<ICommentApiService, CommentApiService>();
+builder.Services.AddScoped<IValidationService, ValidationService>();
 
 builder.Services.AddMudServices();
 

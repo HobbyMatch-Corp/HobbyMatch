@@ -4,12 +4,13 @@ using System.Text.Json;
 using Moq.Protected;
 using HobbyMatch.App.Services.Api;
 using HobbyMatch.BL.DTOs.Auth;
+using HobbyMatch.App.Services;
 namespace UnitTests.AuthTests
 {
 	public class AuthApiServiceTests
 	{
 		private readonly Mock<IHttpClientFactory> _httpClientFactoryMock;
-		private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock;
+        private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock;
 		private readonly AuthApiService _authApiService;
 
 		public AuthApiServiceTests()
@@ -21,7 +22,7 @@ namespace UnitTests.AuthTests
 			client.BaseAddress = new Uri("https://localhost:5001");
 			_httpClientFactoryMock.Setup(factory => factory.CreateClient("AuthClient")).Returns(client);
 
-			_authApiService = new AuthApiService(_httpClientFactoryMock.Object);
+			_authApiService = new AuthApiService(new HttpClientUtils(_httpClientFactoryMock.Object));
 		}
 
 		[Fact]
