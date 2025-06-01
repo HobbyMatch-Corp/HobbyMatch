@@ -4,6 +4,7 @@ using HobbyMatch.Database.Common.Pagination;
 using HobbyMatch.Database.Repositories.Venues;
 using HobbyMatch.Domain.Entities;
 using Moq;
+using System;
 
 namespace UnitTests;
 
@@ -87,4 +88,83 @@ public class VenueServiceTests
         Assert.Equal(5, capturedVenue.BusinessClientId);
         Assert.Equal(capturedVenue, result);
     }
+
+    [Fact]
+
+    public async Task GetVenuesAsync_ReturnsCorrectVenueList_WhenVenueListExists()
+    {
+        // Arrange
+        var data = new List<Venue>
+        {
+            new() { Id = 2, Name = "Venue" },
+            new() { Id = 3, Name = "Venue3" },
+        };
+
+        _venueRepositoryMock
+            .Setup(repo => repo.GetVenuesAsync())
+            .ReturnsAsync(data);
+
+        // Act
+        var result = await _venueService.GetVenuesAsync();
+
+        // Assert
+        Assert.Equal(data, result);
+        Assert.Equal(data.Count(), result.Count());
+    }
+
+    [Fact]
+    public async Task GetVenuesAsync_ReturnsEmptyList_WhenListIsEmpty()
+    {
+        // Arrange
+        var data = new List<Venue>();
+
+        _venueRepositoryMock
+            .Setup(repo => repo.GetVenuesAsync())
+            .ReturnsAsync(data);
+
+        // Act
+        var result = await _venueService.GetVenuesAsync();
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public async Task EditVenueAsync_ReturnsFalse_WhenIdIsInvalid()
+    {
+        // Arrange
+        var updateVenueDto = new UpdateVenueDto("name", "description");
+        _venueRepositoryMock.Setup(repo => repo.GetVenueByIdAsync(3)).ReturnsAsync((Venue?)null);
+
+        // Act
+
+        var result = await _venueService.EditVenueAsync(3, updateVenueDto);
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public async Task EditVenueAsync_VenueExists_UpdatesVenueAndSaves_ReturnsTrue()
+    {
+        // Arrange
+        var venueId = 1;
+        var updateDto = new UpdateVenueDto("Updated Name", "Updated Description");
+        var existingVenue = new Venue{Id = venueId, Name = "Old Name", Description = "Old Description" };
+		var mockRepo = new Mock<IVenueRepository>();
+
+		mockRepo.Setup(repo => repo.GetVenueByIdAsync(venueId)).ReturnsAsync(existingVenue);
+		mockRepo.Setup(repo => repo.SaveChangesAsync()).Returns(Task.CompletedTask);
+
+		var service = new VenueService(mockRepo.Object);
+
+		// Act
+		var result = await service.EditVenueAsync(venueId, updateDto);
+
+		// Assert
+		Assert.True(result);
+		Assert.Equal(updateDto.Name, existingVenue.Name);
+		Assert.Equal(updateDto.Description, existingVenue.Description);
+		mockRepo.Verify(repo => repo.SaveChangesAsync(), Times.Once);
+	}
 }
