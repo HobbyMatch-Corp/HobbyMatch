@@ -142,7 +142,7 @@
             else if (userType == UserType.BussinessClient)
             {
                 user = await organizerApiService.GetMe<BusinessClientDto>();
-                _venuesList = (await venueApiService.GetVenuesAsync()).ToList();
+                _venuesList = (await venueApiService.GetClientVenuesAsync()).ToList();
                 email = (user as BusinessClientDto)?.Email;
             }
 
