@@ -40,7 +40,7 @@
                 {
                     @if (!editable)
                     {
-                        <HobbiesChips Hobbbies="@((user as UserDto).Hobbies.ToList())" />
+                        <HobbiesChips Hobbbies="@((user as UserDto)?.Hobbies.ToList() ?? new List<HobbyDto>())" />
                     }
                     else
                     {
@@ -82,7 +82,7 @@
     bool success;
     bool editable = false;
     string[] errors = { };
-    string _userId;
+    string _userId = "";
     private UserFormModel formModel = new();
     OrganizerDto? user;
     UserType? userType = null;
@@ -179,7 +179,7 @@
         if (userType == UserType.User)
         {
             var hobbyDtos = hobbiesList?.SelectedHobbies.ToArray() ?? [];
-            var updatedUser = new UpdateUserDto(formModel.UserName, formModel.Email, hobbyDtos);
+            var updatedUser = new UpdateUserDto(formModel?.UserName ?? "", formModel?.Email ?? "", hobbyDtos);
 
             if (await organizerApiService.UpdateUserAsync<UserDto, UpdateUserDto>(_userId, updatedUser))
             {
@@ -193,7 +193,7 @@
         }
         else if (userType == UserType.BussinessClient && formModel.TaxId != null)
         {
-            var updatedBusinessClient = new UpdateBusinessClientDto(formModel.UserName, formModel.Email, formModel.TaxId);
+            var updatedBusinessClient = new UpdateBusinessClientDto(formModel?.UserName ?? "", formModel?.Email ?? "", formModel?.TaxId ?? "");
             if (await organizerApiService.UpdateUserAsync<BusinessClientDto, UpdateBusinessClientDto>(_userId, updatedBusinessClient))
             {
                 _snackbar.Add("Saved changes", Severity.Success);

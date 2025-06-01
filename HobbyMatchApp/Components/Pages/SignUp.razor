@@ -73,9 +73,9 @@
 
     private string PasswordMatch(string arg)
     {
-        if (passwordField.Value != arg)
+        if (passwordField?.Value != arg)
             return "Passwords don't match";
-        return null;
+        return String.Empty;
     }
 
     private async Task SignUpAction()
@@ -93,11 +93,11 @@
         HttpResponseMessage result;
         if (isBusinessClient)
         {
-            result = await AuthApiService.RegisterBusinessClientAsync(username, email, password, taxId);
+            result = await AuthApiService.RegisterBusinessClientAsync(username ?? "", email ?? "", password ?? "", taxId ?? "");
         }
 
         else{
-            result = await AuthApiService.RegisterUserAsync(username, email, password);
+            result = await AuthApiService.RegisterUserAsync(username ?? "", email ?? "", password ?? "");
 
         }
         if (result is null)
