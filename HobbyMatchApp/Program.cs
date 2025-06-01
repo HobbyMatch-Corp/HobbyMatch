@@ -50,6 +50,7 @@ builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
     provider.GetRequiredService<CustomAuthStateProvider>()
 );
 builder.Services.AddScoped<EndpointProvider>();
+builder.Services.AddScoped<HttpClientUtils>();
 builder.Services.AddScoped<IOrganizerApiService, OrganizerApiService>();
 builder.Services.AddScoped<IAuthApiService, AuthApiService>();
 builder.Services.AddScoped<IEventApiService, EventApiService>();
