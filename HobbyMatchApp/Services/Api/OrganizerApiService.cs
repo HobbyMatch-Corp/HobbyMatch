@@ -4,14 +4,15 @@ using HobbyMatch.Domain.Entities;
 namespace HobbyMatch.App.Services.Api
 {
 	public class OrganizerApiService : IOrganizerApiService
-	{
-		private readonly HttpClient _httpClient;
-		private readonly EndpointProvider _endpointProvider;
-		public OrganizerApiService(IHttpClientFactory httpClientFactory, EndpointProvider endpointProvider)
+    {
+        private readonly HttpClientUtils _httpClientUtils;
+        private readonly EndpointProvider _endpointProvider;
+
+        public OrganizerApiService(HttpClientUtils httpClientUtils, EndpointProvider endpointProvider)
         {
-            _httpClient = httpClientFactory.CreateClient("AuthenticatedClient");
-            _endpointProvider = endpointProvider;	
-		}
+            _httpClientUtils = httpClientUtils;
+            _endpointProvider = endpointProvider;
+        }
 
 		public async Task<T?> GetMe<T>() where T: OrganizerDto
 		{
@@ -25,14 +26,8 @@ namespace HobbyMatch.App.Services.Api
 				Console.WriteLine(e);
 				return null;
 			}
-			T? user = null;
-			var response = await _httpClient.GetAsync($"{endpoint}/me");
-			if (response.IsSuccessStatusCode)
-			{
-				user = await response.Content.ReadFromJsonAsync<T>();
-			}
 
-			return user;
+			return await _httpClientUtils.GetAsyncSafe<T>($"{endpoint}/me");
 		}
 
 		public async Task<T[]?> GetUsersAsync<T>() where T : OrganizerDto
@@ -47,16 +42,10 @@ namespace HobbyMatch.App.Services.Api
 				Console.WriteLine(e);
 				return null;
 			}
-			T[]? user = null;
-			var response = await _httpClient.GetAsync(endpoint);
-			if (response.IsSuccessStatusCode)
-			{
-				user = await response.Content.ReadFromJsonAsync<T[]>();
-			}
 
-			return user;
+            return await _httpClientUtils.GetAsyncSafe<T[]?>(endpoint);
 
-		}
+        }
 
 		public async Task<T?> GetUserAsync<T>(int id) where T : OrganizerDto
 		{
@@ -71,14 +60,8 @@ namespace HobbyMatch.App.Services.Api
 				return null;
 			}
 
-			T? user = null;
-			var response = await _httpClient.GetAsync($"{endpoint}/{id}");
-			if (response.IsSuccessStatusCode)
-			{
-				user = await response.Content.ReadFromJsonAsync<T>();
-			}
-			return user;
-		}
+            return await _httpClientUtils.GetAsyncSafe<T?>($"{endpoint}/{id}");
+        }
 
 		public async Task<bool> UpdateUserAsync<T, TDto>(string id, TDto editedUser) where T : OrganizerDto
 		{
@@ -93,9 +76,7 @@ namespace HobbyMatch.App.Services.Api
 				return false;
 			}
 
-			T? user = null;
-			var response = await _httpClient.PutAsJsonAsync($"{endpoint}/{id}", editedUser);
-			return response.IsSuccessStatusCode ? true : false;
-		}
+			return await _httpClientUtils.PutAsyncSafe<TDto, bool>($"{endpoint}/{id}", editedUser, returnStatus: true);
+        }
     }
 }

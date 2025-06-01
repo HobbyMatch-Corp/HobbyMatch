@@ -54,11 +54,14 @@ namespace HobbyMatch.App.Services
             }
         }
 
-        public async Task<Tout?> PutAsyncSafe<Tint, Tout>(string url, Tint data, bool unauthorized = false)
+        public async Task<Tout?> PutAsyncSafe<Tint, Tout>(string url, Tint data, bool unauthorized = false, bool returnStatus = false)
         {
             try
             {
                 var response = await GetClient(unauthorized).PutAsJsonAsync(url, data);
+
+                if (returnStatus && typeof(Tout) == typeof(bool)) 
+                    return (Tout)(object)response.IsSuccessStatusCode;
 
                 if (response.IsSuccessStatusCode)
                 {
