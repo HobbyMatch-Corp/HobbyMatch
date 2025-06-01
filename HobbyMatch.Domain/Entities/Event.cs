@@ -37,7 +37,7 @@ namespace HobbyMatch.Domain.Entities
         public ICollection<User>? SignUpList { get; set; }
 
         [JsonIgnore]
-        public ICollection<BusinessClient> SponsorsPartners { get; set; }
+        public ICollection<BusinessClient> SponsorsPartners { get; set; } = new List<BusinessClient>();
 
         [JsonIgnore]
         public ICollection<Hobby> Hobbies { get; set; } = new List<Hobby>();

@@ -34,7 +34,7 @@ namespace HobbyMatch.Domain.Entities
         public BusinessClient BusinessClient { get; set; }
 
         [JsonIgnore]
-        public ICollection<Event> Events { get; set; }
+        public ICollection<Event> Events { get; set; } = new List<Event>();
 
     }
 }
