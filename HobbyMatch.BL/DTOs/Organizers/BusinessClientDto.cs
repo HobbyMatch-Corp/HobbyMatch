@@ -11,7 +11,7 @@ namespace HobbyMatch.BL.DTOs.Organizers
 			user.UserName ?? "",
 			user.Email ?? "",
 			user.TaxID ?? "",
-            user.Venues.Select(v => v.ToDto()).ToList()
+            user?.Venues?.Select(v => v.ToDto()).ToList() ?? new List<VenueDto>()
         );
 	}
 }

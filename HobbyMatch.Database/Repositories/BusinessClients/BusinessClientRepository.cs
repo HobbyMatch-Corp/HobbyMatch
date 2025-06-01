@@ -15,12 +15,12 @@ public class BusinessClientRepository : IBusinessClientRepository
 
     public async Task<BusinessClient?> GetBusinessClientByIdAsync(int id)
     {
-        return await _dbContext.BusinessClients.FindAsync(id);
+        return await _dbContext.BusinessClients.Include(b => b.Venues).FirstOrDefaultAsync(b=> b.Id == id);
     }
 
     public async Task<BusinessClient?> GetBusinessClientByEmailAsync(string email)
     {
-        return await _dbContext.BusinessClients.FirstOrDefaultAsync(b => b.Email == email);
+        return await _dbContext.BusinessClients.Include(b => b.Venues).FirstOrDefaultAsync(b => b.Email == email);
     }
 
     public async Task<List<BusinessClient>> GetBusinessClientsAsync()
