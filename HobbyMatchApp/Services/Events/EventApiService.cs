@@ -42,7 +42,7 @@ namespace HobbyMatch.App.Services.Events
 
 		public async Task<List<EventOverviewDto>?> GetFilteredEvents(string? filter)
         {
-            return await _httpClientUtils.GetAsyncSafe<List<EventOverviewDto>>($"events/?filter={filter}", unauthorized: true);
+            return await _httpClientUtils.GetAsyncSafe<List<EventOverviewDto>>($"events", unauthorized: true);
         }
 
         public async Task<List<EventDto>?> GetOrganizedEventsAsync()
